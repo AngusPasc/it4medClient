@@ -1,0 +1,3 @@
+#unuse dxPScxPivotGrid2Lnk
+#unuse dxPScxGrid6Lnk
+#migrate .OptionsView.Navigator -> .Navigator.Visible
