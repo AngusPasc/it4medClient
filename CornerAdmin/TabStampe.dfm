@@ -1,6 +1,6 @@
 inherited FTabStampe: TFTabStampe
-  Width = 1149
-  Height = 608
+  Width = 1131
+  Height = 641
   Constraints.MinHeight = 50
   Constraints.MinWidth = 110
   ParentShowHint = False
@@ -9,7 +9,7 @@ inherited FTabStampe: TFTabStampe
     Left = 231
     Top = 33
     Width = 4
-    Height = 575
+    Height = 608
     Cursor = crHSplit
     MinSize = 200
     Control = cxFolderItem
@@ -17,14 +17,14 @@ inherited FTabStampe: TFTabStampe
   object Panel1: TPanel [1]
     Left = 235
     Top = 33
-    Width = 914
-    Height = 575
+    Width = 896
+    Height = 608
     Align = alClient
     TabOrder = 0
     object Splitter1: TcxSplitter
       Left = 1
       Top = 345
-      Width = 912
+      Width = 894
       Height = 4
       Cursor = crVSplit
       HotZoneClassName = 'TcxXPTaskBarStyle'
@@ -37,7 +37,7 @@ inherited FTabStampe: TFTabStampe
     object dxBarDockControl1: TdxBarDockControl
       Left = 1
       Top = 349
-      Width = 912
+      Width = 894
       Height = 30
       Align = dalTop
       BarManager = dxBarManagerRadDiagn
@@ -46,10 +46,10 @@ inherited FTabStampe: TFTabStampe
     object cxGrid1: TcxGrid
       Left = 1
       Top = 379
-      Width = 912
-      Height = 195
+      Width = 894
+      Height = 228
       Align = alClient
-      PopupMenu = dxSelezionati
+      PopupMenu = dxBarPopupSelez
       TabOrder = 2
       LookAndFeel.Kind = lfUltraFlat
       RootLevelOptions.DetailTabsPosition = dtpTop
@@ -312,7 +312,7 @@ inherited FTabStampe: TFTabStampe
     object cxGrid2: TcxGrid
       Left = 1
       Top = 1
-      Width = 912
+      Width = 894
       Height = 344
       Align = alTop
       TabOrder = 3
@@ -371,7 +371,7 @@ inherited FTabStampe: TFTabStampe
     Left = 0
     Top = 33
     Width = 231
-    Height = 575
+    Height = 608
     Align = alLeft
     Bands = <
       item
@@ -968,11 +968,6 @@ inherited FTabStampe: TFTabStampe
     UseOwnFont = False
     Left = 124
     Top = 384
-  end
-  object dxSelezionati: TdxPopupMenu
-    dxPopupMenu = dxBarPopupSelez
-    Left = 508
-    Top = 344
   end
   object Folder: TAstaClientDataSet
     StreamOptions = [ssIndexes, ssAggregates]

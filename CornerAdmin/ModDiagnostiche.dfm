@@ -680,6 +680,8 @@ inherited FModDiagnostiche: TFModDiagnostiche
     object aConferma: TAction
       Caption = 'Conferma'
       ImageIndex = 9
+      OnExecute = aConfermaExecute
+      OnUpdate = aConfermaUpdate
     end
   end
   object qCtrlEseguito: TAstaClientDataSet

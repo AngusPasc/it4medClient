@@ -66,7 +66,7 @@ type
     Riapri: TAction;
     qyRiapri: TAstaClientDataSet;
     dxBarButton6: TdxBarButton;
-    dxDataAcc: TcxBarEditItem;
+    dxDataAccDal: TcxBarEditItem;
     dxPageControl: TcxPageControl;
     dxTabArchivio: TcxTabSheet;
     dxTabOperazioni: TcxTabSheet;
@@ -997,12 +997,11 @@ type
     SchedaPazienteDESC_IND_RES: TStringField;
     RefertiNOME_DOCUMENTO: TStringField;
     GridRefertiNOME_DOCUMENTO: TcxGridDBColumn;
-    OperazioniNOME_DOCUMENTO: TStringField;
-    GridOperazioniNOME_DOCUMENTO: TcxGridDBColumn;
     GridOperazioniEsamiBRANCA: TcxGridDBColumn;
     cxGridRefertiEsamiBRANCA: TcxGridDBColumn;
     GridOperazioniEsamiDESCBRANCA: TcxGridDBColumn;
     dxLayoutControlCartellaGroup4: TdxLayoutAutoCreatedGroup;
+    dxDataAccAl: TcxBarEditItem;
     procedure RefertoExecute(Sender: TObject);
     procedure RicercaInternaExecute(Sender: TObject);
     procedure RicercaInternaUpdate(Sender: TObject);
@@ -1279,6 +1278,7 @@ type
     procedure cxGridSconosciutiDBSconosciutiCustomization(Sender: TObject);
     procedure cxGridDBRicercaRefertiCustomization(Sender: TObject);
     procedure cxGridDBRefACRCustomization(Sender: TObject);
+    procedure dxDataAccAlPropertiesCloseUp(Sender: TObject);
   private
     { Private declarations }
     lstato: TStringList;
@@ -1534,6 +1534,8 @@ begin
       refLink := dxComponentPrinterOperazioni;
     end;
 
+    dxComponentPrinter1.Print(True,nil,refLink);
+{
     if FDMCommon.dxPrintDialog1.Execute then
     begin
        if FDMCommon.dxPrintDialog1.PreviewBtnClicked then
@@ -1543,7 +1545,7 @@ begin
           dxComponentPrinter1.Print(false,@AData,refLink);
        end;
     end;
-
+}
 end;
 
 procedure TFArchivioReferti.ElencoRefertiUpdate(Sender: TObject);
@@ -1602,7 +1604,8 @@ begin
     dxAggiornaDal.EditValue := Date();
     dxAggiornaAl.EditValue := Date();
     dxDataPreno.EditValue := Date();
-    dxDataAcc.EditValue := Date();
+    dxDataAccDal.EditValue := Date();
+    dxDataAccAl.EditValue := Date();
     dxDataRefer.EditValue := Date();
     dxDataErrori.EditValue := Date();
     dxDalSconosciuti.EditValue := IncDay(Date(),30);
@@ -2008,7 +2011,8 @@ end;
 
 procedure TFArchivioReferti.dxDataAccCloseUp(Sender: TObject);
 begin
-  Operazioni.Parambyname('data_acc').AsDateTime := dxDataAcc.EditValue;
+  Operazioni.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
+  Operazioni.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Operazioni.syRefresh;
 end;
 
@@ -2377,7 +2381,8 @@ begin
       refDettagli := GridOperazioniEsami;
       if not Operazioni.Active then
       begin
-        Operazioni.Parambyname('data_acc').AsDateTime := dxDataAcc.EditValue;
+        Operazioni.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
+        Operazioni.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
         Operazioni.open;
       end;
    end
@@ -5345,6 +5350,14 @@ procedure TFArchivioReferti.cxGridDBRefACRCustomization(Sender: TObject);
 begin
   inherited;
   FCustomized := True;
+end;
+
+procedure TFArchivioReferti.dxDataAccAlPropertiesCloseUp(Sender: TObject);
+begin
+  inherited;
+  Operazioni.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
+  Operazioni.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
+  Operazioni.syRefresh;
 end;
 
 initialization

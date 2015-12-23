@@ -6,7 +6,7 @@ uses
   Forms, IInterface, BaseGrid, {} cxStyles, cxCustomData, cxGraphics, cxFilter,
   cxData, cxDataStorage, cxEdit, DB, cxDBData, cxSpinEdit, cxTextEdit,
   cxImageComboBox, cxDBLookupComboBox, cxCheckBox, cxTL, cxMaskEdit,
-  AstaUpdateSQL, Menus, UDXPopup, dxBar, AstaDrv2, AstaClientDataset,
+  AstaUpdateSQL, Menus, dxBar, AstaDrv2, AstaClientDataset,
   Classes, ActnList, cxInplaceContainer, cxDBTL, cxTLData, cxGridLevel,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
   cxControls, cxGridCustomView, cxGrid, ExtCtrls, Controls, cxSplitter,
@@ -37,7 +37,6 @@ type
     dxBarButton8: TdxBarButton;
     dxBarPopupCodici: TdxBarPopupMenu;
     dxBarDockControl1: TdxBarDockControl;
-    dxSelezionati: TdxPopupMenu;
     Folder: TAstaClientDataSet;
     dsFolder: TDataSource;
     TabStampeREPARTI_FK: TIntegerField;

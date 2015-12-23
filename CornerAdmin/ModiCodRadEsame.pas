@@ -7,7 +7,7 @@ uses
   cxControls, cxContainer, cxEdit, cxStyles, cxCustomData, cxFilter,
   cxData, cxDataStorage, cxNavigator, DB, cxDBData, cxMaskEdit, cxSpinEdit,
   dxLayoutcxEditAdapters, dxLayoutContainer, AstaUpdateSQL, cxRichMemoDlg,
-  UDXPopup, dxBar, cxClasses, AstaDrv2, AstaClientDataset, Classes,
+  dxBar, cxClasses, AstaDrv2, AstaClientDataset, Classes,
   ActnList, cxGridLevel, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGridCustomView, cxGrid, cxRichEdit, cxDBRichEdit,
   cxDropDownEdit, cxCalendar, cxDBEdit, cxCheckBox, cxMemo, cxTextEdit,
@@ -38,7 +38,6 @@ type
     aZoom: TAction;
     dxBarButton3: TdxBarButton;
     dxBarPopupMenu1: TdxBarPopupMenu;
-    dxPopupMenu1: TdxPopupMenu;
     Prestazioni: TAstaClientDataSet;
     PrestazioniDESCRIZIONE: TStringField;
     PrestazioniCODICE: TStringField;

@@ -6,7 +6,7 @@ uses
   BaseRad, RicRadiologiaPreno,{} cxStyles, cxCustomData, cxGraphics,
   cxFilter, cxData, cxDataStorage, cxEdit, DB, cxDBData, cxMaskEdit,
   cxSpinEdit, AstaUpdateSQL, cxRichMemoDlg, AstaDrv2, AstaClientDataset,
-  Menus, UDXPopup, dxBar, Classes, ActnList, dxLayoutControl, cxCheckBox,
+  Menus, dxBar, Classes, ActnList, dxLayoutControl, cxCheckBox,
   cxDBEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit,
   cxDBLookupComboBox, cxGridLevel, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxClasses, cxControls, cxGridCustomView, cxGrid,
@@ -30,7 +30,6 @@ type
     aZoom: TAction;
     dxBarButton3: TdxBarButton;
     dxBarPopupMenu1: TdxBarPopupMenu;
-    dxPopupMenu1: TdxPopupMenu;
     Prestazioni: TAstaClientDataSet;
     Componenti: TAstaClientDataSet;
     ComponentiDESCRIZIONE: TStringField;

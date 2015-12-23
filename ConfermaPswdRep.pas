@@ -10,7 +10,8 @@ uses
   cxCalendar, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, cxTextEdit,
   cxMaskEdit, CSEZForm, StdCtrls, cxButtons, Controls, ExtCtrls,
   dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter, ComCtrls,
-  dxCore, cxDateUtils, dxLayoutControlAdapters, dxLayoutContainer;
+  dxCore, cxDateUtils, dxLayoutControlAdapters, dxLayoutContainer,
+  AstaUpdateSQL;
 
 type
   TFConfermaPswdRep = class(TFBaseRad)
@@ -477,6 +478,7 @@ procedure TFConfermaPswdRep.cxBtnTestAVClick(Sender: TObject);
 begin
   inherited;
   raise Exception.Create('Prova AV');
+//  raise EInvalidOperation.Create('Prova Invalid Operation'); 
 end;
 
 procedure TFConfermaPswdRep.BaseFormCreate(Sender: TObject);

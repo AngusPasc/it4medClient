@@ -8,16 +8,16 @@ inherited FStruttura: TFStruttura
   ShowHint = True
   object dxPage: TcxPageControl [0]
     Left = 0
-    Top = 78
+    Top = 70
     Width = 573
-    Height = 422
+    Height = 430
     Align = alLeft
     TabOrder = 1
     Properties.ActivePage = dxTabSheet1
     Properties.CustomButtons.Buttons = <>
     Properties.Style = 3
     OnChange = dxPageChange
-    ClientRectBottom = 422
+    ClientRectBottom = 430
     ClientRectRight = 573
     ClientRectTop = 38
     object dxTabSheet1: TcxTabSheet
@@ -26,7 +26,7 @@ inherited FStruttura: TFStruttura
         Left = 0
         Top = 0
         Width = 573
-        Height = 384
+        Height = 392
         Align = alClient
         PopupMenu = dxBarPopModalita
         TabOrder = 0
@@ -920,9 +920,9 @@ inherited FStruttura: TFStruttura
   end
   object Splitter1: TcxSplitter [1]
     Left = 573
-    Top = 78
+    Top = 70
     Width = 4
-    Height = 422
+    Height = 430
     Cursor = crVSplit
     HotZoneClassName = 'TcxXPTaskBarStyle'
     MinSize = 100
@@ -930,17 +930,17 @@ inherited FStruttura: TFStruttura
   end
   object Panel1: TPanel [2]
     Left = 577
-    Top = 78
+    Top = 70
     Width = 423
-    Height = 422
+    Height = 430
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 6
     object DBTree: TdxDbOrgChart
       Left = 0
-      Top = 37
+      Top = 33
       Width = 423
-      Height = 385
+      Height = 397
       DataSource = sStruttura
       KeyFieldName = 'PKSTRUTTURA'
       ParentFieldName = 'PARENT'
@@ -964,14 +964,14 @@ inherited FStruttura: TFStruttura
       ParentCtl3D = False
       OnDragDrop = DBTreeDragDrop
       OnDragOver = DBTreeDragOver
-      PopupMenu = dxPopupMenu1
+      PopupMenu = dxBarPopupMenu1
       ParentFont = False
     end
     object dxBarDockControl1: TdxBarDockControl
       Left = 0
       Top = 0
       Width = 423
-      Height = 37
+      Height = 33
       Align = dalTop
       BarManager = dxBarManager1
     end
@@ -1424,10 +1424,10 @@ inherited FStruttura: TFStruttura
   end
   object dxBarManager1: TdxBarManager
     AllowReset = False
-    Scaled = True
+    Scaled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -23
+    Font.Height = -19
     Font.Name = 'Source Sans Pro'
     Font.Style = []
     CanCustomize = False
@@ -1454,7 +1454,7 @@ inherited FStruttura: TFStruttura
     DockControlHeights = (
       0
       0
-      78
+      70
       0)
     object dxBarManager1Bar1: TdxBar
       AllowClose = False
@@ -1471,11 +1471,6 @@ inherited FStruttura: TFStruttura
       FloatTop = 216
       FloatClientWidth = 23
       FloatClientHeight = 22
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -22
-      Font.Name = 'Source Sans Pro'
-      Font.Style = []
       ItemLinks = <
         item
           Visible = True
@@ -1516,11 +1511,6 @@ inherited FStruttura: TFStruttura
       FloatTop = 216
       FloatClientWidth = 23
       FloatClientHeight = 22
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -22
-      Font.Name = 'Source Sans Pro'
-      Font.Style = []
       ItemLinks = <
         item
           Visible = True
@@ -1940,7 +1930,7 @@ inherited FStruttura: TFStruttura
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'dxPrinterDBTree'
-      ReportDocument.CreationDate = 42248.241980972220000000
+      ReportDocument.CreationDate = 42339.931427962960000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
@@ -1953,6 +1943,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterModalita: TdxGridReportLink
       Active = True
       Component = cxModalita
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -1986,13 +1977,14 @@ inherited FStruttura: TFStruttura
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42248.241980972220000000
+      ReportDocument.CreationDate = 42339.931428136570000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2018,6 +2010,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterDiagnostiche: TdxGridReportLink
       Active = True
       Component = cxDiagnostiche
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -2051,13 +2044,14 @@ inherited FStruttura: TFStruttura
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42248.241980972220000000
+      ReportDocument.CreationDate = 42339.931428136570000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2083,6 +2077,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterSale: TdxGridReportLink
       Active = True
       Component = cxSale
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -2116,13 +2111,14 @@ inherited FStruttura: TFStruttura
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42248.241980972220000000
+      ReportDocument.CreationDate = 42339.931428136570000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2148,6 +2144,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterStazioni: TdxGridReportLink
       Active = True
       Component = cxStazioni
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -2181,13 +2178,14 @@ inherited FStruttura: TFStruttura
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42248.241981145830000000
+      ReportDocument.CreationDate = 42339.931428136570000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2213,6 +2211,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterCD: TdxGridReportLink
       Active = True
       Component = cxCDMaster
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2234,7 +2233,8 @@ inherited FStruttura: TFStruttura
       PrinterPage.PageSize.Y = 297000
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
-      ReportDocument.CreationDate = 42248.241981145830000000
+      ReportDocument.CreationDate = 42339.931428136570000000
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       OptionsOnEveryPage.Footers = False
       OptionsOnEveryPage.FilterBar = False
       OptionsSelection.ProcessExactSelection = True
@@ -2249,6 +2249,7 @@ inherited FStruttura: TFStruttura
     object dxPrinterServerCD: TdxGridReportLink
       Active = True
       Component = cxServerCD
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 1
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2270,7 +2271,8 @@ inherited FStruttura: TFStruttura
       PrinterPage.PageSize.Y = 279400
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
-      ReportDocument.CreationDate = 42248.241981145830000000
+      ReportDocument.CreationDate = 42339.931428136570000000
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       OptionsOnEveryPage.Footers = False
       OptionsOnEveryPage.FilterBar = False
       OptionsSelection.ProcessExactSelection = True
@@ -2289,11 +2291,6 @@ inherited FStruttura: TFStruttura
   end
   object dxBarPopupMenu1: TdxBarPopupMenu
     BarManager = dxBarManager1
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -22
-    Font.Name = 'Source Sans Pro'
-    Font.Style = []
     ItemLinks = <
       item
         Visible = True
@@ -2481,18 +2478,8 @@ inherited FStruttura: TFStruttura
       Size = 1
     end
   end
-  object dxPopupMenu1: TdxPopupMenu
-    dxPopupMenu = dxBarPopupMenu1
-    Left = 568
-    Top = 184
-  end
   object dxBarPopModalita: TdxBarPopupMenu
     BarManager = dxBarManager1
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -22
-    Font.Name = 'Source Sans Pro'
-    Font.Style = []
     ItemLinks = <
       item
         Visible = True
@@ -2535,11 +2522,6 @@ inherited FStruttura: TFStruttura
   end
   object dxBarPopDiagnostiche: TdxBarPopupMenu
     BarManager = dxBarManager1
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -22
-    Font.Name = 'Source Sans Pro'
-    Font.Style = []
     ItemLinks = <
       item
         Visible = True

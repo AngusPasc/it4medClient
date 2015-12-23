@@ -51,6 +51,7 @@ inherited FCalDiagn: TFCalDiagn
     OnClick = SchedulerClick
     OnIsWorkTime = SchedulerIsWorkTime
     OnMouseDown = SchedulerMouseDown
+    Selection = 1
     Splitters = {
       0100000072020000940000007702000017010000010000001C010000D2010000}
     StoredClientBounds = {0100000001000000E7030000D2010000}
@@ -1335,7 +1336,7 @@ inherited FCalDiagn: TFCalDiagn
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Calendario'
-      ReportDocument.CreationDate = 42332.486076006940000000
+      ReportDocument.CreationDate = 42338.364011377310000000
       ReportTitle.Text = 'Stampa calendario'
       PrintRange.TimePrintFrom = 0.333333333333333300
       PrintRange.TimePrintTo = 0.750000000000000000

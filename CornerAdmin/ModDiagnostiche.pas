@@ -82,11 +82,12 @@ type
     qCtrlEseguitoCTRL_ESEGUITO: TIntegerField;
     qCtrlEseguitoDESCRIZIONE: TStringField;
     aConferma: TAction;
-    procedure btSalvaClick(Sender: TObject);
     procedure qTipoEsecuzioneBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure qSlotBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure aAnnullaExecute(Sender: TObject);
     procedure qCtrlEseguitoBeforeQuery(Sender: TAstaBaseClientDataSet);
+    procedure aConfermaExecute(Sender: TObject);
+    procedure aConfermaUpdate(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -108,22 +109,6 @@ implementation
 uses DMCommon, Struttura;
 
 {$R *.dfm}
-
-procedure TFModDiagnostiche.btSalvaClick(Sender: TObject);
-begin
-  inherited;
-  sDiagnostiche.Dataset.Post;
-  if (sDiagnxServ.DataSet.State in dsEditModes) then
-     sDiagnxServ.DataSet.Post;
-  try
-  FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[sDiagnostiche.Dataset,sDiagnxServ.DataSet]);
-  ModalResult := mrOk;
-  except
-     TAstaClientDataSet(sDiagnostiche.Dataset).syRevertRecord;
-     raise;
-  end;
-
-end;
 
 procedure TFModDiagnostiche.DoShow;
 begin
@@ -194,6 +179,27 @@ procedure TFModDiagnostiche.qCtrlEseguitoBeforeQuery(
 begin
   inherited;
   sender.Parambyname('lingua').AsString := gbllingua;
+end;
+
+procedure TFModDiagnostiche.aConfermaExecute(Sender: TObject);
+begin
+  inherited;
+  sDiagnostiche.Dataset.Post;
+  if (sDiagnxServ.DataSet.State in dsEditModes) then
+     sDiagnxServ.DataSet.Post;
+  try
+  FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[sDiagnostiche.Dataset,sDiagnxServ.DataSet]);
+  ModalResult := mrOk;
+  except
+     TAstaClientDataSet(sDiagnostiche.Dataset).syRevertRecord;
+     raise;
+  end;
+end;
+
+procedure TFModDiagnostiche.aConfermaUpdate(Sender: TObject);
+begin
+  inherited;
+//  aConferma.Enabled := TAstaClientDataSet(sDiagnostiche.Dataset).HasChanged;
 end;
 
 end.

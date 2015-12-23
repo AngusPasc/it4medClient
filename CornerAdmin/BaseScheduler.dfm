@@ -1,9 +1,10 @@
 object FBaseScheduler: TFBaseScheduler
   Left = 568
   Top = 220
-  Width = 621
-  Height = 455
+  AutoScroll = False
   Caption = 'FBaseScheduler'
+  ClientHeight = 424
+  ClientWidth = 613
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText

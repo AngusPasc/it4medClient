@@ -995,7 +995,7 @@ inherited FDaStampare: TFDaStampare
       Category = 0
       Hint = 'Giorni anticipo consegna'
       Visible = ivAlways
-      Value = 7.000000000000000000
+      Value = 14.000000000000000000
     end
     object dxBarStatic1: TdxBarStatic
       Caption = 'Tipo di paziente:'
@@ -2281,7 +2281,7 @@ inherited FDaStampare: TFDaStampare
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti eseguiti'
-      ReportDocument.CreationDate = 42333.934544918980000000
+      ReportDocument.CreationDate = 42361.598865902780000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
@@ -2346,7 +2346,7 @@ inherited FDaStampare: TFDaStampare
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti da eseguire'
-      ReportDocument.CreationDate = 42333.934544918980000000
+      ReportDocument.CreationDate = 42361.598866087970000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19

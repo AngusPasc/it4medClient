@@ -12,7 +12,7 @@ uses
   dxPSPDFExport, cxDrawTextUtils, dxPSPrVwStd, dxPScxPageControlProducer,
   dxPScxGridLnk, dxPScxGridLayoutViewLnk, dxPSdxDBOCLnk,
   dxPScxEditorProducers, dxPScxExtEditorProducers, rsStorage, rsPropSaver,
-  AstaUpdateSQL, Dialogs, Menus, UDXPopup, Classes, ActnList, dxBar,
+  AstaUpdateSQL, Dialogs, Menus, Classes, ActnList, dxBar,
   dxPScxCommon, dxPSCore, dxPSGraphicLnk, dxPSdxOCLnk, dxBarExtItems,
   cxClasses, AstaDrv2, AstaClientDataset, dxorgchr, dxdborgc, ExtCtrls,
   cxSplitter, cxGridCardView, cxGridDBCardView, cxGridCustomLayoutView,
@@ -94,7 +94,6 @@ type
     Espandi: TAction;
     Chiudi: TAction;
     Stampa: TAction;
-    dxPopupMenu1: TdxPopupMenu;
     dxBarPopModalita: TdxBarPopupMenu;
     CancellaRecord: TAction;
     ModalitaCODICE: TStringField;

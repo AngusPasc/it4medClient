@@ -3008,7 +3008,6 @@ inherited FAccDiagn: TFAccDiagn
     object dxPrintListaAccettati: TdxGridReportLink
       Active = True
       Component = cxGridEseguiti
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -3042,14 +3041,13 @@ inherited FAccDiagn: TFAccDiagn
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti eseguiti'
-      ReportDocument.CreationDate = 42333.782943761570000000
+      ReportDocument.CreationDate = 42338.981862002310000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -3075,7 +3073,6 @@ inherited FAccDiagn: TFAccDiagn
     object dxPrintListaPrenotati: TdxGridReportLink
       Active = True
       Component = cxGridDaEseguire
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -3109,14 +3106,13 @@ inherited FAccDiagn: TFAccDiagn
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti da eseguire'
-      ReportDocument.CreationDate = 42333.782943761570000000
+      ReportDocument.CreationDate = 42338.981862002310000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -3142,7 +3138,6 @@ inherited FAccDiagn: TFAccDiagn
     object dxPrintListaRichieste: TdxGridReportLink
       Active = True
       Component = cxGridRichieste
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -3174,13 +3169,12 @@ inherited FAccDiagn: TFAccDiagn
       PrinterPage.PageSize.Y = 297180
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
-      ReportDocument.CreationDate = 42333.782943946760000000
+      ReportDocument.CreationDate = 42338.981862002310000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

@@ -17,7 +17,7 @@ uses
   dxPSPrVwStd, dxPSPrVwAdv, dxPSPrVwRibbon, dxPScxPageControlProducer,
   dxPScxGridLnk, dxPScxGridLayoutViewLnk, dxPScxEditorProducers,
   dxPScxExtEditorProducers, dxSkinsdxRibbonPainter, dxPSCore, dxPScxCommon,
-  AstaUpdateSQL, CSEZForm, UDXPopup, dxBar, rsStorage, rsPropSaver,
+  AstaUpdateSQL, CSEZForm, dxBar, rsStorage, rsPropSaver,
   Classes, ActnList, AstaDrv2, AstaClientDataset, cxBarEditItem,
   dxBarExtItems, cxClasses, cxDBLookupComboBox, cxMaskEdit, cxDBEdit,
   StdCtrls, cxButtons, cxDropDownEdit, KScxDBLookupDlg, cxGridLevel,
@@ -57,7 +57,6 @@ type
     dxLibere: TdxBarButton;
     dxConEsami: TdxBarButton;
     dxBarPopGrid: TdxBarPopupMenu;
-    dxPopGrid: TdxPopupMenu;
     dxBarSubItem3: TdxBarSubItem;
     dxBarButton4: TdxBarButton;
     MinimizzaTutte: TAction;
@@ -186,7 +185,7 @@ type
     cdDataNascita: TcxDBLabel;
     dxLayoutControl1Item10: TdxLayoutItem;
     cxIndirizzo: TcxDBLabel;
-    dxLayoutControl1Group8: TdxLayoutGroup;
+    dxLayoutGroupMedico: TdxLayoutGroup;
     dxLayoutControl1Group9: TdxLayoutGroup;
     dxLayoutControl1Item11: TdxLayoutItem;
     cxCodice: TcxButtonEdit;
@@ -255,7 +254,7 @@ type
     ImpegnativeTES_IDENT: TStringField;
     TPrenoDESCR_ESENZIONE: TStringField;
     cxDBTextEdit1: TcxDBLabel;
-    dxLayoutControl1Item1: TdxLayoutItem;
+    dxLayoutDescEsenzione: TdxLayoutItem;
     aCercaAgePreno: TAction;
     cxTelefono: TcxDBMaskEdit;
     dxLayoutControl1Item5: TdxLayoutItem;
@@ -1443,6 +1442,8 @@ begin
   end;
   
   FBollo := FDMCommon.Param_TicketIMPORTO_BOLLO.asFloat;
+
+  dxLayoutGroupMedico.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
   dxLayoutControlQuota.Visible := (FDMCommon.Param_TicketCODICI_CUP.AsInteger=1) and (FBollo>0) and (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
   cxMagg.Checked := dxLayoutControlQuota.Visible;
 
@@ -1570,6 +1571,8 @@ begin
   end;
 
   dxGroupNumeroImpegnativa.Visible := (FDMCommon.LeggiPostoLavoroCHK_DATI_IMPEGNATIVA.AsInteger=1);
+  dxLayoutCodEsenzione.Visible := (FDMCommon.LeggiPostoLavoroCHK_DATI_IMPEGNATIVA.AsInteger=1);
+  dxLayoutDescEsenzione.Visible := (FDMCommon.LeggiPostoLavoroCHK_DATI_IMPEGNATIVA.AsInteger=1);
   dxGroupDataImpegnativa.Visible := (FDMCommon.LeggiPostoLavoroCHK_DATI_IMPEGNATIVA.AsInteger=1);
   dxLayoutControlRicercaTessera.Visible := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
   if dxGroupDataImpegnativa.Visible then

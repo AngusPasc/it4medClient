@@ -5,6 +5,7 @@ interface
 {$I syVer.inc}
 
 {.$DEFINE NO_IIS}
+{$DEFINE MADEXCEPT_FILE}
 
 uses
   AstaParamList, IInterface, ShellApi, Graphics, IEController, cxGridTableView, Types, Windows, AdPort,
@@ -1317,7 +1318,7 @@ var
 
 resourcestring
 
-  RS_AV = 'Si è verificato un problema.'#13'L''applicazione verrà chiusa';
+  RS_AV = 'Si è verificato un problema.'#13'L''applicazione verrà riavviata';
   RAD_ErrSocket = 'Errore in connessione a H&S'#13'%s';
   RAD_TelefonoEmail = 'Telefono o email obbligatori %s!';
   RAD_Paziente = 'per il paziente';
@@ -1362,7 +1363,7 @@ resourcestring
 
   RS_Msg_ConfTogliInviaA = 'Conferma eliminazione di Invia a... ?';
   RS_BaseProvenienza = 'Provenienza';
-  RS_BaseGuardiaMed = 'Radiologia esecuzione';
+  RS_BaseGuardiaMed = 'Farmacia esecuzione';
 
   RS_MancaChiave = 'Attenzione: non e'' stata definita la chiave nel file %s';
   RS_MancaWizard = 'Attenzione: non e'' stato definito il wizard per il file %s';
@@ -1533,7 +1534,7 @@ resourcestring
   { Stringhe messaggi generici }
   RS_UserPresente = 'Accesso non possibile. Utente già collegato in %s'#13#10'Vuoi terminare l''altra connessione ?';
   RS_ComputerNonRegistrato  = 'La workstation %s non e'' stata registrata.';
-  RS_ComputerNonAttivo = 'La workstation %s non e'' stata attivata nella radiologia.';
+  RS_ComputerNonAttivo = 'La workstation %s non e'' stata attivata nella Farmacia.';
   RS_Gene_Msg_OTer = 'Operazione terminata';
   RS_Gene_Cap_ARic = 'Attiva ricerca';
   RS_Gene_Msg_SCam = 'Specificare almeno un campo per la ricerca';
@@ -1749,7 +1750,7 @@ resourcestring
 
   RAD_NoNoteReperibilita = 'Attenzione !'#13#10+'Note di Reperibilità non presenti.'+#13#10+
                         'Accedere alla maschera "Gestione Privacy" ed introdurle, ' + #13#10 +
-                        'oppure impostare il testo standard in configurazione Radiologia.';
+                        'oppure impostare il testo standard in configurazione Farmacia.';
 
 //  RAD_Siss_LogFileCreateError = 'Errore in creazione del file di log';
 //  RAD_Siss_LogFileWriteError = 'Errore in scrittura del file di log';  
@@ -1769,9 +1770,6 @@ uses Forms, Menus, IniFiles,
 {$IFDEF MADEXCEPT}
      madExcept, madTypes, madStrings,
 {$ENDIF}
-{$IFDEF EUREKALOG}
-     EEvents, EException, ETypes,
-{$ENDIF}     
 //   ConfiguraAsta,
      ComObj, StdCtrls,
      CxCustomData,cxGridCustomTableView,cxControls,cxGridCustomView,cxFormats,
@@ -1887,6 +1885,7 @@ begin
   if (exceptIntf.exceptObject is EAccessViolation) or
      (exceptIntf.exceptObject is EInvalidPointer) or
      (exceptIntf.exceptObject is EAbstractError) or
+     (exceptIntf.exceptObject is EInvalidOperation) or
      (exceptIntf.exceptObject is EcxInvalidDataControllerOperation) then
   begin
 //     vShow := 3;  // 3=reset applicazione 2=rimane dentro;
@@ -2007,11 +2006,13 @@ begin
 
   MadException(exceptIntf.exceptObject).Message := ExceptionMessage;
 
-
   if vLog then
   begin
-//     AutoSaveBugReport(exceptIntf.bugReport,exceptIntf);
+{$IFDEF MADEXCEPT_FILE}
+     AutoSaveBugReport(exceptIntf.bugReport,exceptIntf);
+{$ELSE}
      AutoSendBugReport(exceptIntf.bugReport,exceptIntf.ScreenShot);
+{$ENDIF}
   end;
 
   case vShow of
@@ -2051,123 +2052,6 @@ begin
   case vShow of
   3: RestartApplication;
   4: CloseApplication;
-  end;
-
-end;
-{$ENDIF}
-
-{$IFDEF EUREKALOG}
-// Your handler for OnExceptionNotify event
-procedure MyHandler(const ACustom: Pointer; AExceptionInfo: TEurekaExceptionInfo;
-                    var AHandle: Boolean; var ACallNextHandler: Boolean);
-var
-   dove: integer;
-   ExceptionMessage: string;
-   vShow: integer;   // -- 0= no show; 1=show locale; 2=show handler
-   vContinue,vLog: boolean;
-begin
-
-  if (AExceptionInfo.ExceptionClass = 'EDatabaseError') or
-     (AExceptionInfo.ExceptionClass = 'EAstaProtocolError') then
-  begin
-
-    ExceptionMessage := AExceptionInfo.ExceptionMessage;
-    vShow := 2;
-    vLog := True;
-
-    dove := Pos('ORA-20001',ExceptionMessage);
-    if dove>0 then
-    begin
-       ExceptionMessage := Copy(ExceptionMessage,dove+11,Length(ExceptionMessage)-(dove+10));
-       dove := Pos(#10,ExceptionMessage);
-       if dove>0 then
-          ExceptionMessage := Copy(ExceptionMessage,1,dove-1);
-       vLog := false;
-       vShow := 1;
-    end;
-
-    dove := Pos('ORA-20002',ExceptionMessage);
-    if dove>0 then
-    begin
-       ExceptionMessage := Copy(ExceptionMessage,dove+11,Length(ExceptionMessage)-(dove+10));
-       dove := Pos(#10,ExceptionMessage);
-       if dove>0 then
-          ExceptionMessage := Copy(ExceptionMessage,1,dove-1);
-       vLog := true;
-       vShow := 1;
-    end;
-
-    dove := Pos('ORA-00001',ExceptionMessage);
-    if dove>0 then
-    begin
-       ExceptionMessage := RIS_ErroreUnicita;
-       vLog := false;
-       vShow := 1;
-    end;
-
-    dove := Pos('ORA-02292',ExceptionMessage);
-    if dove>0 then
-    begin
-       dove := Pos('(',ExceptionMessage);
-       ExceptionMessage := Copy(ExceptionMessage,dove+1,Length(ExceptionMessage)-dove);
-       dove := Pos(')',ExceptionMessage);
-       ExceptionMessage := Copy(ExceptionMessage,1,dove-1);
-       ExceptionMessage := format(RIS_ErroreForeign,[ExceptionMessage]);
-       vLog := false;
-       vShow := 1;
-    end;
-
-    dove := Pos('(SY002)',ExceptionMessage);
-    if dove>0 then
-    begin
-       ExceptionMessage := Copy(ExceptionMessage,1,dove-1);
-       vContinue := false;
-       vShow := 4;
-    end;
-
-    dove := Pos('(SY003)',ExceptionMessage);
-    if dove>0 then
-    begin
-       ExceptionMessage := Copy(ExceptionMessage,1,dove-1);
-       vContinue := false;
-       vShow := 4;
-    end;
-
-    if (vShow=2) and ((Pos('ORA-03114',ExceptionMessage)>0) or
-        (Pos('Not logged on',ExceptionMessage)>0) or
-        ((Pos('ORA-03113',ExceptionMessage)>0) and not (Pos('ORA-02050',ExceptionMessage)>0)) or
-        (Pos('ORA-12535',ExceptionMessage)>0) or
-        (Pos('ORA-12500',ExceptionMessage)>0) or
-        (Pos('ORA-12203',ExceptionMessage)>0) or
-        (Pos('ORA-01089',ExceptionMessage)>0) or
-        (Pos('ORA-01033',ExceptionMessage)>0) or
-        (Pos('ORA-01034',ExceptionMessage)>0) or
-        (Pos('ORA-01012',ExceptionMessage)>0) or
-        (Pos('ORA-12570',ExceptionMessage)>0) or
-        (Pos('ORA-12571',ExceptionMessage)>0)) then
-    begin
-        ExceptionMessage := RS_ServerNonDisponibile;
-        vContinue := false;
-        vShow := 4;
-    end;
-
-    AExceptionInfo.Options.ExceptionDialogType := edtMessageBox;
-    AExceptionInfo.Options.SaveLogFile := vLog;
-    AExceptionInfo.Options.edoSendErrorReportChecked := vLog;
-    AExceptionInfo.ExceptionMessage := ExceptionMessage;
-
-  end
-  else if (AExceptionInfo.ExceptionClass='EDBEditError') or
-     (AExceptionInfo.ExceptionClass='EcxEditValidationError') then
-  begin
-
-    AExceptionInfo.Options.ExceptionDialogType := edtMessageBox;
-    AExceptionInfo.Options.SaveLogFile := false;
-    AExceptionInfo.Options.edoSendErrorReportChecked := false;
-
-  end
-  else begin
-    AExceptionInfo.Options.edoSendErrorReportChecked := not gblDebugMode;
   end;
 
 end;
@@ -6923,9 +6807,6 @@ initialization
 *)
 {$ENDIF}
 
-{$IFDEF EUREKALOG}
-  RegisterEventExceptionNotify(nil, MyHandler);
-{$ENDIF}
   cxFormatController.UseDelphiDateTimeFormats := True;
 
 //  SetProcessDPIAware;

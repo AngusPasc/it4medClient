@@ -1010,7 +1010,7 @@ inherited frmMainMenu: TfrmMainMenu
     Ellipsis = True
     HintFont.Charset = DEFAULT_CHARSET
     HintFont.Color = clInfoText
-    HintFont.Height = -11
+    HintFont.Height = -19
     HintFont.Name = 'Source Sans Pro'
     HintFont.Style = []
     HintStyle = hsRounded

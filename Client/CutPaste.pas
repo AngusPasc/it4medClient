@@ -6,7 +6,7 @@ uses
   BaseRad, IInterface, IIConsts, Forms, cxStyles, cxCustomData, cxGraphics, cxFilter, cxData, cxEdit,
   DB, cxDBData, cxGridLevel, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxClasses, cxControls, cxGridCustomView, cxGrid,
-  Classes, ActnList, Menus, UDXPopup, dxBar, CSEZForm, 
+  Classes, ActnList, Menus, dxBar, CSEZForm, 
    Controls, ExtCtrls,  cxDataStorage, Messages,
   dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter,
   dxSkinsdxBarPainter, cxLookAndFeelPainters, StdCtrls, cxButtons,
@@ -17,7 +17,6 @@ type
     sAstaCut: TDataSource;
     dxBarManager1: TdxBarManager;
     dxBarPopupMenu1: TdxBarPopupMenu;
-    dxPopupMenu1: TdxPopupMenu;
     ActionList1: TActionList;
     AzzeraMemoria: TAction;
     dxBarButton1: TdxBarButton;
