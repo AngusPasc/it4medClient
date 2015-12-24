@@ -100,7 +100,7 @@ Conditionals=MEDICORNER;madExcept
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=hs1chora02.hes.it PORTA=9000 compress
+RunParams=host=hs1chora02.hes.it PORTA=9000 compress DEBUGMODE
 HostApplication=
 Launcher=
 UseLauncher=0

@@ -23,7 +23,7 @@ uses
   cxDBLookupComboBox, rsXmlData, dxPScxDBEditorLnks, dxPSTextLnk,
   cxNavigator, dxPScxGridLnk, dxPScxGridLayoutViewLnk, dxPSdxLCLnk,
   dxLayoutContainer, dxPScxPivotGridLnk, dxPSdxDBOCLnk, dxBarBuiltInMenu,
-  dxPSPrVwRibbon, dxPScxSchedulerLnk, dxSkinsdxRibbonPainter;
+  dxPSPrVwRibbon, dxPScxSchedulerLnk, dxSkinsdxRibbonPainter, Dialogs;
 
 {$I syVer.inc}
 
@@ -1002,6 +1002,9 @@ type
     GridOperazioniEsamiDESCBRANCA: TcxGridDBColumn;
     dxLayoutControlCartellaGroup4: TdxLayoutAutoCreatedGroup;
     dxDataAccAl: TcxBarEditItem;
+    aEsportaExcel: TAction;
+    SaveDialog1: TSaveDialog;
+    dxBarButton28: TdxBarButton;
     procedure RefertoExecute(Sender: TObject);
     procedure RicercaInternaExecute(Sender: TObject);
     procedure RicercaInternaUpdate(Sender: TObject);
@@ -1279,6 +1282,10 @@ type
     procedure cxGridDBRicercaRefertiCustomization(Sender: TObject);
     procedure cxGridDBRefACRCustomization(Sender: TObject);
     procedure dxDataAccAlPropertiesCloseUp(Sender: TObject);
+    procedure GridOperazioniNavigatorButtonsButtonClick(Sender: TObject;
+      AButtonIndex: Integer; var ADone: Boolean);
+    procedure aEsportaExcelExecute(Sender: TObject);
+    procedure RefEsamiBeforeQuery(Sender: TAstaBaseClientDataSet);
   private
     { Private declarations }
     lstato: TStringList;
@@ -1352,7 +1359,7 @@ uses DMCommon, Windows, StrUtils,
      madExcept, madTypes, madStrings,
 {$ENDIF}
      ConsegnaRef, ShellAPI, cxStorage {$IFDEF DELPHI2007} ,kscxStorage {$ENDIF},
-     ConfermaCancella;
+     ConfermaCancella, cxGridExportLink, cxGridDBDataDefinitions;
 
 {$R *.DFM}
 
@@ -1534,8 +1541,7 @@ begin
       refLink := dxComponentPrinterOperazioni;
     end;
 
-    dxComponentPrinter1.Print(True,nil,refLink);
-{
+//    dxComponentPrinter1.Print(True,nil,refLink);
     if FDMCommon.dxPrintDialog1.Execute then
     begin
        if FDMCommon.dxPrintDialog1.PreviewBtnClicked then
@@ -1545,7 +1551,7 @@ begin
           dxComponentPrinter1.Print(false,@AData,refLink);
        end;
     end;
-}
+
 end;
 
 procedure TFArchivioReferti.ElencoRefertiUpdate(Sender: TObject);
@@ -2005,14 +2011,14 @@ end;
 procedure TFArchivioReferti.OperazioniBeforeQuery(
   Sender: TAstaBaseClientDataSet);
 begin
+  Sender.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
+  Sender.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Sender.Parambyname('reparti_fk').AsInteger := gblpkrep;
   sender.Parambyname('lingua').AsString := gbllingua;
 end;
 
 procedure TFArchivioReferti.dxDataAccCloseUp(Sender: TObject);
 begin
-  Operazioni.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
-  Operazioni.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Operazioni.syRefresh;
 end;
 
@@ -2042,7 +2048,6 @@ end;
 procedure TFArchivioReferti.OperazioniAfterQuery(
   Sender: TAstaBaseClientDataSet);
 begin
-  RefEsami.Parambyname('triage_fk').AsInteger := OperazioniPKTRIAGE.AsInteger;
   RefEsami.syRefresh;
 
 end;
@@ -5358,6 +5363,51 @@ begin
   Operazioni.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
   Operazioni.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Operazioni.syRefresh;
+end;
+
+procedure TFArchivioReferti.GridOperazioniNavigatorButtonsButtonClick(
+  Sender: TObject; AButtonIndex: Integer; var ADone: Boolean);
+begin
+  inherited;
+  case AButtonIndex of
+  NBDI_FILTER+1:  begin
+                      aEsportaExcel.Execute;
+                      ADone := True;
+                    end;
+  end;
+end;
+
+procedure TFArchivioReferti.aEsportaExcelExecute(Sender: TObject);
+var
+  rf: TcxGrid;
+  ADataController: TcxCustomDataController;
+  AView: TcxGridDBTableView;
+begin
+  inherited;
+  SaveDialog1.FileName := dxPageControl.Properties.ActivePage.Caption;
+  rf := cxGridOperazioni;
+  if SaveDialog1.Execute then
+      begin
+{ -- non va...
+        with GridOperazioni.DataController do
+        ADataController := GetDetailDataController(FocusedRecordIndex, 0);
+        AView := TcxGridDBDataController(ADataController).GridView as TcxGridDBTableView;
+        AView.MasterGridRecord.Expand(false);
+        rf.FocusedView := AView;
+        rf.ActiveLevel := TcxGridLevel(AView.Level);
+}
+        ExportGridToExcel(SaveDialog1.FileName, rf);
+      end;
+
+end;
+
+procedure TFArchivioReferti.RefEsamiBeforeQuery(
+  Sender: TAstaBaseClientDataSet);
+begin
+  inherited;
+  Sender.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
+  Sender.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
+  Sender.Parambyname('reparti_fk').AsInteger := gblpkrep;
 end;
 
 initialization

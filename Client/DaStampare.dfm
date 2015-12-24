@@ -107,12 +107,16 @@ inherited FDaStampare: TFDaStampare
             DataBinding.FieldName = 'RIS_STUDY_EUID'
             Options.Editing = False
             Options.Filtering = False
-            Width = 44
+            Width = 48
+          end
+          object GridDaRefertareORA_INIZIO: TcxGridDBColumn
+            DataBinding.FieldName = 'ORA_INIZIO'
+            Width = 123
           end
           object GridDaRefertareDATA_VISITA: TcxGridDBColumn
             DataBinding.FieldName = 'DATA_VISITA'
             Options.Editing = False
-            Width = 52
+            Width = 103
           end
           object GridDaRefertareNOMINATIVO: TcxGridDBColumn
             DataBinding.FieldName = 'NOMINATIVO'
@@ -120,18 +124,18 @@ inherited FDaStampare: TFDaStampare
             Options.Filtering = False
             SortIndex = 0
             SortOrder = soAscending
-            Width = 160
+            Width = 169
           end
           object GridDaRefertareDATA_NASCITA: TcxGridDBColumn
             DataBinding.FieldName = 'DATA_NASCITA'
             Options.Editing = False
             Options.Filtering = False
-            Width = 66
+            Width = 70
           end
           object GridDaRefertareREPARTO: TcxGridDBColumn
             DataBinding.FieldName = 'REPARTO'
             Options.Editing = False
-            Width = 63
+            Width = 67
           end
           object GridDaRefertareSERVIZIO: TcxGridDBColumn
             DataBinding.FieldName = 'SERVIZIO'
@@ -211,17 +215,17 @@ inherited FDaStampare: TFDaStampare
             RepositoryItem = FDMCommon.edrepGRIDMEMO
             BestFitMaxWidth = 30
             MinWidth = 30
-            Width = 116
+            Width = 123
           end
           object GridDaRefertareDESC_INVIO: TcxGridDBColumn
             DataBinding.FieldName = 'DESC_INVIO'
             Options.Editing = False
-            Width = 124
+            Width = 131
           end
           object GridDaRefertareRADIOLOGIA: TcxGridDBColumn
             DataBinding.FieldName = 'RADIOLOGIA'
             Options.Editing = False
-            Width = 82
+            Width = 86
           end
         end
         object GridDettDaRefertare: TcxGridDBTableView
@@ -940,7 +944,7 @@ inherited FDaStampare: TFDaStampare
       OnClick = dxTuttiClick
     end
     object dxDataDal: TcxBarEditItem
-      Caption = 'Data consegna dal'
+      Caption = 'Data esame dal'
       Category = 0
       Hint = 'Da consegnare dal'
       Visible = ivAlways
@@ -1257,7 +1261,7 @@ inherited FDaStampare: TFDaStampare
     StreamOptions = [ssIndexes, ssAggregates]
     Indexes = <>
     Aggregates = <>
-    Active = True
+    Active = False
     FilterOptions = [foCaseInsensitive]
     Constraints = <>
     BeforeQuery = RefertazioneBeforeQuery
@@ -1275,6 +1279,7 @@ inherited FDaStampare: TFDaStampare
       't.data_referto,'
       't.data_accettazione,'
       't.data_visita,'
+      't.ora_inizio,'
       't.data_consegna,'
       'i.assistibili_fk,'
       'i.pkimpegnative,'
@@ -1324,8 +1329,8 @@ inherited FDaStampare: TFDaStampare
       'where c.radiologia = :reparti_fk and'
       't.statovisita between 170 and 180 and'
       
-        't.data_ritiro_referto between :dal and to_date(to_char(:al,'#39'DDMM' +
-        'YYYY'#39')||'#39'2359'#39','#39'DDMMYYYYHH24MI'#39')'
+        't.data_visita between :dal and to_date(to_char(:al,'#39'DDMMYYYY'#39')||' +
+        #39'2359'#39','#39'DDMMYYYYHH24MI'#39')'
       ':provenienza'
       ' '
       ' '
@@ -1397,6 +1402,7 @@ inherited FDaStampare: TFDaStampare
       'DATA_REFERTO,11,0'
       'DATA_ACCETTAZIONE,11,0'
       'DATA_VISITA,11,0'
+      'ORA_INIZIO,11,0'
       'DATA_CONSEGNA,11,0'
       'ASSISTIBILI_FK,3,0'
       'PKIMPEGNATIVE,3,0'
@@ -1513,7 +1519,7 @@ inherited FDaStampare: TFDaStampare
       DisplayFormat = 'ddddd'
     end
     object RefertazioneDATA_VISITA: TDateTimeField
-      DisplayLabel = 'Data esame'
+      DisplayLabel = 'Data referto'
       FieldName = 'DATA_VISITA'
       DisplayFormat = 'ddddd'
     end
@@ -1571,6 +1577,11 @@ inherited FDaStampare: TFDaStampare
     object RefertazioneCODICE_FISCALE: TStringField
       FieldName = 'CODICE_FISCALE'
       Size = 32
+    end
+    object RefertazioneORA_INIZIO: TDateTimeField
+      DisplayLabel = 'Data esame'
+      FieldName = 'ORA_INIZIO'
+      DisplayFormat = 'ddddd'
     end
   end
   object rsPropSaver1: TrsPropSaver
@@ -2248,6 +2259,7 @@ inherited FDaStampare: TFDaStampare
     object dxPrintGridDaConsegnare: TdxGridReportLink
       Active = True
       Component = cxGrid1
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -2281,13 +2293,14 @@ inherited FDaStampare: TFDaStampare
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti eseguiti'
-      ReportDocument.CreationDate = 42361.598865902780000000
+      ReportDocument.CreationDate = 42362.388115879630000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2313,6 +2326,7 @@ inherited FDaStampare: TFDaStampare
     object dxPrintGridConsegnati: TdxGridReportLink
       Active = True
       Component = cxGrid2
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -2346,13 +2360,14 @@ inherited FDaStampare: TFDaStampare
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Lista pazienti da eseguire'
-      ReportDocument.CreationDate = 42361.598866087970000000
+      ReportDocument.CreationDate = 42362.388115879630000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2397,7 +2412,7 @@ inherited FDaStampare: TFDaStampare
       end>
     IndexName = 'Idx_DettRefertazione'
     Aggregates = <>
-    Active = True
+    Active = False
     Constraints = <>
     BeforeQuery = DettRefertazioneBeforeQuery
     SequenceField.ApplyMoment = amOnPost
@@ -2432,8 +2447,8 @@ inherited FDaStampare: TFDaStampare
       'where c.radiologia = :reparti_fk and'
       't.statovisita between 170 and 180 and'
       
-        't.data_ritiro_referto between :dal and to_date(to_char(:al,'#39'DDMM' +
-        'YYYY'#39')||'#39'2359'#39','#39'DDMMYYYYHH24MI'#39')'
+        't.data_visita between :dal and to_date(to_char(:al,'#39'DDMMYYYY'#39')||' +
+        #39'2359'#39','#39'DDMMYYYYHH24MI'#39')'
       ':provenienza'
       ' '
       ' '

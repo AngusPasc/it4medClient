@@ -274,6 +274,8 @@ type
     GridConsegnatiCEREFERTO: TcxGridDBColumn;
     RefertazioneCODICE_FISCALE: TStringField;
     ConsegnatiCODICE_FISCALE: TStringField;
+    RefertazioneORA_INIZIO: TDateTimeField;
+    GridDaRefertareORA_INIZIO: TcxGridDBColumn;
     procedure RicercaUpdate(Sender: TObject);
     procedure RicercaExecute(Sender: TObject);
     procedure RefertazioneBeforeQuery(Sender: TAstaBaseClientDataSet);

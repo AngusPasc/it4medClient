@@ -1207,6 +1207,7 @@ inherited FRefMedicorner: TFRefMedicorner
       SearchHighlightColor = clGray
       Version = '5.0.0.201'
       OnPageChange = gtPDFViewerPageChange
+      InteractiveForms = False
       ViewerMode = vmHand
       AllowImageCopy = False
       SelectedRegionColor = clSkyBlue
@@ -1215,8 +1216,6 @@ inherited FRefMedicorner: TFRefMedicorner
       BackgroundRendering = False
       Caching.Enabled = True
       Caching.DocumentCount = 10
-      DoubleBuffered = False
-      HighlightFormFields = False
     end
     object dxLayoutControl1Group_Root: TdxLayoutGroup
       AlignHorz = ahClient
