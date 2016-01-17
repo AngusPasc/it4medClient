@@ -34,6 +34,7 @@ type
    Preno: TAstaDataSet;
    Richiesti: TAstaDataSet;
    Materiali: TAstaDataSet;
+   RichSpecxPrest: TAstaDataSet;
    AltriPresidi: integer;
    xIntervallo: integer;
    Telefonica: integer;

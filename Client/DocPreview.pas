@@ -72,6 +72,9 @@ type
     procedure DoShow; override;
   public
     { Public declarations }
+	  constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;    
+
     procedure KeyPress(var Key: Char); override;
     procedure ProcStampa;
     
@@ -210,7 +213,6 @@ begin
 
   FTipoReferto := 4;
 
-  gtPDFDocument := TgtPDFDocument.Create(nil);
   with gtPDFDocument do begin
 //    About = 'Gnostice PDFtoolkit (www.gnostice.com)'
 //    Version = '5.0.0.153'
@@ -220,7 +222,6 @@ begin
     ShowSetupDialog := False;
   end;
 
-    gtPDFViewer := TgtPDFViewer.Create(nil);
     gtPDFViewer.Parent := self;
     with gtPDFViewer do begin
       Left := 85;
@@ -253,7 +254,6 @@ begin
       HighlightFormFields := False;
     end;
 
-    gtPDFPrinter := TgtPDFPrinter.Create(nil);
     with gtPDFPrinter do begin
       Collate := True;
       Copies := 1;
@@ -447,6 +447,28 @@ begin
   if not gtPDFViewer.Active then
      gtPDFViewer.Active := True;
   gtPDFViewer.SetFocus;
+end;
+
+constructor TfDocPreview.Create(AOwner: TComponent);
+begin
+
+  gtPDFDocument := TgtPDFDocument.Create(nil);
+	gtPDFViewer := TgtPDFViewer.Create(nil);
+  gtPDFPrinter := TgtPDFPrinter.Create(nil);
+
+	inherited;
+
+end;
+
+destructor TfDocPreview.Destroy;
+begin
+
+	gtPDFViewer.Free;
+  gtPDFPrinter.Free;
+  gtPDFDocument.Free;
+
+  inherited;
+
 end;
 
 end.

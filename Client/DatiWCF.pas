@@ -90,12 +90,12 @@ type
     dxLayoutControl1Group1: TdxLayoutAutoCreatedGroup;
     dxLayoutControl1Group4: TdxLayoutAutoCreatedGroup;
     aInviaWCF: TAction;
-    PrestazioniPKT: TIntegerField;
-    PrestazioniXSTATO: TIntegerField;
+    PrestazioniTRIAGE_FK: TIntegerField;
+    PrestazioniSTATO: TIntegerField;
     EsameTIPO_ACCESSO: TStringField;
     EsameDATA_VISITA: TDateTimeField;
     EsamePKIMPEGNATIVE: TIntegerField;
-    GridPrestazioniXSTATO: TcxGridDBColumn;
+    GridPrestazioniSTATO: TcxGridDBColumn;
     MisureRichieste: TAstaClientDataSet;
     MisureRichiesteBRANCA: TStringField;
     MisureRichiesteCOD_ESTERNO: TStringField;
@@ -109,6 +109,12 @@ type
     dxLayoutControl1Group2: TdxLayoutAutoCreatedGroup;
     PrestazioniDEVICE: TIntegerField;
     aChiamaHeS: TAction;
+    PrestazioniPKPRESTAZIONI: TFloatField;
+    PrestazioniCODICE: TStringField;
+    PrestazioniDESCBRANCA: TStringField;
+    GridPrestazioniDEVICE: TcxGridDBColumn;
+    GridPrestazioniCODICE: TcxGridDBColumn;
+    GridPrestazioniDESCBRANCA: TcxGridDBColumn;
     procedure AnnullaExecute(Sender: TObject);
     procedure AnnullaUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -338,19 +344,19 @@ end;
 
 procedure TFDatiWCF.ControllaTutti;
 var
-  pkp: string;
+  pkp: integer;
 begin
   Prestazioni.DisableControls;
-  pkp := PrestazioniBRANCA.AsString;
+  pkp := PrestazioniPKPRESTAZIONI.AsInteger;
   Prestazioni.First;
   Ftutti := true;
   while not Prestazioni.eof do
   begin
-     Ftutti := Ftutti and (PrestazioniXSTATO.AsInteger>0);  // in [1,2,3]);
+     Ftutti := Ftutti and (PrestazioniSTATO.AsInteger>0);  // in [1,2,3]);
      Prestazioni.Next;
   end;
 //  Tutti := FTutti;
-  Prestazioni.Locate('BRANCA',pkp,[]);
+  Prestazioni.Locate('PKPRESTAZIONI',pkp,[]);
   Prestazioni.EnableControls;
 end;
 
@@ -451,7 +457,7 @@ end;
 procedure TFDatiWCF.CancellaEsameUpdate(Sender: TObject);
 begin
   inherited;
-  CancellaEsame.Enabled := not Prestazioni.IsEmpty and {(GridPrestazioni.SelectedCount>0) and} ((PrestazioniXSTATO.AsInteger=0) or ((PrestazioniXSTATO.AsInteger=1) and (PrestazioniDEVICE.AsInteger=0)));
+  CancellaEsame.Enabled := not Prestazioni.IsEmpty and {(GridPrestazioni.SelectedCount>0) and} ((PrestazioniSTATO.AsInteger=0) or ((PrestazioniSTATO.AsInteger=1) and (PrestazioniDEVICE.AsInteger=0)));
 end;
 
 procedure TFDatiWCF.PrecedentiExecute(Sender: TObject);
@@ -563,10 +569,10 @@ begin
     Prestazioni.First;
     while not Prestazioni.eof do
     begin
-       if (PrestazioniXSTATO.AsInteger=0) then
+       if (PrestazioniSTATO.AsInteger=0) then
        begin
        	  Prestazioni.Edit;
-          PrestazioniXSTATO.AsInteger := 1;
+          PrestazioniSTATO.AsInteger := 1;
        	  Prestazioni.Post;
        end;
        Prestazioni.Next;
@@ -644,11 +650,11 @@ begin
        if (PrestazioniDEVICE.AsInteger=0) then
        begin
            Prestazioni.Edit;
-           PrestazioniXSTATO.AsInteger := 1;
+           PrestazioniSTATO.AsInteger := 1;
            Prestazioni.Post;
            Inc(qNoDevice);
        end
-       else if PrestazioniXSTATO.AsInteger=1 then
+       else if PrestazioniSTATO.AsInteger=1 then
        begin
            if (PrestazioniDEVICE.AsInteger=2) then
               Inc(qNonRefer)
@@ -658,7 +664,7 @@ begin
 
        Inc(qTutti);
        if not almenouno then
-          almenouno := (PrestazioniXSTATO.AsInteger in [0,1,2,3]);
+          almenouno := (PrestazioniSTATO.AsInteger in [0,1,2,3]);
        Prestazioni.Next;
     end;
 
@@ -806,7 +812,7 @@ end;
 procedure TFDatiWCF.aInviaWCFUpdate(Sender: TObject);
 begin
   inherited;
-  aInviaWCF.Enabled := not Prestazioni.IsEmpty and (PrestazioniXSTATO.AsInteger in [0,1]) and (PrestazioniDEVICE.AsInteger in [1,2]);
+  aInviaWCF.Enabled := not Prestazioni.IsEmpty and (PrestazioniSTATO.AsInteger in [0,1]) and (PrestazioniDEVICE.AsInteger in [1,2]);
 end;
 
 procedure TFDatiWCF.MisureRichiesteBeforeQuery(
@@ -843,11 +849,11 @@ begin
   pbranca := PrestazioniBRANCA.AsString;
   GridPrestazioni.BeginUpdate();
   MisureRichieste.CancelRange;
+  misure := '';
   try
   MisureRichieste.SetRange([pbranca],[pbranca]);
   if not MisureRichieste.IsEmpty then
   begin
-    misure := '';
     while not MisureRichieste.eof do
     begin
        if misure<>'' then
@@ -868,7 +874,7 @@ begin
   if PostWCF(FDMCommon.LeggiPostoLavoroWCF_URI.AsString, EsameRIS_STUDY_EUID.AsString, pbranca, misure) then
   begin
      Prestazioni.Edit;
-     PrestazioniXSTATO.AsInteger := 1;
+     PrestazioniSTATO.AsInteger := 1;
      Prestazioni.Post;
 //  end
 //  else begin

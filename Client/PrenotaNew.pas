@@ -495,6 +495,14 @@ dxBarManager1Bar1: TdxBar;
     CompostoBRANCA: TStringField;
     CompostoDESCBRANCA: TStringField;
     dxLayoutControl1Group1: TdxLayoutAutoCreatedGroup;
+    RichiestiCESPECIFIC: TIntegerField;
+    RichSpecxPrest: TAstaDataSet;
+    RichSpecxPrestSPECIFICAZIONI_FK: TIntegerField;
+    RichSpecxPrestIDSPECIFICAZIONI: TStringField;
+    RichSpecxPrestDESCRIZIONE: TStringField;
+    RichSpecxPrestPREZZO: TFloatField;
+    RichSpecxPrestCOSTO: TFloatField;
+    RichSpecxPrestPROGRESSIVO_RIGA: TIntegerField;
     procedure aNuovaPrenotazioneExecute(Sender: TObject);
     procedure actRicercaExecute(Sender: TObject);
     procedure QyGiornateBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -640,6 +648,7 @@ dxBarManager1Bar1: TdxBar;
     procedure cxPersonalizzaClick(Sender: TObject);
     procedure ResetFormClick(Sender: TObject);
     procedure TPrenoOSP_RICHChange(Sender: TField);
+    procedure RichSpecxPrestNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
     FPersModified: Boolean;
@@ -662,7 +671,7 @@ dxBarManager1Bar1: TdxBar;
     vbDiagn: TvbDiagnList;
     vSbItem: TList;
     FxAltriPresidi: integer;
-    procedure LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer);
+    function LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
     procedure SelezionaDiagnostiche(const lista: string);
     procedure SelezioneSingola;
     procedure Inizializza;
@@ -742,8 +751,8 @@ implementation
 
 uses
   Windows, BaseForm, Variants, Msgdlgs, Sysutils, Anagrafica, dateutils, Types,
-  Planner, AstaDBTypes, StrUtils, dxPrnDlg, Prenobasediagn, Prenobasetest, math, 
-  cxMemo, RicAssistito, StampaAvvisi, RicAssPreno, RicMedici,
+  Planner, AstaDBTypes, StrUtils, dxPrnDlg, Prenobasediagn, Prenobasetest, math,
+  cxMemo, RicAssistito, StampaAvvisi, RicAssPreno, RicMedici, SelezSpec,
   CercaBarCode,
 {$IFNDEF MEDICORNER}
   AltriPresidi,
@@ -1371,6 +1380,7 @@ begin
    fp.Preno := TPreno;
    fp.Richiesti := Richiesti;
    fp.Materiali := Materiali;
+   fp.RichSpecxPrest := RichSpecxPrest;
    if xpkrep<>gblpkrep then
       fp.AltriPresidi := 2
    else
@@ -1590,6 +1600,8 @@ begin
   FDMCommon.LkTipoRicetta.Filtered := false;
 
   cxMagg.Properties.OnEditValueChanged := cxMaggPropertiesEditValueChanged;
+
+  cxGridPrestazioni.OptionsSelection.CellSelect := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
 
   // -- spostato da DoShow:
 
@@ -2812,9 +2824,9 @@ begin
      FRicRadiologiaPreno.CopiaDataset(Esami,tpOrd);
 {JRT 6611}
      if tpOrd=tpCodice then
-        FRicRadiologiaPreno.dxCodice.Text := cxCodice.Text
+        FRicRadiologiaPreno.DaCercare := cxCodice.Text
      else
-        FRicRadiologiaPreno.dxDescrizione.Text := cxDescrizione.Text;
+        FRicRadiologiaPreno.DaCercare := cxDescrizione.Text;
 {}
      if FRicRadiologiaPreno.ShowModal=mrOk then
         CaricaCodice(FRicRadiologiaPreno);
@@ -2838,7 +2850,9 @@ begin
   end;
 end;
 
-procedure TFPrenotaNew.LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer);
+function TFPrenotaNew.LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
+var
+  FSelezSpec: TFSelezSpec;
 begin
     Richiesti.Append;
     RichiestiCODICE.AsString := ds.Fieldbyname('CODICE').AsString;
@@ -2852,11 +2866,44 @@ begin
     if not ds.Fieldbyname('GRESAMI_FK').IsNull then
        RichiestiGRESAMI_FK.AsInteger := ds.Fieldbyname('GRESAMI_FK').AsInteger;
 }
-    FDMCommon.PrestTar.close;
-    FDMCommon.PrestTar.Parambyname('IDENT_FK').AsString := ds.Fieldbyname('IDENT_FK').AsString;
-    FDMCommon.PrestTar.Parambyname('LEG_CODICE').AsString := TPrenoLEG_CODICE.AsString;
-    FDMCommon.PrestTar.open;
-    RichiestiIMPORTO.asFloat := FDMCommon.PrestTarTAR_TICKET.asFloat;
+
+    if (ds.FindField('CESPECIFIC')<>nil) and (ds.Fieldbyname('CESPECIFIC').AsInteger>0) then
+    begin
+       RichiestiCESPECIFIC.AsInteger := ds.Fieldbyname('CESPECIFIC').AsInteger;
+    end
+    else begin
+       RichiestiCESPECIFIC.AsInteger := 0;
+    end;
+
+    if RichiestiCESPECIFIC.AsInteger>0 then
+    begin
+        FSelezSpec := TFSelezSpec.Create(nil);
+        RichSpecxPrest.Filtered := False;
+        RichSpecxPrest.Filter := format('PROGRESSIVO_RIGA = %d',[RichiestiPROGRESSIVO_RIGA.AsInteger]);
+        RichSpecxPrest.Filtered := True;
+        try
+           FSelezSpec.sSpecxPrest.Dataset := RichSpecxPrest;
+           FSelezSpec.sPrestazioni.DataSet := Richiesti;
+           if FSelezSpec.ShowModal=mrCancel then
+           begin
+              Richiesti.Cancel;
+              Exit;
+           end;
+        finally
+           RichSpecxPrest.Filtered := False;
+           FSelezSpec.Free;
+        end;
+    end;
+
+    if (RichiestiCESPECIFIC.AsInteger<>2) then
+    begin
+      FDMCommon.PrestTar.close;
+      FDMCommon.PrestTar.Parambyname('IDENT_FK').AsString := ds.Fieldbyname('IDENT_FK').AsString;
+      FDMCommon.PrestTar.Parambyname('LEG_CODICE').AsString := TPrenoLEG_CODICE.AsString;
+      FDMCommon.PrestTar.open;
+      RichiestiIMPORTO.asFloat := FDMCommon.PrestTarTAR_TICKET.asFloat;
+    end;
+
     if (TPrenoESENTE.AsInteger=1) or
        ((TPrenoESENTE.AsInteger=2) and
         (not CodiciEsenti.Active or
@@ -2889,6 +2936,14 @@ begin
       MsgDlg(format(RS_PrestGiaCaricata,[cod]),'', ktWarning, [kbOK]);
       exit;
   end;
+
+{$IFDEF MEDICORNER}
+  if Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  begin
+      MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
+      exit;
+  end;
+{$ENDIF}
 
   if Esami.Fieldbyname('COMPOSTO').AsInteger=0 then
   begin
@@ -3133,6 +3188,7 @@ begin
 
        fp.Preno := nil; // TPreno;
        fp.Richiesti := nil; // Richiesti;
+       fp.RichSpecxPrest := nil;
        fp.AltriPresidi := FxAltriPresidi;
        fp.xIntervallo := dxIntervallo.EditValue;
 
@@ -4598,9 +4654,9 @@ begin
      FRicRadiologiaPreno.CopiaDataset(Esami,tpOrd);
 {JRT 6611}
      if tpOrd=tpCodice then
-        FRicRadiologiaPreno.dxCodice.Text := cxEsamiDaCercare.Text
+        FRicRadiologiaPreno.DaCercare := cxEsamiDaCercare.Text
      else
-        FRicRadiologiaPreno.dxDescrizione.Text := cxDescrTempi.Text;
+        FRicRadiologiaPreno.DaCercare := cxDescrTempi.Text;
 {}
      if FRicRadiologiaPreno.ShowModal=mrOk then
         CaricaCodiceTempi(FRicRadiologiaPreno);
@@ -4692,6 +4748,14 @@ begin
       MsgDlg(format(RS_PrestGiaCaricata,[cod]),'', ktWarning, [kbOK]);
       exit;
   end;
+
+{$IFDEF MEDICORNER}
+  if Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  begin
+      MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
+      exit;
+  end;
+{$ENDIF}
 
   if Esami.Fieldbyname('COMPOSTO').AsInteger=0 then
   begin
@@ -4978,6 +5042,12 @@ procedure TFPrenotaNew.DoOnActivate;
 begin
   inherited;
   aNuovaPrenotazione.Execute;
+end;
+
+procedure TFPrenotaNew.RichSpecxPrestNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  RichSpecxPrestPROGRESSIVO_RIGA.AsInteger := RichiestiPROGRESSIVO_RIGA.AsInteger;
 end;
 
 initialization

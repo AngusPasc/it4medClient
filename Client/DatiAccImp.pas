@@ -44,7 +44,6 @@ type
     PrestazioniPKPRESTAZIONI: TFloatField;
     PrestazioniPROGRESSIVO_RIGA: TIntegerField;
     PrestazioniDIAGNOSTICA_FK: TIntegerField;
-    PrestazioniDESCRIZIONE: TStringField;
     PrestazioniTRIAGE_FK: TIntegerField;
     PrestazioniDURATA: TIntegerField;
     PrestazioniCODICE: TStringField;
@@ -232,7 +231,6 @@ type
     AccettazioneCIT_CODICE: TStringField;
     AccettazioneCOM_TYPE: TStringField;
     btnMPPS: TcxButton;
-    PrestazioniSPECIFICAZIONI_FK: TIntegerField;
     AccettazioneLIV_SCR: TIntegerField;
     cxDBLookupComboBox2: TcxDBLookupComboBox;
     dxLayoutScreening: TdxLayoutItem;
@@ -339,6 +337,16 @@ type
     CompostoBRANCA: TStringField;
     CompostoDESCBRANCA: TStringField;
     aAnnulla: TAction;
+    PrestazioniCESPECIFIC: TIntegerField;
+    PrestazioniDESCRIZIONE: TStringField;
+    qSpecxPrest: TAstaClientDataSet;
+    qSpecxPrestPKSPECXPREST: TIntegerField;
+    qSpecxPrestSPECIFICAZIONI_FK: TIntegerField;
+    qSpecxPrestPRESTAZIONI_FK: TIntegerField;
+    qSpecxPrestIDSPECIFICAZIONI: TStringField;
+    qSpecxPrestDESCRIZIONE: TStringField;
+    qSpecxPrestPREZZO: TFloatField;
+    qSpecxPrestCOSTO: TFloatField;
     procedure AccettazioneBeforePost(DataSet: TDataSet);
     procedure AccettazioneNewRecord(DataSet: TDataSet);
     procedure PrestazioniBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -429,6 +437,10 @@ type
     procedure qRicettaInfBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure qLivScrBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure aAnnullaExecute(Sender: TObject);
+    procedure qSpecxPrestBeforeQuery(Sender: TAstaBaseClientDataSet);
+    procedure cxCodiceKeyPress(Sender: TObject; var Key: Char);
+    procedure cxDescrizioneKeyPress(Sender: TObject; var Key: Char);
+    procedure qSpecxPrestNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
     FBollo: Double;
@@ -440,7 +452,7 @@ type
     FPreFilter: string;
     FDIAGNOSTICA_FK: integer;
     xIndirizzo : string;
-    procedure LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer);
+    function LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
     procedure ControllaAltriEsami;
     procedure ScegliCodiceEsame;
     function GetDiagSelez: integer;
@@ -452,7 +464,7 @@ type
     procedure AssegnaEsenzione(daSalva: boolean);
     procedure RicalcolaTotale;
     procedure CercoCodice(tpOrd: TtpOrd);
-    procedure CaricaCodice(pkcodrad: integer; pkspec: Variant); overload;
+    procedure CaricaCodice(pkcodrad: integer); overload;
     procedure CaricaCodice(xRad: TFRicRadiologiaPreno); overload;
     procedure SalvaTutto;
     procedure FiltraQuery(const cosa: string);
@@ -502,7 +514,7 @@ var
 implementation
 
 uses DMCommon,BaseForm,Windows,msgdlgs,dateutils,sysutils,Variants, //Accettazione,
-     RicAssistito, VisitePrecRAD, RicMedici, Anagrafica, osFastStrings,
+     RicAssistito, VisitePrecRAD, RicMedici, Anagrafica, osFastStrings, SelezSpec,
 {$IFNDEF MEDICORNER}
      RicMedInt,
      Radiofarmaco,
@@ -1147,9 +1159,12 @@ begin
      FRicRadiologiaPreno.CopiaDataset(Esami,tpOrd);
 {JRT 6611}
      if tpOrd=tpCodice then
-        FRicRadiologiaPreno.dxCodice.Text := cxCodice.Text
-     else
-        FRicRadiologiaPreno.dxDescrizione.Text := cxDescrizione.Text;
+     begin
+        FRicRadiologiaPreno.DaCercare := cxCodice.Text;
+     end
+     else begin
+        FRicRadiologiaPreno.DaCercare := cxDescrizione.Text;
+     end;
 {}
      if FRicRadiologiaPreno.ShowModal=mrOk then
      begin
@@ -1166,19 +1181,20 @@ procedure TFDatiAccImp.CaricaCodice(xRad: TFRicRadiologiaPreno);
 var
   i: integer;
   pkcod: integer;
-  pkspec: Variant;
 begin
   for i:=0 to xRad.cxGridCodici.Controller.SelectedRecordCount-1 do
   begin
      pkcod := xRad.cxGridCodici.Controller.SelectedRecords[i].Values[xRad.cxGridCodiciPKCODICIRAD.Index];
-     pkspec := xRad.cxGridCodici.Controller.SelectedRecords[i].Values[xRad.cxGridCodiciPKSPECIFICAZIONI.Index];
-     CaricaCodice(pkcod,pkspec);
+     CaricaCodice(pkcod);
   end;
 end;
 
 
-procedure TFDatiAccImp.LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer);
+function TFDatiAccImp.LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
+var
+  FSelezSpec: TFSelezSpec;
 begin
+        result := True;
 {$IFNDEF MEDICORNER}
         if not ds.Fieldbyname('EXTRA_TARIFFARIO').IsNull and (ds.Fieldbyname('EXTRA_TARIFFARIO').AsInteger=1) then
         begin
@@ -1189,18 +1205,38 @@ begin
         Prestazioni.Append;
         PrestazioniCODICIRAD_FK.AsInteger := ds.Fieldbyname('PKCODICIRAD').AsInteger;
         PrestazioniCODICE.AsString := ds.Fieldbyname('CODICE').AsString;
+        PrestazioniDESCRIZIONE.AsString := ds.Fieldbyname('DESCRIZIONE').AsString;
 
         if pgrprest>0 then
            PrestazioniGRUPPIPREST_FK.AsInteger := pgrprest;
 
-        if (ds.FindField('PKSPECIFICAZIONI')<>nil) and not ds.Fieldbyname('PKSPECIFICAZIONI').IsNull then // FRicRadiologia.EsamiGRSPEC_FK.IsNull then
+        if (ds.FindField('CESPECIFIC')<>nil) and (ds.Fieldbyname('CESPECIFIC').AsInteger>0) then
         begin
-           PrestazioniSPECIFICAZIONI_FK.AsInteger := ds.Fieldbyname('PKSPECIFICAZIONI').AsInteger;
-           PrestazioniDESCRIZIONE.AsString := ds.Fieldbyname('DESCRIZIONE').AsString + ' ' + ds.Fieldbyname('DESCSPEC').AsString;
+           PrestazioniCESPECIFIC.AsInteger := ds.Fieldbyname('CESPECIFIC').AsInteger;
         end
         else begin
-           PrestazioniDESCRIZIONE.AsString := ds.Fieldbyname('DESCRIZIONE').AsString;
-           PrestazioniSPECIFICAZIONI_FK.Clear;
+           PrestazioniCESPECIFIC.AsInteger := 0;
+        end;
+
+        if PrestazioniCESPECIFIC.AsInteger>0 then
+        begin
+            FSelezSpec := TFSelezSpec.Create(nil);
+            qSpecxPrest.Filtered := False;
+            qSpecxPrest.Filter := format('PRESTAZIONI_FK = %d',[PrestazioniPKPRESTAZIONI.AsInteger]);
+            qSpecxPrest.Filtered := True;
+            try
+               FSelezSpec.sSpecxPrest.Dataset := qSpecxPrest;
+               FSelezSpec.sPrestazioni.DataSet := Prestazioni;
+               Result := (FSelezSpec.ShowModal=mrOk);
+               if not Result then
+               begin
+                  Prestazioni.Cancel;
+                  Exit;
+               end;
+            finally
+               qSpecxPrest.Filtered := False;
+               FSelezSpec.Free;
+            end;
         end;
 
         PrestazioniDURATA.AsInteger := ds.Fieldbyname('DURATA').AsInteger;
@@ -1225,7 +1261,7 @@ begin
              PrestazioniDURATA.AsInteger := xPossibili.Fieldbyname('DURATA').AsInteger;
         end;
 
-        if not PrestazioniIDENT_FK.IsNull then
+        if not PrestazioniIDENT_FK.IsNull and (PrestazioniCESPECIFIC.AsInteger<>2) then
         begin
             FDMCommon.PrestTar.close;
             FDMCommon.PrestTar.Parambyname('IDENT_FK').AsString := PrestazioniIDENT_FK.AsString;
@@ -1234,6 +1270,7 @@ begin
             if not FDMCommon.PrestTar.IsEmpty then
                PrestazioniIMPORTO.asFloat := FDMCommon.PrestTarTAR_TICKET.asFloat;
         end;
+
         if (AccettazioneESENTE.AsInteger=1) or
            ((AccettazioneESENTE.AsInteger=2) and
             (not CodiciEsenti.Active or
@@ -1259,11 +1296,12 @@ begin
 
 end;
 
-procedure TFDatiAccImp.CaricaCodice(pkcodrad: integer; pkspec: Variant);
+procedure TFDatiAccImp.CaricaCodice(pkcodrad: integer);
+var
+  res: boolean;
 begin
   Esami.Filtered := false;
-  if not Esami.Locate('PKCODICIRAD;PKSPECIFICAZIONI',
-                       VarArrayOf([pkcodrad,pkspec]),[]) then
+  if not Esami.Locate('PKCODICIRAD', pkcodrad,[]) then
      exit;
   if (FDMCommon.LeggiPostoLavoroCHECK_NO_PRESTMULT.AsInteger=0) and
       Prestazioni.Locate('CODICE',Esami.Fieldbyname('CODICE').AsString,[]) then
@@ -1272,10 +1310,20 @@ begin
       exit;
   end;
 
+{$IFDEF MEDICORNER}
+  if Prestazioni.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  begin
+      MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
+      exit;
+  end;
+{$ENDIF}
+
+  res := True;
+
   if Esami.Fieldbyname('COMPOSTO').AsInteger=0 then
   begin
 
-        LoadPrestazione(Esami, -1);
+        res := LoadPrestazione(Esami, -1);
 
         cxCodice.Text := '';
         cxDescrizione.Text := '';
@@ -1284,9 +1332,9 @@ begin
       Composto.Parambyname('codicirad_fk').AsInteger := Esami.Fieldbyname('PKCODICIRAD').AsInteger;
       Composto.open;
       try
-         while not Composto.eof do
+         while res and not Composto.eof do
          begin
-            LoadPrestazione(Composto, CompostoPKGRUPPIPREST.AsInteger);
+            res := LoadPrestazione(Composto, CompostoPKGRUPPIPREST.AsInteger);
             Composto.Next;
          end;
       finally
@@ -1297,7 +1345,7 @@ begin
   end;
 
   // -- assegnazione diagnostica...
-  if (xDiag=0) then
+  if res and (xDiag=0) then
   begin
     if Assigned(xReferAcc) then
     begin
@@ -1417,10 +1465,12 @@ begin
      begin
         Prestazioni.opennofetch;
         NoteEsame.opennofetch;
+        qSpecxPrest.opennofetch;
      end
      else begin
         Prestazioni.open;
         NoteEsame.Open;
+        qSpecxPrest.Open;
      end;
   end;
 
@@ -1892,7 +1942,6 @@ end;
 
 procedure TFDatiAccImp.SalvaTutto;
 var
-  rr: integer;
   xdtpro: TDateTime;
   xuid: integer;
   xdiagn: integer;
@@ -1991,9 +2040,9 @@ begin
 
   try
      if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) then
-        FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[Accettazione,Prestazioni,NoteEsame,Materiali,AggiornaStatoVisita])
+        FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[Accettazione,Prestazioni,NoteEsame,Materiali,AggiornaStatoVisita,qSpecxPrest])
      else
-        FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[Accettazione,Prestazioni,NoteEsame,AggiornaStatoVisita]);
+        FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[Accettazione,Prestazioni,NoteEsame,AggiornaStatoVisita,qSpecxPrest]);
   finally
      AggiornaStatoVisita.Close;
   end;
@@ -2068,8 +2117,8 @@ begin
   if (cxCodice.Text<>'') then
   begin
      FiltraQuery('CODICE LIKE '+#39+cxCodice.Text+'%'+#39);
-     if Esami.RecordCount=1 then
-        CaricaCodice(Esami.Fieldbyname('PKCODICIRAD').AsInteger,Esami.Fieldbyname('PKSPECIFICAZIONI').AsVariant)
+     if (Esami.RecordCount=1) then
+        CaricaCodice(Esami.Fieldbyname('PKCODICIRAD').AsInteger)
      else
         CercoCodice(tpCodice);
   end
@@ -2083,8 +2132,8 @@ begin
   if (cxDescrizione.Text<>'') then
   begin
      FiltraQuery('DESCRIZIONE LIKE '+#39+'%'+cxDescrizione.Text+'%'+#39);
-     if Esami.RecordCount=1 then
-        CaricaCodice(Esami.Fieldbyname('PKCODICIRAD').AsInteger,Esami.Fieldbyname('PKSPECIFICAZIONI').AsVariant)
+     if (Esami.RecordCount=1) then
+        CaricaCodice(Esami.Fieldbyname('PKCODICIRAD').AsInteger)
      else
         CercoCodice(tpDescrizione);
   end
@@ -2111,7 +2160,7 @@ procedure TFDatiAccImp.cxDescrizioneKeyDown(Sender: TObject; var Key: Word;
 begin
   inherited;
   case Key of
-  VK_RETURN,VK_TAB,VK_F10: DescrPress;
+  VK_F10: DescrPress;
   end;
 end;
 
@@ -2120,7 +2169,8 @@ procedure TFDatiAccImp.cxCodiceKeyDown(Sender: TObject; var Key: Word;
 begin
   inherited;
   case Key of
-  {VK_RETURN,VK_TAB,}VK_F10: CodicePress;
+  VK_F10: CodicePress;
+  VK_RETURN:  Key := VK_TAB;
   end;
 end;
 
@@ -2659,8 +2709,10 @@ end;
 
 procedure TFDatiAccImp.GridPrestazioniRADIOFARMACOPropertiesButtonClick(
   Sender: TObject; AButtonIndex: Integer);
+{$IFNDEF MEDICORNER}
 var
   i: integer;
+{$ENDIF}
 begin
   inherited;
 {$IFNDEF MEDICORNER}
@@ -2985,6 +3037,35 @@ procedure TFDatiAccImp.aAnnullaExecute(Sender: TObject);
 begin
   inherited;
   ModalResult := mrCancel;
+end;
+
+procedure TFDatiAccImp.qSpecxPrestBeforeQuery(
+  Sender: TAstaBaseClientDataSet);
+begin
+  inherited;
+  Sender.Parambyname('impegnative_fk').AsInteger := AccettazionePKIMPEGNATIVE.AsInteger;
+
+end;
+
+procedure TFDatiAccImp.cxCodiceKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+     CodicePress;
+end;
+
+procedure TFDatiAccImp.cxDescrizioneKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+     DescrPress;
+end;
+
+procedure TFDatiAccImp.qSpecxPrestNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  qSpecxPrestPRESTAZIONI_FK.AsInteger := PrestazioniPKPRESTAZIONI.AsInteger;
 end;
 
 end.

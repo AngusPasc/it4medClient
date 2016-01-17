@@ -1471,6 +1471,12 @@ begin
   if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) then
      dxConEsami.Enabled := False;
 
+  if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger = 5) then
+  begin
+     dxSubDiag.Visible := ivNever;
+     dxCalendario.Visible := ivNever;
+  end;
+
   dxPageControl.ActivePage := dxTabElenco;
        
   PostMessage( Handle, SY_REFRESHFORM, 0, 0);
@@ -4713,13 +4719,14 @@ begin
      subst2 :=
               'join ('+
               'select p.triage_fk,'+
-              'ris.TO_STRING( CAST( COLLECT( NVL2(p.specificazioni_fk,c.descrizione||'+#39+' '+#39+'||sp.descrizione,c.descrizione)) AS ntt_varchar2 ) ) as DescEsame '+
+//              'ris.TO_STRING( CAST( COLLECT( NVL2(p.specificazioni_fk,c.descrizione||'+#39+' '+#39+'||sp.descrizione,c.descrizione)) AS ntt_varchar2 ) ) as DescEsame '+
+              'c.descrizione as DescEsame '+
               'from diagxwk d '+
               'join servizi s on s.pkservizi = d.servizi_fk '+
               'join triage t on t.diagnostica_fk=s.PKSERVIZI '+
               'join prestazioni p on p.triage_fk = t.pktriage '+
               'left join codicirad c on c.pkcodicirad=p.codicirad_fk '+
-              'left join specificazioni sp on sp.pkspecificazioni = p.specificazioni_fk '+
+//              'left join specificazioni sp on sp.pkspecificazioni = p.specificazioni_fk '+
               'where d.workstation_fk=:workstation_fk '+
               'and d.attiva=1 '+
               'and s.reparti_fk = :reparti_fk '+

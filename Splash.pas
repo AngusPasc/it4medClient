@@ -42,7 +42,7 @@ var
   frmSplash: TfrmSplash;
 
 implementation
-uses math, sysutils, VersInfo, IInterface, Forms, Graphics, IniFiles;
+uses math, sysutils, VersInfo, IInterface, Forms, Graphics, IniFiles, DMCommon;
 
 {$R *.dfm}
 
@@ -131,6 +131,8 @@ constructor TfrmSplash.Create(AOwner: TComponent);
 begin
   inherited;
   ProgressBar.Position := 0;
+  if gblDebugMode then
+     Self.FormStyle := fsNormal;
 end;
 
 destructor TfrmSplash.Destroy;

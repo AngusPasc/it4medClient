@@ -104,7 +104,6 @@ type
     dxBarButton3: TdxBarButton;
     aStampaProvvisorio: TAction;
     btStampaProvv: TcxButton;
-    gtPDFDocument: TgtPDFDocument;
     Panel2: TPanel;
     BtnFirstPage: TSpeedButton;
     BtnPriorPage: TSpeedButton;
@@ -120,7 +119,6 @@ type
     sCDMaster: TDataSource;
     SoloBookmark: TcxCheckBox;
     qPrintReportSTATOREFERTO_FK: TIntegerField;
-    gtPDFViewer: TgtPDFViewer;
     qPrintTestataNOTE_TECNICO: TStringField;
     qPrintTestataQUESITO_DIAGN: TStringField;
     qPrintReportTIPO_REFERTO_FK: TIntegerField;
@@ -145,7 +143,6 @@ type
     aCancellaDiagnosi: TAction;
     aModificaDiagnosi: TAction;
     dxBarButton4: TdxBarButton;
-    gtPDFPrinter: TgtPDFPrinter;
     procedure aStampaExecute(Sender: TObject);
     procedure aFirmatoExecute(Sender: TObject);
     procedure aProvvisorioExecute(Sender: TObject);
@@ -192,6 +189,9 @@ type
     procedure aModificaDiagnosiUpdate(Sender: TObject);
   private
     { Private declarations }
+    gtPDFPrinter: TgtPDFPrinter;
+    gtPDFDocument: TgtPDFDocument;
+    gtPDFViewer: TgtPDFViewer;
     FActiveRef: string;
     refrCarica: boolean;
     FStampante: string;
@@ -234,6 +234,8 @@ type
     { Public declarations }
     dacreare: boolean;
     daReparti: boolean;
+	  constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;    
     function SincronizzaReferto: boolean;
     procedure KeyPress(var Key: Char); override;
     property MyStream: TMemoryStream read FMyStream write SetMyStream;
@@ -257,7 +259,7 @@ var
 
 implementation
 
-uses DMCommon, Forms, Windows, MsgDlgs, IIConsts, sysutils, variants, PrintFromShell,
+uses DMCommon, Forms, Windows, MsgDlgs, IIConsts, sysutils, variants, PrintFromShell, Graphics,
 {$IFNDEF MEDICORNER}
      FirmaSISS,
      FirmaSISSWay,
@@ -818,16 +820,26 @@ begin
           FRefMedicorner.Stampante := dxPrintDevice.CurrentDevice;
        end;
 
+       FRefMedicorner.qPrintTestata.Parambyname('PKTRIAGE').AsInteger := pk;
+       FRefMedicorner.qPrintTestata.open;
+
        with FRefMedicorner do begin
 
        aDefinitivo.Visible := (FDMCommon.LeggiPostoLavoroPROVV_DEFINITIVO.AsInteger=1) and not (tbtDefinitivo in escludi);
        aStampaDefinitivo.Visible := (FDMCommon.LeggiPostoLavoroPROVV_DEFINITIVO.AsInteger=1) and not (tbtStampaDefinitivo in escludi);
        if aStampaDefinitivo.Visible then
        begin
-         if qPrintTestataSTATOVISITA.AsInteger in [165,166] then
-         begin
-            aStampaDefinitivo.Caption := RS_StampaReferto;
-            aStampaDefinitivo.Hint := RS_StampaRefertoHint;
+         case qPrintTestataSTATOVISITA.AsInteger of
+         165,166:
+               begin
+                  aStampaDefinitivo.Caption := RS_StampaReferto;
+                  aStampaDefinitivo.Hint := RS_StampaRefertoHint;
+               end;
+         170:
+               begin
+                  aStampaDefinitivo.Caption := RS_StampaEConsegna;
+                  aStampaDefinitivo.Hint := RS_StampaEConsegnaHint;
+               end;
          end;
        end;
 
@@ -868,9 +880,6 @@ begin
           FRefMedicorner.daReparti := true;
 
        FRefMedicorner.Titolo := xTitolo;
-
-       FRefMedicorner.qPrintTestata.Parambyname('PKTRIAGE').AsInteger := pk;
-       FRefMedicorner.qPrintTestata.open;
 
        xnr := TipoMod(FRefMedicorner.qPrintTestataPROVENIENZA.AsString,escludi);
        if xnr=-1 then
@@ -925,10 +934,11 @@ begin
            begin
              FRefMedicorner.aFirmato.Enabled := false;
              FRefMedicorner.aFirmato.Visible := false;
+{$IFNDEF MEDICORNER}
              FRefMedicorner.aStampa.Visible := FRefMedicorner.aStampa.Visible and
                                              not ((tprnStampaProvvisorio in stampa) or (tprnStampaProvvisorioBatch in stampa) or
                                                   (tprnStampaDefinitivo in stampa) or (tprnStampaDefinitivoBatch in stampa));
-
+{$ENDIF}
              if FRefMedicorner.aStampa.Visible then
              begin
                if FRefMedicorner.qPrintTestataSTATOVISITA.AsInteger=170 then
@@ -1242,13 +1252,13 @@ begin
 
   end;
 
-{$IFNDEF MEDICORNER}
+{.$IFNDEF MEDICORNER}
   case tipo of
   1: ModalResult := mrIgnore;    // stampa firmato
   2: ModalResult := mrAbort;     // stampa provvisorio
   3: ModalResult := mrNoToAll    // stampa definitivo
   end;
-{$ENDIF}
+{.$ENDIF}
 end;
 
 procedure TFRefMedicorner.aFirmatoExecute(Sender: TObject);
@@ -1268,6 +1278,64 @@ procedure TFRefMedicorner.DoCreate;
 //  dove: integer;
 begin
   inherited;
+
+  with gtPDFDocument do begin
+//    About := 'Gnostice PDFtoolkit (www.gnostice.com)';
+//    Version := '5.0.0.201';
+    OpenAfterSave := False;
+    MergeOptions := [moIncludeOutlines, moIncludeFormFields];
+    EMailAfterSave := False;
+    ShowSetupDialog := False;
+    Left := 908;
+    Top := 352;
+  end;
+
+  gtPDFViewer.Parent := self;
+  with gtPDFViewer do begin
+      Left := 75;
+      Top := 12;
+      Width := 1482;
+      Height := 491;
+      Cursor := 1;
+      Color := clGray;
+      DockOrientation := doNoOrient;
+      ParentColor := False;
+      TabOrder := 1;
+      TabStop := True;
+      OnKeyDown := gtPDFViewerKeyDown;
+//      About := 'Gnostice PDFtoolkit (www.gnostice.com)';
+//      Status := 'PDF Viewer loaded Successfully.';
+      PDFDocument := gtPDFDocument;
+      SearchHighlightColor := clGray;
+//      Version := '5.0.0.201';
+      OnPageChange := gtPDFViewerPageChange;
+      InteractiveForms := False;
+      ViewerMode := vmHand;
+      AllowImageCopy := False;
+      SelectedRegionColor := clSkyBlue;
+      HighlightRegionColor := clYellow;
+      HighlightRegionShape := stRectangle;
+      BackgroundRendering := False;
+      Caching.Enabled := True;
+      Caching.DocumentCount := 10;
+    end;
+
+    with gtPDFPrinter do begin
+      Collate := True;
+      Copies := 1;
+      Options := [poPageNums];
+//      About := 'Gnostice PDFtoolkit (www.gnostice.com)';
+      PDFDocument := gtPDFDocument;
+//      Version := '5.0.0.201';
+      AutoRotate := False;
+      IgnoreHardMargin := False;
+      RenderingOptions := [];
+      Left := 883;
+      Top := 276;
+    end;
+
+  dxLayoutControl1Item9.Control := gtPDFViewer;
+
 //  Personalizza := gblSuperUser;
   FDMCommon.CaricaLayout(Name,dxLayoutControl1);
 
@@ -1917,6 +1985,28 @@ procedure TFRefMedicorner.aModificaDiagnosiUpdate(Sender: TObject);
 begin
   inherited;
   aModificaDiagnosi.Enabled := not Diagnosi.IsEmpty;
+end;
+
+constructor TFRefMedicorner.Create(AOwner: TComponent);
+begin
+
+  gtPDFDocument := TgtPDFDocument.Create(nil);
+	gtPDFViewer := TgtPDFViewer.Create(nil);
+  gtPDFPrinter := TgtPDFPrinter.Create(nil);
+
+	inherited;
+
+end;
+
+destructor TFRefMedicorner.Destroy;
+begin
+
+	gtPDFViewer.Free;
+  gtPDFPrinter.Free;
+  gtPDFDocument.Free;
+
+  inherited;
+
 end;
 
 end.

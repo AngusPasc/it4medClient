@@ -1,4 +1,4 @@
-program MediCorner;
+program MediCornerTest;
 
 {$I syVer.inc}
 

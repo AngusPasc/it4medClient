@@ -276,6 +276,8 @@ type
     ConsegnatiCODICE_FISCALE: TStringField;
     RefertazioneORA_INIZIO: TDateTimeField;
     GridDaRefertareORA_INIZIO: TcxGridDBColumn;
+    aDatiConsegna: TAction;
+    dxBarButton7: TdxBarButton;
     procedure RicercaUpdate(Sender: TObject);
     procedure RicercaExecute(Sender: TObject);
     procedure RefertazioneBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -349,6 +351,8 @@ type
     procedure cxPageControl1Change(Sender: TObject);
     procedure GridDaRefertareDblClick(Sender: TObject);
     procedure aStampaModuliUpdate(Sender: TObject);
+    procedure aDatiConsegnaExecute(Sender: TObject);
+    procedure aDatiConsegnaUpdate(Sender: TObject);
   private
     { Private declarations }
     refData: TAstaClientDataset;
@@ -370,7 +374,7 @@ type
     procedure StampaReferto(pSelezStampante: boolean);
     procedure PreparaCD;
     procedure StampaEtichette(pSelezStampante: Boolean);
-    procedure ConsegnaRefertoDaStampare;
+    function ConsegnaRefertoDaStampare: integer;
     procedure ConsegnaRefertoConsegnati;
 
   protected
@@ -578,7 +582,7 @@ begin
       end
       else
         tempG.DataController.FocusedRecordIndex := oldi;
-      result := tpcrTrovato;        
+      result := tpcrTrovato;
   end;
 
 end;
@@ -591,11 +595,6 @@ begin
 
   rsPropSaver1.Storage.Load;
   rsPropSaver1.LoadValues;
-
-  if dxDaConsegnare.Down then
-     cxPageControl1.ActivePage := cxTabStampare
-  else
-     cxPageControl1.ActivePage := cxTabConsegnati;
 
   FDMCommon.SetVisible(GridDaRefertareDESC_INVIO,(FDMCommon.LeggiPostoLavoroCHK_CONSEGNA_REF.AsInteger>0));
 
@@ -639,6 +638,13 @@ begin
   FDMCommon.SetVisible(GridDaRefertareSERVIZIO,(FDMCommon.LeggiPostoLavoroCHK_SLITTA_REP.AsInteger=1));
   FDMCommon.SetVisible(GridConsegnatiSERVIZIO,(FDMCommon.LeggiPostoLavoroCHK_SLITTA_REP.AsInteger=1));
 
+  cxPageControl1.Properties.ActivePage := cxTabStampare;
+{
+  if dxDaConsegnare.Down then
+     cxPageControl1.ActivePage := cxTabStampare
+  else
+     cxPageControl1.ActivePage := cxTabConsegnati;
+}
   if dxConsegnati.Down then
   begin
     Consegnati.open;
@@ -693,7 +699,6 @@ begin
   if FDMCommon.LeggiPostoLavoroCHK_CONSEGNA_CON_PSWD.AsInteger=1 then
      qryUser.open;
 
-  cxPageControl1.Properties.ActivePage := cxTabStampare;
   refData := Refertazione;
 
   if FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5 then
@@ -1094,7 +1099,7 @@ end;
 procedure TFDaStampare.GridConsegnatiDblClick(Sender: TObject);
 begin
 
-  PostMessage(Handle,SY_DBLCLICK,LongInt(cxGrid2),LongInt(aConsegnaReferti));
+  PostMessage(Handle,SY_DBLCLICK,LongInt(cxGrid2),LongInt(aDatiConsegna));
 
 end;
 
@@ -1214,12 +1219,14 @@ begin
      ConsegnaRefertoConsegnati;
 end;
 
-procedure TFDaStampare.ConsegnaRefertoDaStampare;
+function TFDaStampare.ConsegnaRefertoDaStampare: integer;
 var
   TempUM: TAstaUpdateMethod;
   avanti: boolean;
   i: integer;
 begin
+
+  result := mrCancel;
   AlertEventList1.Active := false;
   Refertazione.DisableControls;
   try
@@ -1237,7 +1244,8 @@ begin
        FConsegnaRef.Consegna.Edit;
        FConsegnaRef.ConsegnaDATA_CONSEGNA.AsDateTime := Date();
 
-       avanti := (FConsegnaRef.ShowModal in [mrOk,mrRetry]);
+       result := FConsegnaRef.ShowModal;
+       avanti := (result in [mrOk,mrRetry]);
 
     finally
        FConsegnaRef.Free;
@@ -1265,6 +1273,8 @@ begin
        inc(i);
 
     end;
+
+    result := mrOk;
 
   end;
 
@@ -1315,7 +1325,7 @@ end;
 procedure TFDaStampare.aConsegnaRefertiUpdate(Sender: TObject);
 begin
 
-  aConsegnaReferti.Enabled := not IsEmptyDataSet;
+  aConsegnaReferti.Enabled := (cxPageControl1.ActivePage=cxTabStampare) and not IsEmptyDataSet;
 
 end;
 
@@ -1916,10 +1926,21 @@ begin
                xstampa := xstampa + [tprnStampaDefinitivo];
                xescludi := xescludi + [tbtProvvisorio,tbtDefinitivo];
             end;
- 170..190:  begin
+{$IFDEF MEDICORNER}
+   170:  begin
+               xstampa := xstampa + [tprnStampaDefinitivo];
+               xescludi := xescludi + [tbtfirmato,tbtProvvisorio,tbtDefinitivo];
+         end;
+   180,
+   190:  begin
 //               xstampa := xstampa + [tprnStampaDefinitivo];
                xescludi := xescludi + [tbtfirmato,tbtProvvisorio,tbtDefinitivo];
+         end;
+{$ELSE}}
+ 170..190:  begin
+               xescludi := xescludi + [tbtfirmato,tbtProvvisorio,tbtDefinitivo];
             end;
+{$ENDIF}
    else
        xescludi := xescludi + [tbtprovvisorio];
    end;
@@ -1928,6 +1949,10 @@ begin
    begin
       ref := Refertazione;
       res := VisualizzaReferto({RefertazioneSITE_NAME.AsString}'',RefertazionePKTRIAGE.AsInteger,RefertazioneNOMINATIVO.AsString,xescludi,xstampa,tvdEdit);
+
+      if res=mrNoToAll then
+         res := ConsegnaRefertoDaStampare;
+
    end
    else //if cxPageControl1.ActivePage=cxTabConsegnati then
    begin
@@ -1990,6 +2015,18 @@ procedure TFDaStampare.aStampaModuliUpdate(Sender: TObject);
 begin
   inherited;
   aStampaModuli.Enabled := not IsEmptyDataSet;
+end;
+
+procedure TFDaStampare.aDatiConsegnaExecute(Sender: TObject);
+begin
+  inherited;
+  aConsegnaReferti.Execute;
+end;
+
+procedure TFDaStampare.aDatiConsegnaUpdate(Sender: TObject);
+begin
+  inherited;
+  aDatiConsegna.Enabled := not (cxPageControl1.ActivePage=cxTabStampare) and not IsEmptyDataSet;
 end;
 
 initialization

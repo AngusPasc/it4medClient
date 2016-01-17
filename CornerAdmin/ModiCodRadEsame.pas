@@ -12,7 +12,8 @@ uses
   cxGridDBTableView, cxGridCustomView, cxGrid, cxRichEdit, cxDBRichEdit,
   cxDropDownEdit, cxCalendar, cxDBEdit, cxCheckBox, cxMemo, cxTextEdit,
   cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, dxLayoutControl,
-  CSEZForm, StdCtrls, cxButtons, Controls, ExtCtrls, cxGroupBox;
+  CSEZForm, StdCtrls, cxButtons, Controls, ExtCtrls, cxGroupBox,
+  cxImageComboBox;
 
 type
   TFModiCodRadEsame = class(TFBaseRad)
@@ -118,7 +119,6 @@ type
     sRefNegativi: TDataSource;
     cxLookupRefNegativo: TcxDBLookupComboBox;
     DistBasCODXRAD_FK: TIntegerField;
-    PrestazioniGRESAMI_FK: TIntegerField;
     PrestazioniTESTO: TBlobField;
     PrestazioniREF_NEGATIVO: TBlobField;
     PrepTesto: TAstaClientDataSet;
@@ -140,10 +140,6 @@ type
     dxLayoutControl1Item8: TdxLayoutItem;
     cxDBDateEdit2: TcxDBDateEdit;
     dxLayoutControl1Item9: TdxLayoutItem;
-    PrestazioniGRSPEC_FK: TIntegerField;
-    sLkGrSpec: TDataSource;
-    cxDBLookupComboBox1: TcxDBLookupComboBox;
-    dxLayoutControl1Item10: TdxLayoutItem;
     dxLayoutControlSpecificazioni: TdxLayoutGroup;
     dxLayoutControl1Group2: TdxLayoutGroup;
     dxLayoutControl1Group7: TdxLayoutGroup;
@@ -168,6 +164,10 @@ dxBarManager1Bar2: TdxBar;
     dxLayoutControl1Group15: TdxLayoutGroup;
     dxLayoutControl1Group6: TdxLayoutAutoCreatedGroup;
     dxLayoutControl1Group8: TdxLayoutAutoCreatedGroup;
+    PrestazioniGRESAMI_FK: TIntegerField;
+    PrestazioniCESPECIFIC: TIntegerField;
+    cxDBImageComboBox1: TcxDBImageComboBox;
+    dxLayoutControl1Item11: TdxLayoutItem;
     procedure aConfermaExecute(Sender: TObject);
     procedure aAnnullaExecute(Sender: TObject);
     procedure DistBasBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -383,7 +383,8 @@ begin
   ReadBarCode := False;
   dxLayoutControlMateriali.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
   dxLayoutControlMoltiplicatore.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
-  
+  dxLayoutControlSpecificazioni.Visible := (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1);
+
 end;
 
 procedure TFModiCodRadEsame.cxTariffarioPropertiesCloseUp(Sender: TObject);

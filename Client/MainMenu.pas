@@ -25,7 +25,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure rsXMLAccessiLoadFromStream(Sender: TObject; Stream: TStream;
       var DoStandard: Boolean);
-    procedure FormShow(Sender: TObject);
   private
     FOnIdle: TIdleEvent;
     FPCSC: TPCSC;
@@ -251,7 +250,27 @@ begin
         if dxTile.Items[x].GroupIndex=dxTiledxTileControlGroup2.Index then
            dxTile.Items[x].Size := tcisExtraLarge;
   end;
-*)  
+*)
+
+  if not gblCallCenter then
+  begin
+      if not(FPCSC.Valid) then AddLogMemo('SCardEstablishContext failed.')
+      else begin
+        AddLogMemo('SCardEstablishContext succeeded.');
+        FPCSC.OnReaderFound := ReaderFound;
+        FPCSC.OnReaderRemoved := ReaderRemoved;
+        FPCSC.OnCardStateChanged := CardStateChanged;
+        FPCSC.OnCardInserted := CardInserted;
+        FPCSC.OnCardRemoved := CardRemoved;
+        FPCSC.OnCardError := CardError;
+
+        FPCSC.Start;
+      end;
+  end
+  else begin
+      TFPrenotaNew.ActivateDetail;  
+  end;
+
 end;
 
 // -- gestione lettore Tessera Sanitaria
@@ -262,25 +281,6 @@ begin
   if Assigned(FOnIdle) then FOnIdle(Sender, Done);
 end;
 
-
-procedure TfrmMainMenu.FormShow(Sender: TObject);
-begin
-  inherited;
-
-  if not(FPCSC.Valid) then AddLogMemo('SCardEstablishContext failed.')
-  else begin
-    AddLogMemo('SCardEstablishContext succeeded.');
-    FPCSC.OnReaderFound := ReaderFound;
-    FPCSC.OnReaderRemoved := ReaderRemoved;
-    FPCSC.OnCardStateChanged := CardStateChanged;
-    FPCSC.OnCardInserted := CardInserted;
-    FPCSC.OnCardRemoved := CardRemoved;
-    FPCSC.OnCardError := CardError;
-
-    FPCSC.Start;
-  end;
-
-end;
 
 procedure TfrmMainMenu.AddLogMemo(Msg: string);
 begin

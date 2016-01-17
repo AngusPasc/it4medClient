@@ -15,7 +15,6 @@ object frmSplash: TfrmSplash
   FormStyle = fsStayOnTop
   OldCreateOrder = False
   Position = poScreenCenter
-  Scaled = True
   PixelsPerInch = 96
   TextHeight = 28
   object dxLayoutControl1: TdxLayoutControl
@@ -53,10 +52,10 @@ object frmSplash: TfrmSplash
       Properties.Alignment.Horz = taCenter
       Properties.Alignment.Vert = taVCenter
       Transparent = True
-      Height = 17
-      Width = 711
-      AnchorX = 367
-      AnchorY = 301
+      Height = 45
+      Width = 702
+      AnchorX = 362
+      AnchorY = 315
     end
     object imgLogo: TcxImage
       Left = 11
@@ -1296,7 +1295,7 @@ object frmSplash: TfrmSplash
       Left = 11
       Top = 242
       AutoSize = False
-      Caption = 'Copyright '#169' 2015 Chorafarma s.r.l.'
+      Caption = 'Copyright '#169' 2016 Chorafarma s.r.l.'
       Style.HotTrack = False
       Style.TransparentBorder = False
       Properties.Alignment.Horz = taCenter

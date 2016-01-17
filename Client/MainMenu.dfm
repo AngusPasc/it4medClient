@@ -5,7 +5,6 @@ inherited frmMainMenu: TfrmMainMenu
   ClientHeight = 569
   ClientWidth = 966
   OnDestroy = FormDestroy
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 24
   inherited dxTile: TdxTileControl

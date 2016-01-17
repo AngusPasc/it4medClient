@@ -2,8 +2,8 @@ object FDMCommon: TFDMCommon
   OldCreateOrder = False
   OnCreate = FDMCommonCreate
   OnDestroy = DataModuleDestroy
-  Left = 356
-  Top = 33
+  Left = 220
+  Top = 28
   Height = 778
   Width = 1048
   object cxLocalizer1: TcxLocalizer
@@ -547,12 +547,50 @@ object FDMCommon: TFDMCommon
       Properties.ListOptions.SyncMode = True
       Properties.ListSource = sqDefPrint
     end
+    object edrepValuta: TcxEditRepositoryCurrencyItem
+      Properties.Nullable = False
+    end
+    object edrepCESPECIFIC: TcxEditRepositoryImageComboBoxItem
+      Properties.Images = cxImageNavigator16
+      Properties.Items = <
+        item
+          Description = 'Nessuna'
+          Value = 0
+        end
+        item
+          Description = 'Solo selezione'
+          ImageIndex = 33
+          Value = 1
+        end
+        item
+          Description = 'Con calcolo prezzo'
+          ImageIndex = 29
+          Value = 2
+        end>
+    end
+    object edrepImageDEVICE: TcxEditRepositoryImageComboBoxItem
+      Properties.ImageAlign = iaRight
+      Properties.Items = <
+        item
+          Description = 'No Device / No Referto'
+          ImageIndex = 0
+          Value = 0
+        end
+        item
+          Description = 'Device / Referto'
+          Value = 1
+        end
+        item
+          Description = 'Device / No Referto'
+          Value = 2
+        end>
+    end
   end
   object AstaClientSocket: TAstaClientSocket
     Active = False
-    Address = 'hs1chora02.hes.it'
+    Address = 'oracle12'
     ClientType = ctNonBlocking
-    Host = 'hs1chora02.hes.it'
+    Host = 'oracle12'
     Port = 9000
     OnConnect = AstaClientSocketConnect
     OnDisconnect = AstaClientSocketDisconnect
@@ -6214,8 +6252,7 @@ object FDMCommon: TFDMCommon
       'c.pkcodicirad,'
       'c.dose,'
       'c.composto,'
-      's.pkspecificazioni,'
-      's.descrizione as DescSpec,'
+      'c.cespecific,'
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'c.branca,'
@@ -6223,7 +6260,6 @@ object FDMCommon: TFDMCommon
       'from codxrad m'
       'join codicirad c on c.pkcodicirad = m.codicirad_fk'
       'left join branche b on b.pkbranche = c.branca'
-      'left join specificazioni s on s.grspecif_fk = c.grspec_fk'
       'left join gresami gr on gr.pkgresami = m.gresami_fk'
       'left join prestazioni_specialistiche p on p.ident=c.ident_fk'
       'where (c.data_fine is null or c.data_fine>SYSDATE)'
@@ -6255,8 +6291,7 @@ object FDMCommon: TFDMCommon
       'PKCODICIRAD,3,0'
       'DOSE,6,0'
       'COMPOSTO,3,0'
-      'PKSPECIFICAZIONI,3,0'
-      'DESCSPEC,1,30'
+      'CESPECIFIC,3,0'
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'BRANCA,1,3'
@@ -6295,14 +6330,6 @@ object FDMCommon: TFDMCommon
     object EsamiGRESAMI_FK: TIntegerField
       FieldName = 'GRESAMI_FK'
     end
-    object EsamiPKSPECIFICAZIONI: TIntegerField
-      FieldName = 'PKSPECIFICAZIONI'
-    end
-    object EsamiDESCSPEC: TStringField
-      DisplayLabel = 'Specificazioni'
-      FieldName = 'DESCSPEC'
-      Size = 30
-    end
     object EsamiGRESAMI: TStringField
       DisplayLabel = 'Metodica'
       FieldName = 'GRESAMI'
@@ -6321,6 +6348,9 @@ object FDMCommon: TFDMCommon
     object EsamiBRANCA: TStringField
       FieldName = 'BRANCA'
       Size = 3
+    end
+    object EsamiCESPECIFIC: TIntegerField
+      FieldName = 'CESPECIFIC'
     end
   end
   object Timer2: TTimer
@@ -6485,8 +6515,7 @@ object FDMCommon: TFDMCommon
       'gr.gresami,'
       'r.reparti_fk,'
       'm.provenienza,'
-      'sp.pkspecificazioni,'
-      'sp.descrizione as DescSpec,'
+      'c.cespecific,'
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'c.branca,'
@@ -6504,7 +6533,6 @@ object FDMCommon: TFDMCommon
       'join codicirad c on c.pkcodicirad = m.codicirad_fk'
       'join branche b on b.pkbranche = c.branca'
       'join codxrad r on r.codicirad_fk = c.pkcodicirad'
-      'left join specificazioni sp on sp.grspecif_fk = c.grspec_fk'
       'left join gresami gr on gr.pkgresami = r.gresami_fk'
       'left join prestazioni_specialistiche p on p.ident=c.ident_fk'
       '/*, dist_bas db, magart ma*/'
@@ -6565,8 +6593,7 @@ object FDMCommon: TFDMCommon
       'GRESAMI,1,10'
       'REPARTI_FK,3,0'
       'PROVENIENZA,1,1'
-      'PKSPECIFICAZIONI,3,0'
-      'DESCSPEC,1,30'
+      'CESPECIFIC,3,0'
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'BRANCA,1,3'
@@ -6600,14 +6627,6 @@ object FDMCommon: TFDMCommon
       FieldName = 'PROVENIENZA'
       Size = 1
     end
-    object PossibiliPKSPECIFICAZIONI: TIntegerField
-      FieldName = 'PKSPECIFICAZIONI'
-    end
-    object PossibiliDESCSPEC: TStringField
-      DisplayLabel = 'Specificazioni'
-      FieldName = 'DESCSPEC'
-      Size = 30
-    end
     object PossibiliGRESAMI: TStringField
       DisplayLabel = 'Metodica'
       FieldName = 'GRESAMI'
@@ -6634,6 +6653,9 @@ object FDMCommon: TFDMCommon
     object PossibiliBRANCA: TStringField
       FieldName = 'BRANCA'
       Size = 3
+    end
+    object PossibiliCESPECIFIC: TIntegerField
+      FieldName = 'CESPECIFIC'
     end
   end
   object sLkOspedali: TDataSource
@@ -7502,8 +7524,7 @@ object FDMCommon: TFDMCommon
       'c.pkcodicirad,'
       'c.dose,'
       'c.composto,'
-      'sp.pkspecificazioni,'
-      'sp.descrizione as DescSpec,'
+      'c.cespecific,'
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'CAST(m.servizi_fk as varchar2(9)) as servizi_fk'
@@ -7511,7 +7532,6 @@ object FDMCommon: TFDMCommon
       'join codicirad c on c.pkcodicirad = r.codicirad_fk'
       'join esamixdiagn m on m.codicirad_fk=c.pkcodicirad'
       'left join gresami gr on gr.pkgresami = r.gresami_fk'
-      'left join specificazioni sp on sp.grspecif_fk = c.grspec_fk'
       
         'join (select distinct rs.rep_owner from repserv rs where rs.repa' +
         'rti_fk=:pkreparti and rs.rep_owner<>:pkreparti) A on A.rep_owner' +
@@ -7549,14 +7569,13 @@ object FDMCommon: TFDMCommon
       'CODICE,1,12'
       'DESCRIZIONE,1,100'
       'IDENT_FK,1,12'
-      'DURATA,6,0'
+      'DURATA,3,0'
       'GRESAMI_FK,3,0'
       'GRESAMI,1,10'
       'PKCODICIRAD,3,0'
       'DOSE,6,0'
       'COMPOSTO,3,0'
-      'PKSPECIFICAZIONI,3,0'
-      'DESCSPEC,1,30'
+      'CESPECIFIC,3,0'
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'SERVIZI_FK,1,9')
@@ -7590,16 +7609,6 @@ object FDMCommon: TFDMCommon
     object AltriEsamixSitoCOMPOSTO: TIntegerField
       FieldName = 'COMPOSTO'
     end
-    object AltriEsamixSitoPKSPECIFICAZIONI: TIntegerField
-      FieldName = 'PKSPECIFICAZIONI'
-    end
-    object AltriEsamixSitoDESCSPEC: TStringField
-      FieldName = 'DESCSPEC'
-      Size = 30
-    end
-    object AltriEsamixSitoDURATA: TFloatField
-      FieldName = 'DURATA'
-    end
     object AltriEsamixSitoEXTRA_TARIFFARIO: TIntegerField
       FieldName = 'EXTRA_TARIFFARIO'
     end
@@ -7609,6 +7618,12 @@ object FDMCommon: TFDMCommon
     end
     object AltriEsamixSitoCALCOLO_85: TIntegerField
       FieldName = 'CALCOLO_85'
+    end
+    object AltriEsamixSitoDURATA: TIntegerField
+      FieldName = 'DURATA'
+    end
+    object AltriEsamixSitoCESPECIFIC: TIntegerField
+      FieldName = 'CESPECIFIC'
     end
   end
   object NuovoTriage: TAstaClientDataSet
@@ -7927,15 +7942,13 @@ object FDMCommon: TFDMCommon
       'c.pkcodicirad,'
       'c.dose,'
       'c.composto,'
-      's.pkspecificazioni,'
-      's.descrizione as DescSpec,'
+      'c.cespecific,'
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'CAST(m.servizi_fk as varchar2(9)) as servizi_fk'
       'from codxrad r'
       'join codicirad c on c.pkcodicirad = r.codicirad_fk'
       'left join gresami gr on gr.pkgresami = r.gresami_fk'
-      'left join specificazioni s on s.grspecif_fk = c.grspec_fk'
       'left join prestazioni_specialistiche p on p.ident=c.ident_fk'
       'join esamixdiagn m on m.codicirad_fk=c.pkcodicirad'
       'where'
@@ -7966,14 +7979,13 @@ object FDMCommon: TFDMCommon
       'CODICE,1,12'
       'DESCRIZIONE,1,100'
       'IDENT_FK,1,12'
-      'DURATA,6,0'
+      'DURATA,3,0'
       'GRESAMI_FK,3,0'
       'GRESAMI,1,10'
       'PKCODICIRAD,3,0'
       'DOSE,6,0'
       'COMPOSTO,3,0'
-      'PKSPECIFICAZIONI,3,0'
-      'DESCSPEC,1,30'
+      'CESPECIFIC,3,0'
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'SERVIZI_FK,1,9')
@@ -8012,18 +8024,8 @@ object FDMCommon: TFDMCommon
       FieldName = 'GRESAMI'
       Size = 10
     end
-    object EsamixAltriPKSPECIFICAZIONI: TIntegerField
-      FieldName = 'PKSPECIFICAZIONI'
-    end
-    object EsamixAltriDESCSPEC: TStringField
-      FieldName = 'DESCSPEC'
-      Size = 30
-    end
     object EsamixAltriEXTRA_TARIFFARIO: TIntegerField
       FieldName = 'EXTRA_TARIFFARIO'
-    end
-    object EsamixAltriDURATA: TFloatField
-      FieldName = 'DURATA'
     end
     object EsamixAltriSERVIZI_FK: TStringField
       FieldName = 'SERVIZI_FK'
@@ -8031,6 +8033,12 @@ object FDMCommon: TFDMCommon
     end
     object EsamixAltriCALCOLO_85: TIntegerField
       FieldName = 'CALCOLO_85'
+    end
+    object EsamixAltriDURATA: TIntegerField
+      FieldName = 'DURATA'
+    end
+    object EsamixAltriCESPECIFIC: TIntegerField
+      FieldName = 'CESPECIFIC'
     end
   end
   object acPingTimer: TacAwayTimer

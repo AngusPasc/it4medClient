@@ -187,6 +187,14 @@ type
     QyPrenoSERVIZIO_RICH_FK: TIntegerField;
     NrPrenoEsamiNR_ESAMI: TIntegerField;
     PossibiliDURATA: TIntegerField;
+    RegistraSpecxPrest: TAstaClientDataSet;
+    RegistraSpecxPrestPKSPECXPREST: TIntegerField;
+    RegistraSpecxPrestSPECIFICAZIONI_FK: TIntegerField;
+    RegistraSpecxPrestPRESTAZIONI_FK: TIntegerField;
+    RegistraSpecxPrestIDSPECIFICAZIONI: TStringField;
+    RegistraSpecxPrestDESCRIZIONE: TStringField;
+    RegistraSpecxPrestPREZZO: TFloatField;
+    RegistraSpecxPrestCOSTO: TFloatField;
     procedure DBDaySourceFieldsToItem(Sender: TObject; Fields: TFields;
       Item: TPlannerItem);
     procedure DBDaySourceGetResourceName(Sender: TObject;
@@ -327,6 +335,7 @@ type
      Preno: TAstaDataSet;
      Richiesti: TAstaDataSet;
      Materiali: TAstaDataSet;
+     RichSpecxPrest: TAstaDataSet;
      function CanClose: boolean; override;
      procedure Minimizza; override;
      procedure Massimizza; override;
@@ -635,6 +644,7 @@ Begin
    Preno := fp.Preno;
    Richiesti := fp.Richiesti;
    Materiali := fp.Materiali;
+   RichSpecxPrest := fp.RichSpecxPrest;
    FxAltriPresidi := fp.AltriPresidi;
 
 //   DBPlanner.SetZoomValue(min(DBPlanner.Display.Displayunit,fp.vDurata));
@@ -2955,6 +2965,19 @@ begin
           RegistraEsamiNUMERO_PRESTAZIONE.AsInteger := Richiesti.Fieldbyname('NUMERO_PRESTAZIONE').AsInteger;
           RegistraEsami.Post;
 
+          RichSpecxPrest.Filtered := False;
+          RichSpecxPrest.Filter := format('PROGRESSIVO_RIGA = %d',[Richiesti.Fieldbyname('PROGRESSIVO_RIGA').AsInteger]);
+          RichSpecxPrest.Filtered := True;
+
+          while not RichSpecxPrest.Eof do
+          begin
+            RegistraSpecxPrest.Append;
+            RegistraSpecxPrestSPECIFICAZIONI_FK.AsInteger := RichSpecxPrest.Fieldbyname('SPECIFICAZIONI_FK').AsInteger;
+            RegistraSpecxPrestPRESTAZIONI_FK.AsInteger := RegistraEsamiPKPRESTAZIONI.AsInteger;
+            RegistraSpecxPrest.Post;
+            RichSpecxPrest.Next;
+          end;
+
           if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) and Materiali.Locate('PROGRESSIVO_RIGA',codici[x-1],[]) then
           begin
               RegistraMateriali.Append;
@@ -2967,9 +2990,9 @@ begin
         Richiesti.Next;
        end;
        if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) then
-          FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[RegistraEsami,RegistraMateriali])
+          FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[RegistraEsami,RegistraMateriali,RegistraSpecxPrest])
        else
-          FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[RegistraEsami]);
+          FDMCommon.AstaClientSocket.SendDataSetTransactions(Name,[RegistraEsami,RegistraSpecxPrest]);
        QyPreno.RefreshRecord;
        RefreshEsamixPreno(xItem);
        SpostaInMemoria;
@@ -2994,6 +3017,7 @@ begin
        end;
     end;
     finally
+        RichSpecxPrest.Filtered := False;
         AlertEventList.Active := true;
         codici.free;
     end;

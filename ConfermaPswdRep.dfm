@@ -52,8 +52,12 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       Properties.ListColumns = <
         item
           SortOrder = soAscending
-          Width = 200
+          Width = 400
           FieldName = 'REPARTO'
+        end
+        item
+          Width = 500
+          FieldName = 'INTESTAREF3'
         end>
       Properties.ListOptions.CaseInsensitive = True
       Properties.ListOptions.ShowHeader = False
@@ -205,7 +209,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
     StreamOptions = [ssIndexes, ssAggregates]
     Indexes = <>
     Aggregates = <>
-    Active = False
+    Active = True
     Constraints = <>
     BeforeQuery = qryUserBeforeQuery
     SequenceField.ApplyMoment = amOnNewRecord
@@ -240,6 +244,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       ' r.descrizione as Reparto,'
       ' o.descrizione as Ospedale,'
       ' s.descrizione as DescrServizio,'
+      ' s.intestaref3,'
       ' tb.sposta,'
       ' tb.eseguito'
       'from  Personale p'
@@ -317,6 +322,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       'REPARTO,1,60'
       'OSPEDALE,1,80'
       'DESCRSERVIZIO,1,100'
+      'INTESTAREF3,1,100'
       'SPOSTA,3,0'
       'ESEGUITO,3,0')
     FMultiTable = ()
@@ -405,80 +411,14 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       FieldName = 'LOGIN_NT'
       Size = 30
     end
+    object qryUserINTESTAREF3: TStringField
+      FieldName = 'INTESTAREF3'
+      Size = 100
+    end
   end
   object sqryUser: TDataSource
     DataSet = qryUser
     Left = 140
     Top = 60
-  end
-  object LkAmbulatori: TAstaClientDataSet
-    StreamOptions = [ssIndexes, ssAggregates]
-    Indexes = <
-      item
-        Name = 'ambulatori_descriz'
-        Fields = 'DESCRIZ'
-        Options = [ioCaseInsensitive]
-        Selected = True
-      end>
-    IndexName = 'ambulatori_descriz'
-    Aggregates = <>
-    Active = False
-    Constraints = <>
-    BeforeQuery = LkAmbulatoriBeforeQuery
-    SequenceField.ApplyMoment = amOnPost
-    EditMode = 'Read Only'
-    AstaClientSocket = FDMCommon.AstaClientSocket
-    SQL.Strings = (
-      'select'
-      's.pkservizi,'
-      's.descrizione as descriz,'
-      's.slot_standard'
-      'from servizi s'
-      'where s.reparti_fk=:pkreparti '
-      'and s.tipo_servizio='#39'D'#39
-      'and (s.data_fine is null or s.data_fine>sysdate)'
-      'and (s.data_inizio is null or s.data_inizio<=sysdate)')
-    Params = <
-      item
-        Name = 'pkreparti'
-        ParamType = ptInput
-        DataType = ftInteger
-        IsNull = False
-        Size = 0
-        Value = 0
-      end>
-    QBEMode = False
-    QBEDefinition.QBEFieldDefs = {
-      030000000200000009000000504B53455256495A490100000000070000004445
-      534352495A0100000000}
-    Left = 196
-    Top = 84
-    FastFields = (
-      'PKSERVIZI,3,0'
-      'DESCRIZ,1,100'
-      'SLOT_STANDARD,3,0')
-    FMultiTable = ()
-    UpdateMethod = umManual
-    object LkAmbulatoriDESCRIZ: TStringField
-      DisplayLabel = 'Diagnostica'
-      DisplayWidth = 60
-      FieldName = 'DESCRIZ'
-      Required = True
-      Size = 100
-    end
-    object LkAmbulatoriPKSERVIZI: TIntegerField
-      DisplayWidth = 10
-      FieldName = 'PKSERVIZI'
-      Required = True
-      Visible = False
-    end
-    object LkAmbulatoriSLOT_STANDARD: TIntegerField
-      FieldName = 'SLOT_STANDARD'
-    end
-  end
-  object sLkAmbulatori: TDataSource
-    DataSet = LkAmbulatori
-    Left = 228
-    Top = 120
   end
 end

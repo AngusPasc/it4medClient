@@ -2048,6 +2048,7 @@ end;
 procedure TFArchivioReferti.OperazioniAfterQuery(
   Sender: TAstaBaseClientDataSet);
 begin
+  RefEsami.Parambyname('triage_fk').AsInteger := -1;
   RefEsami.syRefresh;
 
 end;
@@ -2539,7 +2540,8 @@ end;
 procedure TFArchivioReferti.RefertiAfterQuery(
   Sender: TAstaBaseClientDataSet);
 begin
-  RefEsami.Parambyname('triage_fk').AsInteger := RefertiPKTRIAGE.AsInteger;
+
+  RefEsami.Parambyname('triage_fk').AsInteger := -1;
   RefEsami.syRefresh;
 
 end;
@@ -5405,9 +5407,11 @@ procedure TFArchivioReferti.RefEsamiBeforeQuery(
   Sender: TAstaBaseClientDataSet);
 begin
   inherited;
+{
   Sender.Parambyname('data_dal').AsDateTime := dxDataAccDal.EditValue;
   Sender.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Sender.Parambyname('reparti_fk').AsInteger := gblpkrep;
+}
 end;
 
 initialization

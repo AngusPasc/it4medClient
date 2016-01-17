@@ -2024,21 +2024,7 @@ inherited FTabGenerale: TFTabGenerale
           end
           object cxGridBrancheDBTableView1DEVICE: TcxGridDBColumn
             DataBinding.FieldName = 'DEVICE'
-            PropertiesClassName = 'TcxImageComboBoxProperties'
-            Properties.Items = <
-              item
-                Description = 'No Device / No Referto'
-                ImageIndex = 0
-                Value = 0
-              end
-              item
-                Description = 'Device / Referto'
-                Value = 1
-              end
-              item
-                Description = 'Device / No Referto'
-                Value = 2
-              end>
+            RepositoryItem = FDMCommon.edrepImageDEVICE
             Width = 193
           end
           object cxGridBrancheDBTableView1DATA_INIZIO: TcxGridDBColumn
@@ -5580,6 +5566,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentEsenzioni: TdxGridReportLink
       Active = True
       Component = GridEsenzioni
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5613,13 +5600,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027673610000000
+      ReportDocument.CreationDate = 42382.730534571760000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5645,6 +5633,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentASL: TdxGridReportLink
       Active = True
       Component = cxGridASL
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5678,13 +5667,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5710,6 +5700,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentOspedali: TdxGridReportLink
       Active = True
       Component = GridOspedali
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5743,13 +5734,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5775,6 +5767,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentComuni: TdxGridReportLink
       Active = True
       Component = GridComuni
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5808,13 +5801,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5840,6 +5834,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentRegioni: TdxGridReportLink
       Active = True
       Component = GridRegioniProv
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5873,13 +5868,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5905,6 +5901,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentNazioni: TdxGridReportLink
       Active = True
       Component = GridNazioni
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -5938,13 +5935,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -5970,6 +5968,7 @@ inherited FTabGenerale: TFTabGenerale
     object dxComponentMedici: TdxGridReportLink
       Active = True
       Component = cxGMedici
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 5080
       PrinterPage.GrayShading = True
@@ -6003,13 +6002,14 @@ inherited FTabGenerale: TFTabGenerale
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42333.687027858800000000
+      ReportDocument.CreationDate = 42382.730534756940000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

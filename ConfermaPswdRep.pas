@@ -38,11 +38,6 @@ type
     qryUserOSPEDALE: TStringField;
     qryUserTIPO_CARTA: TIntegerField;
     qryUserDESCRSERVIZIO: TStringField;
-    LkAmbulatori: TAstaClientDataSet;
-    LkAmbulatoriDESCRIZ: TStringField;
-    LkAmbulatoriPKSERVIZI: TIntegerField;
-    LkAmbulatoriSLOT_STANDARD: TIntegerField;
-    sLkAmbulatori: TDataSource;
     qryUserDBLCLICKTIME: TIntegerField;
     qryUserSPOSTA: TIntegerField;
     qryUserALLOW_OVERBOOKING: TIntegerField;
@@ -64,6 +59,7 @@ type
     dxLayoutControl1Item1: TdxLayoutItem;
     dxLayoutControl1Group2: TdxLayoutAutoCreatedGroup;
     cxBtnTestAV: TcxButton;
+    qryUserINTESTAREF3: TStringField;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ConfermaExecute(Sender: TObject);
@@ -72,7 +68,6 @@ type
     procedure csEZKeys1KeyIntercept(KeyType: TNavigationKey;
       Ctrl: TControl; var Intercept: Boolean);
     procedure ConfermaUpdate(Sender: TObject);
-    procedure LkAmbulatoriBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure cxRadioStatoPropertiesChange(Sender: TObject);
     procedure qryUserAfterPopulate(Sender: TObject);
     procedure qryUserBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -377,13 +372,6 @@ begin
   inherited;
   Conferma.Enabled := ((CercaReparto and (not dxLayoutReparto.Enabled or (cxReparti.Text<>''))) or not CercaReparto)
                       and (cxUtente.Text<>'') and (cxPswd.Text<>'');
-end;
-
-procedure TFConfermaPswdRep.LkAmbulatoriBeforeQuery(
-  Sender: TAstaBaseClientDataSet);
-begin
-  inherited;
-	Sender.Parambyname('pkreparti').AsInteger := gblpkrep;
 end;
 
 procedure TFConfermaPswdRep.cxRadioStatoPropertiesChange(Sender: TObject);

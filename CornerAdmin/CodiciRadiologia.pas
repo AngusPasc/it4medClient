@@ -18,7 +18,7 @@ uses
   dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter, dxSkinsdxBarPainter, 
   rsXmlData, cxNavigator, dxPScxGridLnk, dxPScxGridLayoutViewLnk,
   dxPSdxDBOCLnk, dxBarBuiltInMenu, dxPSPrVwRibbon, dxPScxSchedulerLnk,
-  dxSkinsdxRibbonPainter, dxPSdxLCLnk, Dialogs, cxLabel;
+  dxSkinsdxRibbonPainter, dxPSdxLCLnk, Dialogs, cxLabel, ExtCtrls;
 
 type
   TFCodiciRadiologia = class(TFBaseGrid)
@@ -186,40 +186,21 @@ type
     EsamiRadiologiaDESCPREPARAZIONE: TStringField;
     GridCodiciCOMPOSTO: TcxGridDBColumn;
     cxGruppiSpec: TcxTabSheet;
-    GrSpecificazioni: TAstaClientDataSet;
-    GrSpecificazioniPK_GRUPPOSPEC: TIntegerField;
-    GrSpecificazioniIDGRUPPOSPEC: TStringField;
-    GrSpecificazioniDESCRIZIONE: TStringField;
-    GrSpecificazioniDATA_INIZIO: TDateTimeField;
-    GrSpecificazioniDATA_FINE: TDateTimeField;
-    cxGridSpecDBTableView1: TcxGridDBTableView;
     cxGridSpecLevel1: TcxGridLevel;
     cxGridSpec: TcxGrid;
-    sGrSpecificazioni: TDataSource;
-    cxGridSpecDBTableView1PK_GRUPPOSPEC: TcxGridDBColumn;
-    cxGridSpecDBTableView1IDGRUPPOSPEC: TcxGridDBColumn;
-    cxGridSpecDBTableView1DESCRIZIONE: TcxGridDBColumn;
-    cxGridSpecDBTableView1DATA_INIZIO: TcxGridDBColumn;
-    cxGridSpecDBTableView1DATA_FINE: TcxGridDBColumn;
     Specificazioni: TAstaClientDataSet;
     sSpecificazioni: TDataSource;
     SpecificazioniIDSPECIFICAZIONI: TStringField;
     SpecificazioniDESCRIZIONE: TStringField;
     SpecificazioniPKSPECIFICAZIONI: TIntegerField;
-    SpecificazioniGRSPECIF_FK: TIntegerField;
     SpecificazioniDATA_INIZIO: TDateTimeField;
     SpecificazioniDATA_FINE: TDateTimeField;
-    cxGridSpecLevel2: TcxGridLevel;
-    cxGridSpecDBTableView2: TcxGridDBTableView;
-    cxGridSpecDBTableView2IDSPECIFICAZIONI: TcxGridDBColumn;
-    cxGridSpecDBTableView2DESCRIZIONE: TcxGridDBColumn;
-    cxGridSpecDBTableView2PKSPECIFICAZIONI: TcxGridDBColumn;
-    cxGridSpecDBTableView2GRSPECIF_FK: TcxGridDBColumn;
-    cxGridSpecDBTableView2DATA_INIZIO: TcxGridDBColumn;
-    cxGridSpecDBTableView2DATA_FINE: TcxGridDBColumn;
-    PrestazioniGRSPEC_FK: TIntegerField;
-    PrestazioniIDGRUPPOSPEC: TStringField;
-    GridCodiciIDGRUPPOSPEC: TcxGridDBColumn;
+    cxGridSpecificazioni: TcxGridDBTableView;
+    cxGridSpecificazioniIDSPECIFICAZIONI: TcxGridDBColumn;
+    cxGridSpecificazioniDESCRIZIONE: TcxGridDBColumn;
+    cxGridSpecificazioniPKSPECIFICAZIONI: TcxGridDBColumn;
+    cxGridSpecificazioniDATA_INIZIO: TcxGridDBColumn;
+    cxGridSpecificazioniDATA_FINE: TcxGridDBColumn;
     dxTuttiEsami: TdxBarButton;
     GridCodiciDATA_FINE: TcxGridDBColumn;
     EsamiRadiologiaPESO_TECNICO: TFloatField;
@@ -262,10 +243,6 @@ type
     cxMetodicheDBDATA_FINE: TcxGridDBColumn;
     ListiniDATA_INIZIO: TDateTimeField;
     ListiniDATA_FINE: TDateTimeField;
-    LkGrSpec: TAstaClientDataSet;
-    LkGrSpecPK_GRUPPOSPEC: TIntegerField;
-    LkGrSpecIDGRUPPOSPEC: TStringField;
-    LkGrSpecDESCRIZIONE: TStringField;
     LkBranche: TAstaClientDataSet;
     LkBrancheDESCRIZIONE: TStringField;
     LkBranchePKBRANCHE: TStringField;
@@ -286,8 +263,6 @@ type
     PrestazioniIDENT_FK: TStringField;
     PrestazioniGRESAMI_FK: TStringField;
     PrestazioniGRESAMI: TStringField;
-    PrestazioniPKSPECIFICAZIONI: TStringField;
-    PrestazioniDESCSPEC: TStringField;
     cxTabCodEsEsterni: TcxTabSheet;
     CodEsEsterni: TAstaClientDataSet;
     CodEsEsterniCOD_ESTERNO: TStringField;
@@ -322,6 +297,51 @@ dxBarManager1Bar2: TdxBar;
     SaveDialog: TSaveDialog;
     TariffeListiniTAR_PAGANTI: TFloatField;
     cxGridTariffeListiniTAR_PAGANTI: TcxGridDBColumn;
+    EsamiRadiologiaTAR_TICKET: TFloatField;
+    cxGridCodiciTAR_TICKET: TcxGridDBColumn;
+    SpecificazioniPREZZO: TFloatField;
+    SpecificazioniCOSTO: TFloatField;
+    cxGridSpecificazioniPREZZO: TcxGridDBColumn;
+    cxGridSpecificazioniCOSTO: TcxGridDBColumn;
+    cxTabSpecxEsami: TcxTabSheet;
+    cxGridDBTableSpecifiche: TcxGridDBTableView;
+    cxGrid5Level1: TcxGridLevel;
+    cxGrid5: TcxGrid;
+    cxGridDBTableSpecificheIDSPECIFICAZIONI: TcxGridDBColumn;
+    cxGridDBTableSpecificheDESCRIZIONE: TcxGridDBColumn;
+    cxGridDBTableSpecifichePKSPECIFICAZIONI: TcxGridDBColumn;
+    cxSplitter1: TcxSplitter;
+    Panel1: TPanel;
+    cxGridDBTableEsami: TcxGridDBTableView;
+    cxGrid6Level1: TcxGridLevel;
+    cxGrid6: TcxGrid;
+    cxSplitter2: TcxSplitter;
+    cxGridDBTableSpecxEsami: TcxGridDBTableView;
+    cxGrid7Level1: TcxGridLevel;
+    cxGrid7: TcxGrid;
+    cxGridDBTableEsamiCODICE: TcxGridDBColumn;
+    cxGridDBTableEsamiDESCRIZIONE: TcxGridDBColumn;
+    cxGridDBTableEsamiPKSPECIFICAZIONI: TcxGridDBColumn;
+    SpecxEsami: TAstaClientDataSet;
+    SpecxEsamiPKSPECXCODRAD: TIntegerField;
+    SpecxEsamiCODICIRAD_FK: TIntegerField;
+    SpecxEsamiSPECIFICAZIONI_FK: TIntegerField;
+    SpecxEsamiIDSPECIFICAZIONI: TStringField;
+    SpecxEsamiDESCRIZIONE: TStringField;
+    sSpecxEsami: TDataSource;
+    cxGridDBTableSpecxEsamiPKSPECXCODRAD: TcxGridDBColumn;
+    cxGridDBTableSpecxEsamiCODICIRAD_FK: TcxGridDBColumn;
+    cxGridDBTableSpecxEsamiSPECIFICAZIONI_FK: TcxGridDBColumn;
+    cxGridDBTableSpecxEsamiIDSPECIFICAZIONI: TcxGridDBColumn;
+    cxGridDBTableSpecxEsamiDESCRIZIONE: TcxGridDBColumn;
+    cxGridDBTableEsamiDATA_FINE: TcxGridDBColumn;
+    PrestazioniCESPECIFIC: TIntegerField;
+    cxGridDBTableEsamiCESPECIFIC: TcxGridDBColumn;
+    SpecxEsamiPREZZO: TFloatField;
+    SpecxEsamiCOSTO: TFloatField;
+    cxGridDBTableSpecxEsamiPREZZO: TcxGridDBColumn;
+    cxGridDBTableSpecxEsamiCOSTO: TcxGridDBColumn;
+    cxGridDBTableSpecifichePREZZO: TcxGridDBColumn;
     procedure NuovaMetodicaExecute(Sender: TObject);
     procedure ModificaMetodicaExecute(Sender: TObject);
     procedure CancellaMetodicaExecute(Sender: TObject);
@@ -389,7 +409,6 @@ dxBarManager1Bar2: TdxBar;
     procedure MetodicheNewRecord(DataSet: TDataSet);
     procedure aRefreshListiniExecute(Sender: TObject);
     procedure dxNonAssegnatiClick(Sender: TObject);
-    procedure SpecificazioniNewRecord(DataSet: TDataSet);
     procedure dxTuttiEsamiClick(Sender: TObject);
     procedure GridCodiciNavigatorButtonsButtonClick(Sender: TObject;
       AButtonIndex: Integer; var ADone: Boolean);
@@ -426,12 +445,27 @@ dxBarManager1Bar2: TdxBar;
       NewPage: TcxTabSheet; var AllowChange: Boolean);
     procedure aEstraiExcelExecute(Sender: TObject);
     procedure TariffeListiniPSP_IDENTChange(Sender: TField);
+    procedure cxGridDBTableSpecxEsamiDragDrop(Sender, Source: TObject; X,
+      Y: Integer);
+    procedure cxGridDBTableSpecxEsamiDragOver(Sender, Source: TObject; X,
+      Y: Integer; State: TDragState; var Accept: Boolean);
+    procedure cxGridDBTableSpecificheDragDrop(Sender, Source: TObject; X,
+      Y: Integer);
+    procedure cxGridDBTableSpecificheDragOver(Sender, Source: TObject; X,
+      Y: Integer; State: TDragState; var Accept: Boolean);
+    procedure cxGridDBTableEsamiFocusedRecordChanged(
+      Sender: TcxCustomGridTableView; APrevFocusedRecord,
+      AFocusedRecord: TcxCustomGridRecord;
+      ANewItemRecordFocusingChanged: Boolean);
+    procedure SpecxEsamiBeforeQuery(Sender: TAstaBaseClientDataSet);
+    procedure cxGridDBTableSpecificheDblClick(Sender: TObject);
   private
     { Private declarations }
     oldfiltered: Boolean;
     procedure AggiungiCodici( wView: TcxGridDBTableView; xController: TcxCustomGridTableController );
     procedure ApriCodMultiplo;
-    procedure ChiudiCodMultiplo;    
+    procedure ChiudiCodMultiplo;
+    procedure AggiungiSpecificazioni( wView: TcxGridDBTableView; xController: TcxCustomGridTableController );
   public
     { Public declarations }
     constructor Create(AOwner: TComponent); override;
@@ -506,7 +540,6 @@ begin
   try
   FModiCodEsame.sLkTariffario.DataSet := LkTariffario;
   FModiCodEsame.sLkBranche.DataSet := LkBranche;
-  FModiCodEsame.sLkGrSpec.DataSet := LkGrSpec;
   FModiCodEsame.Prestazioni.OpenNoFetch;
   FModiCodEsame.Prestazioni.Insert;
 
@@ -558,7 +591,6 @@ begin
 
         FModiCodEsame.sLkTariffario.DataSet := LkTariffario;
         FModiCodEsame.sLkBranche.DataSet := LkBranche;
-        FModiCodEsame.sLkGrSpec.DataSet := LkGrSpec;
 
         FModiCodEsame.Prestazioni.Parambyname('pkcodicirad').AsInteger := pkr;
         FModiCodEsame.Prestazioni.Open;
@@ -660,27 +692,22 @@ begin
   Prestazioni.open;
   Tipo_Modalita.open;
   LkBranche.Open;
-  if (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1) then
-     LkGrSpec.open;
 
   FDMCommon.ApplicaDataFine(cxMetodicheDB, cxMetodicheDBDATA_FINE);
   FDMCommon.ApplicaDataFine(GridCodici, GridCodiciDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridCodici, cxGridCodiciDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridTariffario, cxGridTariffarioDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridListini, cxGridListiniDATA_FINE);
-  FDMCommon.ApplicaDataFine(cxGridSpecDBTableView1,cxGridSpecDBTableView1DATA_FINE);
+  FDMCommon.ApplicaDataFine(cxGridSpecificazioni,cxGridSpecificazioniDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridCodEsEsterniDBTableView1,cxGridCodEsEsterniDBTableView1DATA_FINE);
-
+  FDMCommon.ApplicaDataFine(cxGridDBTableEsami,cxGridDBTableEsamiDATA_FINE);
+  
   dxTabMetodiche.TabVisible := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
 
   dxTabMetodiche.TabVisible := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
-  cxGruppiSpec.TabVisible := {not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5) and} (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1);
-//  cxTabCodEsEsterni.TabVisible := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
-
-  if (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=0) then
-  begin
-     FDMCommon.SetVisible(GridCodiciIDGRUPPOSPEC,false);
-  end;
+  cxGruppiSpec.TabVisible := (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1);
+  cxTabSpecxEsami.TabVisible := (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1);
+  cxTabCodEsEsterni.TabVisible := not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
 
   if (FDMCommon.Param_TicketCODICI_CUP.AsInteger=0) then
   begin
@@ -873,7 +900,6 @@ begin
 
         FModiCodEsame.sLkTariffario.DataSet := LkTariffario;
         FModiCodEsame.sLkBranche.DataSet := LkBranche;
-        FModiCodEsame.sLkGrSpec.DataSet := LkGrSpec;
 
         FModiCodEsame.Prestazioni.Parambyname('pkcodicirad').AsInteger := PrestazioniPKCODICIRAD.AsInteger;
         FModiCodEsame.Prestazioni.Open;
@@ -1112,8 +1138,11 @@ var
 begin
      puntamento := -1;
      cxGridCodici.BeginUpdate;
+//     TempUM := Prestazioni.UpdateMethod;
+//     Prestazioni.UpdateMethod := umManual;
      lAssociati := TStringList.Create;
      try
+
      for i:=0 to xController.SelectedRecordCount-1 do
      begin
          EsamiRadiologia.Append;
@@ -1121,7 +1150,8 @@ begin
          EsamiRadiologiaCODICIRAD_FK.AsInteger := xController.SelectedRecords[i].Values[GridCodiciPKCODICIRAD.Index];
          EsamiRadiologiaREPARTI_FK.AsInteger := gblpkrep;
          EsamiRadiologia.Post;
-//         EsamiRadiologia.RefreshRecord;
+         EsamiRadiologia.RefreshRecord;
+
          if puntamento=-1 then
             puntamento := EsamiRadiologiaPKCODXRAD.AsInteger;
          if xController.SelectedRecords[i].Values[GridCodiciCOMPOSTO.Index]=1 then
@@ -1147,17 +1177,20 @@ begin
 //           raise;
          end;
      end;
-     TempUM := Prestazioni.UpdateMethod;
-     Prestazioni.UpdateMethod := umManual;
-     xController.DeleteSelection;
-     // -- elimino eventuali componenti associati
-     for z:=0 to lAssociati.Count-1 do
-        if Prestazioni.Locate('PKCODICIRAD',lAssociati[z],[]) then
-           Prestazioni.Delete;
-     Prestazioni.UpdateMethod := TempUM;
-     cxGridCodici.EndUpdate;
-
+{
+     if dxNonAssegnati.Down then
+     begin
+         xController.DeleteSelection;
+         // -- elimino eventuali componenti associati
+         for z:=0 to lAssociati.Count-1 do
+            if Prestazioni.Locate('PKCODICIRAD',lAssociati[z],[]) then
+               Prestazioni.Delete;
+     end;
+}
+     Prestazioni.syRefresh;
      finally
+//       Prestazioni.UpdateMethod := TempUM;
+       cxGridCodici.EndUpdate;
        lAssociati.Free;
        if (xController.SelectedRecordCount>0) and (puntamento>0) then
   //        EsamiRadiologia.Locate('CODICE',xController.SelectedRecords[0].Values[GridCodiciCODICE.Index],[]);
@@ -1179,7 +1212,6 @@ begin
     FModiCodRadEsame := TFModiCodRadEsame.Create(nil);
     try
 
-        FModiCodRadEsame.sLkGrSpec.DataSet := LkGrSpec;
         FModiCodRadEsame.sGruppo.Dataset := Metodiche;
         FModiCodRadEsame.sLkTariffario.Dataset := LkTariffario;
         FModiCodRadEsame.sLkBranche.Dataset := LkBranche;
@@ -1265,11 +1297,6 @@ procedure TFCodiciRadiologia.dxNonAssegnatiClick(Sender: TObject);
 begin
   Prestazioni.Filter := 'CODICIRAD_FK is NULL';
   Prestazioni.Filtered := true;
-end;
-
-procedure TFCodiciRadiologia.SpecificazioniNewRecord(DataSet: TDataSet);
-begin
-  SpecificazioniGRSPECIF_FK.AsInteger := GrSpecificazioniPK_GRUPPOSPEC.AsInteger;
 end;
 
 procedure TFCodiciRadiologia.dxTuttiEsamiClick(Sender: TObject);
@@ -1591,6 +1618,8 @@ procedure TFCodiciRadiologia.cxPageControlPageChanging(Sender: TObject;
 begin
   inherited;
 
+//  FDMCommon.edrepCESPECIFIC.Properties.ShowDescriptions := True;
+
   if NewPage=dxTabTariffario then
   begin
     if not LkTariffario.Active then
@@ -1615,11 +1644,10 @@ begin
   end
   else if NewPage=cxGruppiSpec then
   begin
-    if not GrSpecificazioni.Active then
+    if not Specificazioni.Active then
     begin
-       GrSpecificazioni.open;
        Specificazioni.open;
-       cxGridSpecDBTableView1.Controller.GotoFirst;
+       cxGridSpecificazioni.Controller.GotoFirst;
     end;
   end
   else if NewPage=cxTabCodEsEsterni then
@@ -1630,6 +1658,25 @@ begin
        qIdAuth.Open;
        cxGridCodEsEsterniDBTableView1.Controller.GotoFirst;
     end;
+  end
+  else if NewPage=cxTabSpecxEsami then
+  begin
+    Prestazioni.Filter := '';
+    Prestazioni.Filtered := false;
+//    FDMCommon.edrepCESPECIFIC.Properties.ShowDescriptions := False;
+    if not Specificazioni.Active then
+    begin
+       Specificazioni.open;
+       cxGridSpecificazioni.Controller.GotoFirst;
+    end;
+    cxGridDBTableEsami.Controller.GotoFirst;
+{
+    if not SpecxEsami.Active then
+    begin
+       SpecxEsami.Open;
+//       cxGridDBTableEsami.Controller.GotoFirst;
+    end;
+}
   end;
 end;
 
@@ -1649,6 +1696,137 @@ procedure TFCodiciRadiologia.TariffeListiniPSP_IDENTChange(Sender: TField);
 begin
   inherited;
   TariffeListiniDESCRIZIONE.AsString := LkTariffarioDESCRIZIONE.AsString;
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableSpecxEsamiDragDrop(Sender,
+  Source: TObject; X, Y: Integer);
+var
+//  TargetData: TAstaClientDataset;
+  aSourceView,aDragView: TcxGridDBTableView;
+//  aTargetView: TcxGridDBTableView;
+
+begin
+
+  aSourceView := FDMCommon.GetRealDragSourceGridView (TcxDragControlObject (Source));
+
+//  aTargetView := TcxGridSite(Sender).GridView as TcxGridDBTableView;
+  aDragView := FDMCommon.GetDragSourceGridView (TcxDragControlObject (Source));
+
+//  TargetData := aTargetView.DataController.DataSource.DataSet as TAstaClientDataset;
+
+  if aSourceView.DataController.FocusedRecordIndex<>-1 then
+  begin
+      AggiungiSpecificazioni(aDragView, aSourceView.Controller);
+  end;
+
+end;
+
+procedure TFCodiciRadiologia.AggiungiSpecificazioni( wView: TcxGridDBTableView; xController: TcxCustomGridTableController );
+var
+  i: integer;
+begin
+     SpecxEsami.DisableControls;
+     try
+     for i:=0 to xController.SelectedRecordCount-1 do
+       begin
+{
+         qSpostaRiga.Parambyname('reparti_fk').AsInteger := gblpkrep;
+         qSpostaRiga.Parambyname('xdiagnostiche').AsInteger := ServiziPKSERVIZI.AsInteger;
+         qSpostaRiga.Parambyname('codicirad_fk').AsInteger := xController.SelectedRecords[i].Values[GridCodiciPKCODICIRAD.Index];  // pkPrestSpecmult
+         qSpostaRiga.ExecCommit;
+}
+         if not SpecxEsami.LocateRecord('IDSPECIFICAZIONI',xController.SelectedRecords[i].Values[cxGridDBTableSpecificheIDSPECIFICAZIONI.Index],[]) then
+         begin
+           SpecxEsami.Append;
+           SpecxEsamiSPECIFICAZIONI_FK.AsInteger := xController.SelectedRecords[i].Values[cxGridDBTableSpecifichePKSPECIFICAZIONI.Index];
+           SpecxEsamiCODICIRAD_FK.AsInteger := PrestazioniPKCODICIRAD.AsInteger;
+           SpecxEsami.Post;
+           if PrestazioniCESPECIFIC.AsInteger=0 then
+           begin
+             Prestazioni.Edit;
+             PrestazioniCESPECIFIC.AsInteger := 1;
+             Prestazioni.Post;
+           end;
+         end;
+       end;
+       SpecxEsami.syRefresh;
+       finally
+          SpecxEsami.EnableControls;
+       end;
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableSpecxEsamiDragOver(Sender,
+  Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+var
+  aSourceView: TcxGridDBTableView;
+begin
+  Accept := false;
+  if (Source is TcxDragControlObject) and (Sender is TcxGridSite) then
+  begin
+     aSourceView := FDMCommon.GetDragSourceGridView (TcxDragControlObject (Source));
+     Accept := (aSourceView=cxGridDBTableSpecifiche);
+  end;
+
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableSpecificheDragDrop(Sender,
+  Source: TObject; X, Y: Integer);
+begin
+  inherited;
+  if cxGridDBTableSpecxEsami.Controller.SelectedRecordCount>0 then
+     cxGridDBTableSpecxEsami.Controller.DeleteSelection;
+
+   if SpecxEsami.IsEmpty and (PrestazioniCESPECIFIC.AsInteger>0) then
+   begin
+     Prestazioni.Edit;
+     PrestazioniCESPECIFIC.AsInteger := 0;
+     Prestazioni.Post;
+   end;
+
+
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableSpecificheDragOver(Sender,
+  Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+var
+  aSourceView: TcxGridDBTableView;
+begin
+
+  Accept := false;
+  if (Source is TcxDragControlObject) and (Sender is TcxGridSite) then
+  begin
+     aSourceView := FDMCommon.GetDragSourceGridView (TcxDragControlObject (Source));
+     Accept := (aSourceView=cxGridDBTableSpecxEsami);
+  end;
+
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableEsamiFocusedRecordChanged(
+  Sender: TcxCustomGridTableView; APrevFocusedRecord,
+  AFocusedRecord: TcxCustomGridRecord;
+  ANewItemRecordFocusingChanged: Boolean);
+begin
+  inherited;
+  if (APrevFocusedRecord=nil) or (APrevFocusedRecord<>AFocusedRecord) then
+  begin
+     SpecxEsami.syRefresh;  
+  end;
+end;
+
+procedure TFCodiciRadiologia.SpecxEsamiBeforeQuery(
+  Sender: TAstaBaseClientDataSet);
+begin
+  inherited;
+  Sender.Parambyname('codicirad_fk').AsInteger := PrestazioniPKCODICIRAD.AsInteger;
+end;
+
+procedure TFCodiciRadiologia.cxGridDBTableSpecificheDblClick(
+  Sender: TObject);
+begin
+  inherited;
+
+  AggiungiSpecificazioni(cxGridDBTableSpecifiche, cxGridDBTableSpecifiche.Controller);
+
 end;
 
 initialization

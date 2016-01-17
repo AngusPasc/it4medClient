@@ -444,10 +444,6 @@ type
     qryUserDBLCLICKTIME: TIntegerField;
     SettaDateTime: TAstaClientDataSet;
     SettaDateTimeSYSDATE: TDateTimeField;
-    EsamiPKSPECIFICAZIONI: TIntegerField;
-    EsamiDESCSPEC: TStringField;
-    PossibiliPKSPECIFICAZIONI: TIntegerField;
-    PossibiliDESCSPEC: TStringField;
     LeggiPostoLavoroCHK_ALLIEVO_TECNICO: TIntegerField;
     LeggiPostoLavoroCDMASTER_FK: TIntegerField;
     cdMaster: TAstaClientDataSet;
@@ -557,8 +553,6 @@ type
     LkRepartiMAX_GG_RICHIESTA: TIntegerField;
     edrepPROFILI: TcxEditRepositoryLookupComboBoxItem;
     sProfili: TDataSource;
-    EsamixAltriPKSPECIFICAZIONI: TIntegerField;
-    EsamixAltriDESCSPEC: TStringField;
     AltriEsamixSitoCODICE: TStringField;
     AltriEsamixSitoDESCRIZIONE: TStringField;
     AltriEsamixSitoIDENT_FK: TStringField;
@@ -567,8 +561,6 @@ type
     AltriEsamixSitoPKCODICIRAD: TIntegerField;
     AltriEsamixSitoDOSE: TFloatField;
     AltriEsamixSitoCOMPOSTO: TIntegerField;
-    AltriEsamixSitoPKSPECIFICAZIONI: TIntegerField;
-    AltriEsamixSitoDESCSPEC: TStringField;
     edrepNRALTRE: TcxEditRepositoryImageComboBoxItem;
     Profili: TAstaClientDataSet;
     ProfiliPKPROFILI: TIntegerField;
@@ -683,10 +675,8 @@ type
     EsamixAltriEXTRA_TARIFFARIO: TIntegerField;
     LeggiPostoLavoroREF_VOCALE: TIntegerField;
     edRepPROVENIENZA_PRENO: TcxEditRepositoryImageComboBoxItem;
-    AltriEsamixSitoDURATA: TFloatField;
     AltriEsamixSitoEXTRA_TARIFFARIO: TIntegerField;
     AltriEsamixSitoSERVIZI_FK: TStringField;
-    EsamixAltriDURATA: TFloatField;
     EsamixAltriSERVIZI_FK: TStringField;
     qRefertoDIAGN_ADD: TBlobField;
     TipoUrgenzaPOSIZIONE: TIntegerField;
@@ -905,6 +895,15 @@ type
     qCercaAppuntamentoSTATOVISITA: TIntegerField;
     qCercaAppuntamentoORA_INIZIO: TDateTimeField;
     cxImageNavigator32: TcxImageList;
+    edrepValuta: TcxEditRepositoryCurrencyItem;
+    EsamiCESPECIFIC: TIntegerField;
+    EsamixAltriDURATA: TIntegerField;
+    EsamixAltriCESPECIFIC: TIntegerField;
+    PossibiliCESPECIFIC: TIntegerField;
+    edrepCESPECIFIC: TcxEditRepositoryImageComboBoxItem;
+    AltriEsamixSitoDURATA: TIntegerField;
+    AltriEsamixSitoCESPECIFIC: TIntegerField;
+    edrepImageDEVICE: TcxEditRepositoryImageComboBoxItem;
     procedure FDMCommonCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -1273,7 +1272,9 @@ var
   gblUserCup: boolean;
   gblSkinName: string;
   gblColorName: string;
-
+{$IFDEF MEDICORNER}
+  gblCallCenter: Boolean;
+{$ENDIF}
 
   { parametro DEBUGMODE da riga di comando }
   gblDebugMode: boolean;
@@ -1469,6 +1470,7 @@ resourcestring
   RS_EsamixDiagnInMemoria = 'Confermi la copia degli esami della diagnostica %s ?';
   RS_EsistonoErrori = 'Rilevati errori. Controllare i dati prima di effettuare l''estrazione !';
   RS_PrestGiaCaricata = 'Esame %s già registrato !';
+  RS_TipoEsameGiaCaricato = 'Non è possibile caricare due esami dello stesso tipo (%s)';
   RS_AnagEsternaNonTrovata = 'Anagrafica esterna non trovata !';
   RS_ConfInvioSingModificheAnagEst = 'Confermi invio della singola modifica all''anagrafica esterna ?';
   RS_ConfInvioTutteModificheAnagEst = 'Confermi invio di tutte le modifiche all''anagrafica esterna ?';
@@ -1736,6 +1738,8 @@ resourcestring
 
   RS_StampaReferto = 'Stampa';
   RS_StampaRefertoHint = 'Stampa referto';
+  RS_StampaEConsegna = 'Consegna';
+  RS_StampaEConsegnaHint = 'Stampa e consegna';  
   RS_StampaTuttiReferti = 'Stampa di tutti i referti selezionati';
   RS_ListaRefertiConsegnati = 'Lista referti consegnati';
   RS_ConsegnaTuttiReferti = 'Confermi la consegna di tutti i referti selezionati ?';
@@ -2006,7 +2010,9 @@ begin
 
   MadException(exceptIntf.exceptObject).Message := ExceptionMessage;
 
-  if vLog then
+  if gblDebugMode then
+     vShow := 5
+  else if vLog then
   begin
 {$IFDEF MADEXCEPT_FILE}
      AutoSaveBugReport(exceptIntf.bugReport,exceptIntf);
@@ -2040,6 +2046,10 @@ begin
         MessageBox(0, pchar(RS_AV), 'Errore...', MB_ICONERROR)
 //     else
 //        MsgDlg(RS_AV, '', ktError, [kbOk], dfFirst);
+    end;
+  5:begin
+      exceptIntf.AutoShowBugReport := True;
+      handled := false;
     end;
   end;
 
@@ -3699,6 +3709,9 @@ begin
       gblEstrazioneDati := (qryUserESTRAZIONE_DATI.AsInteger=1) or gblSuperUser;
       gblLoginNT := qryUserLOGIN_NT.AsString;
       gblpswd := Decrypt(qryUserUSER_PWD.AsString);
+{$IFDEF MEDICORNER}
+      gblCallCenter  := (qryUserFUNZ_INTERNI.AsInteger = 6);
+{$ENDIF}
 
       if (qryUser.recordcount>1) and scegli then
       begin
@@ -3847,6 +3860,9 @@ begin
             gblSuperUser := FConfermaPswdRep.SuperUser and (lstpar.IndexOf(NPAR_USER)=-1);
             gblSpecializ := (FConfermaPswdRep.qryUserFUNZ_INTERNI.AsInteger in [3,4]);
             gblEstrazioneDati := FConfermaPswdRep.EstrazioneDati or gblSuperUser;
+{$IFDEF MEDICORNER}
+            gblCallCenter  := (FConfermaPswdRep.qryUserFUNZ_INTERNI.AsInteger = 6);
+{$ENDIF}
             gblpkrep := FConfermaPswdRep.qryUserREPARTI_FK.AsInteger;
             gblNomeReparto := FConfermaPswdRep.qryUserREPARTO.AsString;
             gblpkserv := FConfermaPswdRep.qryUserSERVIZI_FK.AsInteger;
@@ -4928,7 +4944,7 @@ procedure TFDMCommon.DetailFirst(ADataSet: TDataSet;
 begin
   with (ADataSet as TAstaClientDataset) do
   begin
-    if ParamByName(AMasterDetailKeyFieldNames).Value = AMasterDetailKeyValues then
+    if Active and (ParamByName(AMasterDetailKeyFieldNames).Value = AMasterDetailKeyValues) then
     begin
       First;
       Exit;
@@ -4949,7 +4965,7 @@ function TFDMCommon.DetailIsCurrentQuery(ADataSet: TDataSet; const AMasterDetail
         const AMasterDetailKeyValues: Variant): Boolean;
 begin
   with (ADataSet as TAstaClientDataset) do
-    Result := ParamByName(AMasterDetailKeyFieldNames).Value = AMasterDetailKeyValues;
+    Result := Active and (ParamByName(AMasterDetailKeyFieldNames).Value = AMasterDetailKeyValues);
 
 end;
 

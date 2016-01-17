@@ -9,18 +9,21 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = MediCorner.exe CornerAdmin.exe RisPackage.bpl
+PROJECTS = MediCornerTest.exe CornerAdmin.exe RisPackage.bpl MediCorner.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-MediCorner.exe: MediCorner.dpr
+MediCornerTest.exe: MediCornerTest.dpr
   $(DCC)
 
 CornerAdmin.exe: CornerAdmin.dpr
   $(DCC)
 
 RisPackage.bpl: ..\3pD7\ks7\RisPackage.dpk
+  $(DCC)
+
+MediCorner.exe: MediCorner.dpr
   $(DCC)
 
 

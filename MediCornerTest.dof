@@ -25,7 +25,7 @@ U=0
 V=1
 W=1
 X=1
-Y=0
+Y=2
 Z=1
 ShowHints=1
 ShowWarnings=1
@@ -91,16 +91,16 @@ ImageBase=4194304
 ExeDescription=
 [Directories]
 OutputDir=..\bin
-UnitOutputDir=..\dcuout
+UnitOutputDir=..\dcuoutTest
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=
+SearchPath=$(DELPHI)\Lib\Debug;C:\RAD4MED\3pD7\EurekaLog\Lib\Win32\Debug\Delphi7\
 Packages=xtradev;RxCtl6;RxDB6;RxBDE6;vcl;vclx;TRN6CMP;vcldb;bdertl;rtl;dxEdtrD6;dbrtl;PsRBD60;rbCIDE66;rbIDE66;rbRCL66;rbCT66;rbDB66;rbRAP66;rbDAD66;dxcomnd6;EQGridD6;ECQDBCD6;EQTLD6;dxDBEdD6;EQDBTLD6;dxBarD6;dxBarDBNavD6;dxInsD6;dxObjInsD6;dxELibD6;ractl6;GFDLIB60;ppWPToolsPack;tmsd6;lmd60_d6;SUIPack;fc3000v6;dxLayoutControlD6;dxorgcD6;dxPSCoreD6;dxPSdxOCLnkD6;dxdborD6;dxPSdxDBOCLnkD6;cxLibraryVCLD6;dxThemeD6;cxEditorsVCLD6;cxDataD6;cxGridVCLD6;dxPScxGridLnkD6;A405_R60;wpViewPDF_D6;cxLibraryVCLD7;dxThemeD7;cxEditorsVCLD7;cxDataD7;cxGridVCLD7;cxGridUtilsVCLD7;dxtrmdD7;dxmdsD7;dxBarD7;dxComnD7;RisRunTime;AstaRemoteControlD7;lmd70_d7;TMSD7;rbCIDE77;rbIDE77;rbRCL77;rbCT77;rbDB77;rbRAP77;rbDAD77;dxBarDBNavD7;dxBarExtItemsD7;cxGridD7;dxPScxCommonD7;dxPSCoreD7;dxPScxGrid6LnkD7;vclactnband;vclie;AppControlsD7;acQueryBuilderD7;acQueryBuilderASTAD7;acQueryBuilderDOAD7;rsl70;DicomObjects;BaseBBoxD7;MIMEBBoxD7;PKIBBoxD7;SMIMEBBoxD7;dxGDIPlusD7;cxPageControlVCLD7;cxBarEditItemD7;dxBarExtDBItemsD7;dxRibbonD7;dxdborD7;dxDockingD7;dxFlowChartD7;dxLayoutControlD7;dxLayoutControlcxEditAdaptersD7;dxNavBarD7;cxPivotGridD7;dxPsPrVwAdvD7;dxPScxPCProdD7;dxPScxExtCommonD7;cxExtEditorsVCLD7;teedb;tee;dxPSTeeChartD7;dxPSDBTeeChartD7;dxPSdxLCLnkD7;dxPScxTLLnkD7;cxTreeListVCLD7;dxPScxScheduler3LnkD7;cxSchedulerD7;dxPScxVGridLnkD7;cxVerticalGridVCLD7;dxPSdxOCLnkD7;dxPSdxDBOCLnkD7;dxorgcD7;dxPSLnksD7;dxPSdxFCLnkD7;cxSchedulerGridD7;PsRBD70;rbRCL107;rbCIDE107;rbIDE107;rbBDE107;SMExportD7;SMImportD7d;SMImportD7r;rbCT107;rbDB107;rbRAP107;A406_R70;XMLPartner_PR70;madBasic_;madDisAsm_;madExcept_;WPTools5_D7;HyperSpeech;dxCoreD7;rbCIDE117;rbIDE117;rbRCL117;rbCT117;rbDB117;rbDAD117;rbRAP117;cxLibraryD7;cxPageControlD7;dxPScxPivotGridLnkD7;dxPScxGridLnkD7;dxPScxSchedulerLnkD7;dxSkinsdxNavBarPainterD7;dxSkinscxSchedulerPainterD7;cxVerticalGridD7;rbDIDE117;TMSMenu;VclSmp;wupdpkgd7;xmlrtl
 Conditionals=MEDICORNER;madExcept
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=oracle12 PORTA=9000 compress
+RunParams=host=ORACLE12 PORTA=9000 compress DEBUGMODE
 HostApplication=
 Launcher=
 UseLauncher=0
@@ -111,7 +111,7 @@ ProjectLang=
 RootDir=
 [Version Info]
 IncludeVerInfo=1
-AutoIncBuild=0
+AutoIncBuild=1
 MajorVer=0
 MinorVer=1
 Release=0

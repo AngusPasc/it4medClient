@@ -1,19 +1,19 @@
 inherited FRefMedicorner: TFRefMedicorner
-  Left = 545
-  Top = 144
+  Left = 328
+  Top = 0
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Referto'
-  ClientHeight = 800
-  ClientWidth = 1156
+  ClientHeight = 801
+  ClientWidth = 1154
   Position = poDesigned
   WindowState = wsMaximized
   OnDestroy = BaseFormDestroy
   PixelsPerInch = 96
   TextHeight = 24
   inherited cxGroupBox1: TcxGroupBox
-    Top = 750
-    Width = 1156
+    Top = 751
+    Width = 1154
     inherited btSalva: TcxButton
       Left = 7
       Width = 135
@@ -39,20 +39,20 @@ inherited FRefMedicorner: TFRefMedicorner
       TabOrder = 3
     end
     inherited cxPersonalizza: TcxButton
-      Left = 1121
+      Left = 1119
       TabOrder = 7
     end
     object btProvvisorio: TcxButton
       Left = 430
       Top = 5
       Width = 137
-      Height = 35
+      Height = 41
       Action = aProvvisorio
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -19
       Font.Name = 'Source Sans Pro'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
       LookAndFeel.Kind = lfUltraFlat
@@ -61,13 +61,13 @@ inherited FRefMedicorner: TFRefMedicorner
       Left = 572
       Top = 5
       Width = 136
-      Height = 35
+      Height = 41
       Action = aStampa
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -19
       Font.Name = 'Source Sans Pro'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 4
       LookAndFeel.Kind = lfUltraFlat
@@ -130,13 +130,13 @@ inherited FRefMedicorner: TFRefMedicorner
       Left = 713
       Top = 5
       Width = 136
-      Height = 35
+      Height = 41
       Action = aStampaProvvisorio
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -19
       Font.Name = 'Source Sans Pro'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 5
       LookAndFeel.Kind = lfUltraFlat
@@ -188,13 +188,13 @@ inherited FRefMedicorner: TFRefMedicorner
       Left = 289
       Top = 5
       Width = 135
-      Height = 35
+      Height = 41
       Action = aDefinitivo
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -19
       Font.Name = 'Source Sans Pro'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
       LookAndFeel.Kind = lfUltraFlat
@@ -203,13 +203,13 @@ inherited FRefMedicorner: TFRefMedicorner
       Left = 855
       Top = 5
       Width = 134
-      Height = 35
+      Height = 41
       Action = aStampaDefinitivo
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -19
       Font.Name = 'Source Sans Pro'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 6
       LookAndFeel.Kind = lfUltraFlat
@@ -253,8 +253,8 @@ inherited FRefMedicorner: TFRefMedicorner
   object dxLayoutControl1: TdxLayoutControl [1]
     Left = 0
     Top = 0
-    Width = 1156
-    Height = 750
+    Width = 1154
+    Height = 751
     Align = alClient
     TabOrder = 1
     AutoSize = True
@@ -1189,34 +1189,6 @@ inherited FRefMedicorner: TFRefMedicorner
         OnClick = BtnZoomInClick
       end
     end
-    object gtPDFViewer: TgtPDFViewer
-      Left = 75
-      Top = 12
-      Width = 1482
-      Height = 491
-      Cursor = 1
-      Color = clGray
-      DockOrientation = doNoOrient
-      ParentColor = False
-      TabOrder = 1
-      TabStop = True
-      OnKeyDown = gtPDFViewerKeyDown
-      About = 'Gnostice PDFtoolkit (www.gnostice.com)'
-      Status = 'PDF Viewer loaded Successfully.'
-      PDFDocument = gtPDFDocument
-      SearchHighlightColor = clGray
-      Version = '5.0.0.201'
-      OnPageChange = gtPDFViewerPageChange
-      InteractiveForms = False
-      ViewerMode = vmHand
-      AllowImageCopy = False
-      SelectedRegionColor = clSkyBlue
-      HighlightRegionColor = clYellow
-      HighlightRegionShape = stRectangle
-      BackgroundRendering = False
-      Caching.Enabled = True
-      Caching.DocumentCount = 10
-    end
     object dxLayoutControl1Group_Root: TdxLayoutGroup
       AlignHorz = ahClient
       AlignVert = avClient
@@ -1251,7 +1223,6 @@ inherited FRefMedicorner: TFRefMedicorner
       SizeOptions.SizableHorz = True
       SizeOptions.Width = 906
       AllowRemove = False
-      Control = gtPDFViewer
       Index = 1
     end
   end
@@ -2192,16 +2163,6 @@ inherited FRefMedicorner: TFRefMedicorner
     Left = 664
     Top = 589
   end
-  object gtPDFDocument: TgtPDFDocument
-    About = 'Gnostice PDFtoolkit (www.gnostice.com)'
-    Version = '5.0.0.201'
-    OpenAfterSave = False
-    MergeOptions = [moIncludeOutlines, moIncludeFormFields]
-    EMailAfterSave = False
-    ShowSetupDialog = False
-    Left = 908
-    Top = 352
-  end
   object GetPDF: TAstaClientDataSet
     StreamOptions = [ssIndexes, ssAggregates]
     Indexes = <>
@@ -2315,18 +2276,5 @@ inherited FRefMedicorner: TFRefMedicorner
     object RefxTriageTRIAGE_FK: TIntegerField
       FieldName = 'TRIAGE_FK'
     end
-  end
-  object gtPDFPrinter: TgtPDFPrinter
-    Collate = True
-    Copies = 1
-    Options = [poPageNums]
-    About = 'Gnostice PDFtoolkit (www.gnostice.com)'
-    PDFDocument = gtPDFDocument
-    Version = '5.0.0.201'
-    AutoRotate = False
-    IgnoreHardMargin = False
-    RenderingOptions = []
-    Left = 883
-    Top = 276
   end
 end

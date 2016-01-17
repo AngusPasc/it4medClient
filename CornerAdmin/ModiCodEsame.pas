@@ -10,7 +10,7 @@ uses
   cxDBEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit,
   cxDBLookupComboBox, cxCalendar, cxSpinEdit, cxTextEdit, cxMaskEdit,
   dxLayoutControl, CSEZForm, StdCtrls, cxButtons, Controls, ExtCtrls,
-  cxGroupBox;
+  cxGroupBox, cxImageComboBox;
 
 type
   TFModiCodEsame = class(TFBaseRad)
@@ -60,11 +60,7 @@ type
     sLkBranche: TDataSource;
     PrestazioniDESCRIZIONE: TStringField;
     PrestazioniDOSE: TFloatField;
-    sLkGrSpec: TDataSource;
     dxLayoutControlSpecificazioni: TdxLayoutGroup;
-    cxDBLookupComboBox1: TcxDBLookupComboBox;
-    dxLayoutControl1Item1: TdxLayoutItem;
-    PrestazioniGRSPEC_FK: TIntegerField;
     PrestazioniPESO_MEDICO: TFloatField;
     PrestazioniPESO_TECNICO: TFloatField;
     cxDBSpinEdit1: TcxDBSpinEdit;
@@ -72,6 +68,9 @@ type
     cxDBSpinEdit3: TcxDBSpinEdit;
     dxLayoutControl1Item5: TdxLayoutItem;
     dxLayoutControl1Group2: TdxLayoutAutoCreatedGroup;
+    PrestazioniCESPECIFIC: TIntegerField;
+    cxDBImageComboBox1: TcxDBImageComboBox;
+    dxLayoutControl1Item9: TdxLayoutItem;
     procedure aConfermaExecute(Sender: TObject);
     procedure aAnnullaExecute(Sender: TObject);
     procedure PrestazioniBeforePost(DataSet: TDataSet);
@@ -186,6 +185,8 @@ begin
     dxLayoutControlCodTariffario.Visible := false;
     dxLayoutControlDescTariffario.Visible := false;
   end;
+
+  dxLayoutControlSpecificazioni.Visible := (FDMCommon.LeggiPostoLavoroCHK_SPECIFICAZIONI.AsInteger=1);
 
   ReadBarCode := False;
     

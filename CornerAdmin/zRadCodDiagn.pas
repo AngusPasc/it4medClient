@@ -210,10 +210,6 @@ type
     LkBranche: TAstaClientDataSet;
     LkBrancheDESCRIZIONE: TStringField;
     LkBranchePKBRANCHE: TStringField;
-    LkGrSpec: TAstaClientDataSet;
-    LkGrSpecPK_GRUPPOSPEC: TIntegerField;
-    LkGrSpecIDGRUPPOSPEC: TStringField;
-    LkGrSpecDESCRIZIONE: TStringField;
     DiagnxServ: TAstaClientDataSet;
     DiagnxServDIAGNOSTICA_FK: TIntegerField;
     DiagnxServSERVIZI_FK: TIntegerField;
@@ -785,7 +781,6 @@ begin
 //    DiagnxEsami.open;
     Gruppi.open;
     LkTariffario.open;
-    LkGrSpec.Open;
     LkBranche.Open;
     oldselTutti := dxTuttiEsami.Down;
     cxPageControl1.ActivePage := TabAssegna;
@@ -848,7 +843,6 @@ begin
     FModiCodRadEsame := TFModiCodRadEsame.Create(nil);
     try
 
-        FModiCodRadEsame.sLkGrSpec.DataSet := LkGrSpec;
         FModiCodRadEsame.sGruppo.Dataset := Gruppi;
         FModiCodRadEsame.sLkTariffario.Dataset := LkTariffario;
         FModiCodRadEsame.sLkBranche.Dataset := LkBranche;
