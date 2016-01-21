@@ -904,6 +904,8 @@ type
     AltriEsamixSitoDURATA: TIntegerField;
     AltriEsamixSitoCESPECIFIC: TIntegerField;
     edrepImageDEVICE: TcxEditRepositoryImageComboBoxItem;
+    EsamiDEVICE: TIntegerField;
+    PossibiliDEVICE: TIntegerField;
     procedure FDMCommonCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -1319,6 +1321,8 @@ var
 
 resourcestring
 
+  Tessera_NonTrovatoPreno = 'Nessun appuntamento trovato.'#13'Vuoi fare una prenotazione ?';
+  Tessera_NonTrovatoAccet = 'Nessun appuntamento trovato.'#13'Vuoi fare una accettazione diretta ?';
   RS_AV = 'Si è verificato un problema.'#13'L''applicazione verrà riavviata';
   RAD_ErrSocket = 'Errore in connessione a H&S'#13'%s';
   RAD_TelefonoEmail = 'Telefono o email obbligatori %s!';
@@ -1905,10 +1909,20 @@ begin
      vLog := false;
   end;
 
+  if (frmSplash<>nil) and
+     ((exceptIntf.exceptObject is ESocketError) or
+      (exceptIntf.exceptObject is EDataBaseError) or
+      (exceptIntf.exceptObject is EAstaProtocolError)
+     ) then
+  begin
+     frmSplash.Free;
+     frmSplash := nil;
+  end;
+
   if (exceptIntf.exceptObject is ESocketError) then
   begin
      vContinue := gbldebugmode; // false;
-     ExceptionMessage := format(ExceptionMessage+' (%s %s)',[FDMCommon.AstaClientSocket.Address,FDMCommon.AstaClientSocket.Address]);
+//     ExceptionMessage := format(ExceptionMessage+#13#10+'(%s)',[FDMCommon.AstaClientSocket.Address]);
   end;
 
   if (Pos('List index out of bounds',ExceptionMessage)>0) then
@@ -2478,11 +2492,9 @@ begin
   MESettings.BugReportFile := ChangeFileExt(Application.ExeName,'.erx');
 {$ENDIF}
 
-{
   DateSeparator := '/';
   ShortDateFormat := 'dd/MM/yyyy';
   LongDateFormat := 'dddd d MMMM yyyy';
-}
 
   ShowProgress(10);
 
@@ -5072,8 +5084,8 @@ begin
      TmyAstaClientSocket(AstaClientSocket).DoError(Sender,Socket,ErrorEvent,ErrorCode);
      except
         on E: Exception do
-           MessageBox(0, pchar(E.Message), 'Errore...', MB_ICONERROR);
-//        raise;
+//           MessageBox(0, pchar(E.Message), 'Errore...', MB_ICONERROR);
+        raise;
      end;
 
      AstaClientSocket.OnError := AstaClientSocketError;

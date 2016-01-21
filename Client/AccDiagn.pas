@@ -1320,16 +1320,7 @@ begin
          begin
             if (refData=QyPreno) then
             begin
-              pk := QyPrenoPKTRIAGE.AsInteger;
-              if not AncheEseguiti then
-              begin
-                DeleteOperazione(GridDaEseguire,GridDaEseguireDettagli,pk);
-                if AncheDettagli then
-                   AggiornaFiltro;
-              end
-              else
-                RefreshOperazione(GridDaEseguire,GridDaEseguireDettagli,pk);
-              InsertOperazione(GridEseguiti,GridEseguitiDettagli,pk);
+              Eseguito(QyPrenoPKTRIAGE.AsInteger);
             end
             else
               refData.RefreshRecord;
@@ -1490,6 +1481,8 @@ begin
 
   ApriTutti.Enabled := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) or dxConEsami.Down;
   ChiudiTutti.Enabled := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]) or dxConEsami.Down;
+  aModTecnicoEsecutore.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
+  AssegnaMedico.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
 
   PostMessage( Handle, SY_ESPANDIDETTAGLI, 0, 0);
 

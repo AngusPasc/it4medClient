@@ -13,7 +13,7 @@ uses
 
 type
   TfrmMainMenu = class(TfrmBaseMainMenu)
-    TFDaStampare: TdxTileControlItem;
+    TFDaStampare: TdxTileControlItem;                       
     TFPrenotaNew: TdxTileControlItem;
     TFArchivioReferti: TdxTileControlItem;
     TFAccDiagn: TdxTileControlItem;
@@ -62,7 +62,7 @@ var
 
 implementation
 
-uses DMCommon, IInterface, BaseGrid, Windows, SysUtils, MD_Tools, DateUtils, gtPDFUtils;
+uses DMCommon, IInterface, BaseGrid, Windows, SysUtils, MD_Tools, DateUtils, gtPDFUtils, Dialogs;
 
 {$R *.dfm}
 
@@ -254,9 +254,14 @@ begin
 
   if not gblCallCenter then
   begin
-      if not(FPCSC.Valid) then AddLogMemo('SCardEstablishContext failed.')
+      if not(FPCSC.Valid) then
+      begin
+          AddLogMemo('SCardEstablishContext failed.');
+          TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[1].IndicatorType := sitRed;
+      end
       else begin
         AddLogMemo('SCardEstablishContext succeeded.');
+        TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[1].IndicatorType := sitYellow;
         FPCSC.OnReaderFound := ReaderFound;
         FPCSC.OnReaderRemoved := ReaderRemoved;
         FPCSC.OnCardStateChanged := CardStateChanged;
@@ -268,10 +273,14 @@ begin
       end;
   end
   else begin
-      TFPrenotaNew.ActivateDetail;  
+       TFAccDiagn.Visible := False;
+       TFDaStampare.Visible := False;
+       TFArchivioReferti.Visible := False;
+       TFPrenotaNew.ActivateDetail;
   end;
 
 end;
+
 
 // -- gestione lettore Tessera Sanitaria
 
@@ -292,6 +301,7 @@ procedure TfrmMainMenu.ReaderFound(Sender: TObject; ReaderName: string);
 begin
   AddLogMemo('New reader found: ' + ReaderName);
   UpdatePCSCReaderList;
+  TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[1].IndicatorType := sitGreen;  
 end;
 
 procedure TfrmMainMenu.ReaderRemoved(Sender: TObject; ReaderName: string);
@@ -511,8 +521,8 @@ begin
     Exit;
   end;
   AddLogMemo('SCardConnect (shared) succeeded.');
-  TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[1].IndicatorType := sitBlue;
-
+  TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[2].IndicatorType := sitYellow;
+  try
   // -- SELECT_MF
   PCSCResult := SendCommand(PCSCReader,'00A40000023F00');
   if not PCSCResult = SCARD_S_SUCCESS then Exit;
@@ -585,12 +595,22 @@ begin
   begin
      res := FDMCommon.CercaAppuntamento(trec.CodiceFiscale,trec);
 
-     // -- se prenotato ma non per oggi mando in archivio
+     // -- se prenotato ma non per oggi mando in Prenotazione
      if (res=20) and (CompareDate(trec.DataEsame,Date())<>EqualsValue) then
          res := 10;
 
+     if res=-1 then
+        if MessageDlg(Tessera_NonTrovatoPreno, mtInformation, [mbYes,mbNo],0)=mrYes then
+           res := 10
+        else if MessageDlg(Tessera_NonTrovatoAccet, mtInformation, [mbYes,mbNo],0)=mrYes then
+           res := 20
+        else
+           res := -1;
+
      case res of
-     -1,
+     -1: begin
+            Exit;
+         end;
      10: begin
             TFPrenotaNew.ActivateDetail;
          end;
@@ -617,7 +637,9 @@ begin
      TFBaseGrid(dxTile.ActiveDetail.ActiveControl).TesseraLetta := trec;
      PostMessage(TFBaseGrid(dxTile.ActiveDetail.ActiveControl).Handle,SY_READTESSERA,0,0);
   end;
-
+  finally
+      TdxStatusBarStateIndicatorPanelStyle(dxStatusBar.Panels[0].PanelStyle).Indicators.Items[2].IndicatorType := sitOff;
+  end;
 end;
 
 function TfrmMainMenu.ErrorToString(ErrorCode: DWORD): string;

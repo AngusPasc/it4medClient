@@ -1,6 +1,6 @@
 object frmBaseMainMenu: TfrmBaseMainMenu
   Left = 100
-  Top = 34
+  Top = 45
   AutoScroll = False
   ClientHeight = 549
   ClientWidth = 963
@@ -185,8 +185,10 @@ object frmBaseMainMenu: TfrmBaseMainMenu
           item
           end
           item
+          end
+          item
           end>
-        Width = 48
+        Width = 69
       end
       item
         PanelStyleClassName = 'TdxStatusBarTextPanelStyle'

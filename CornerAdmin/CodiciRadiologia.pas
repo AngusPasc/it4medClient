@@ -342,6 +342,7 @@ dxBarManager1Bar2: TdxBar;
     cxGridDBTableSpecxEsamiPREZZO: TcxGridDBColumn;
     cxGridDBTableSpecxEsamiCOSTO: TcxGridDBColumn;
     cxGridDBTableSpecifichePREZZO: TcxGridDBColumn;
+    TariffeListiniPKTARIFFE_PRESTAZIONI: TIntegerField;
     procedure NuovaMetodicaExecute(Sender: TObject);
     procedure ModificaMetodicaExecute(Sender: TObject);
     procedure CancellaMetodicaExecute(Sender: TObject);

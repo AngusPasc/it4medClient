@@ -100,7 +100,7 @@ Conditionals=MEDICORNER;MADEXCEPT
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=oracle12 PORTA=9000 compress DEBUGMODE
+RunParams=host=ORACLE12 PORTA=9000 compress DEBUGMODE
 HostApplication=
 Launcher=
 UseLauncher=0
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=0
 MinorVer=1
 Release=0
-Build=0
+Build=5
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Chorafarma s.r.l.
 FileDescription=Setup Medicorner
-FileVersion=0.1.0.0
+FileVersion=0.1.0.5
 InternalName=CornerAdmin.exe
 LegalCopyright=Chorafarma s.r.l.
 LegalTrademarks=Chorafarma s.r.l.

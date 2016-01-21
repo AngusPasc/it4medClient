@@ -194,6 +194,10 @@ end;
 
 procedure TdxTileControlAccess.DoDeactivateDetail(ADetail: TdxTileControlDetailSite);
 begin
+
+  if gblCallCenter then
+     Exit;
+
   if ADetail.TileItem.DetailOptions.DetailControl<>nil then
   begin
 

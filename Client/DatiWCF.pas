@@ -98,14 +98,12 @@ type
     GridPrestazioniSTATO: TcxGridDBColumn;
     MisureRichieste: TAstaClientDataSet;
     MisureRichiesteBRANCA: TStringField;
-    MisureRichiesteCOD_ESTERNO: TStringField;
     cxGrid1Level2: TcxGridLevel;
     GridMisure: TcxGridDBTableView;
     dsMisureRichieste: TDataSource;
-    MisureRichiesteDESC_ESTERNA: TStringField;
     GridMisureBRANCA: TcxGridDBColumn;
-    GridMisureCOD_ESTERNO: TcxGridDBColumn;
-    GridMisureDESC_ESTERNA: TcxGridDBColumn;
+    GridMisureIDSPECIFICAZIONI: TcxGridDBColumn;
+    GridMisureDESCRIZIONE: TcxGridDBColumn;
     dxLayoutControl1Group2: TdxLayoutAutoCreatedGroup;
     PrestazioniDEVICE: TIntegerField;
     aChiamaHeS: TAction;
@@ -115,6 +113,10 @@ type
     GridPrestazioniDEVICE: TcxGridDBColumn;
     GridPrestazioniCODICE: TcxGridDBColumn;
     GridPrestazioniDESCBRANCA: TcxGridDBColumn;
+    MisureRichiesteIDSPECIFICAZIONI: TStringField;
+    MisureRichiesteDESCRIZIONE: TStringField;
+    MisureRichiesteCOD_ESTERNO: TStringField;
+    GridMisureCOD_ESTERNO: TcxGridDBColumn;
     procedure AnnullaExecute(Sender: TObject);
     procedure AnnullaUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -155,12 +157,12 @@ type
     FInEseguito: boolean;
     FConConferma: boolean;
     FModificato: boolean;
-    FTutti: boolean;
+//    FTutti: boolean;
     ControlloAttivo: boolean;
     FEseguitoAutomatico: boolean;
     FEsamiNuovidaEseguire: integer;
 
-    procedure ControllaTutti;
+//    procedure ControllaTutti;
     procedure SalvaTutto;
     function ControlloCampi: integer;
     procedure EseguitoEsame(xst: integer; guardiamedica: boolean);
@@ -229,8 +231,8 @@ begin
 end;
 
 procedure TFDatiWCF.FormShow(Sender: TObject);
-//var
-//  i: integer;
+var
+  res: integer;
 begin
   inherited;
 
@@ -255,8 +257,10 @@ begin
 //     Prestazioni.EnableControls;
   end;
 
-  ControllaTutti;
+//  ControllaTutti;
+  res := ControlloCampi;
 
+  FModificato := res<>EsameSTATOVISITA.AsInteger;
 //  NonRefertare.Enabled := (EsameCHK_NON_REFERTARE.AsInteger=1) or gblUserIsAdmin or gblSuperUser;
 //  NonRefertare.Visible := (EsameCHK_NON_REFERTARE.AsInteger=1) or gblUserIsAdmin or gblSuperUser;
 
@@ -289,7 +293,7 @@ begin
  	EsameSTATOVISITA.AsInteger := xstato;
   SalvaTutto;
 
-  if xstato=130 then
+  if (xstato in [130,140,198]) then
   begin
       FStampaAvvisi := TFStampaAvvisi.Create(nil);
       try
@@ -315,6 +319,7 @@ begin
   end;
 
   case xstato of
+  140,
   198:  ModalResult := mrNo;   // -- Non refertare
   120:  ModalResult := mrOk;   // -- Da eseguire
   130:  ModalResult := mrOk;   //mrYes;  // -- Attesa conferma ricezione dati
@@ -329,6 +334,7 @@ begin
   inherited;
 
   FModificato := true;
+{
   if ControlloAttivo then
   begin
      ControlloAttivo := False;
@@ -338,10 +344,10 @@ begin
         ControlloAttivo := True;
      end;
   end;
-  
+}  
 end;
 
-
+(*
 procedure TFDatiWCF.ControllaTutti;
 var
   pkp: integer;
@@ -359,7 +365,7 @@ begin
   Prestazioni.Locate('PKPRESTAZIONI',pkp,[]);
   Prestazioni.EnableControls;
 end;
-
+*)
 
 procedure TFDatiWCF.EseguitoExecute(Sender: TObject);
 begin
@@ -457,7 +463,7 @@ end;
 procedure TFDatiWCF.CancellaEsameUpdate(Sender: TObject);
 begin
   inherited;
-  CancellaEsame.Enabled := not Prestazioni.IsEmpty and {(GridPrestazioni.SelectedCount>0) and} ((PrestazioniSTATO.AsInteger=0) or ((PrestazioniSTATO.AsInteger=1) and (PrestazioniDEVICE.AsInteger=0)));
+  CancellaEsame.Enabled := not Prestazioni.IsEmpty and {(GridPrestazioni.SelectedCount>0) and} ((PrestazioniSTATO.AsInteger=0) or ((PrestazioniSTATO.AsInteger in [1,2]) and (PrestazioniDEVICE.AsInteger in [0,3])));
 end;
 
 procedure TFDatiWCF.PrecedentiExecute(Sender: TObject);
@@ -528,6 +534,7 @@ begin
 
   SalvaTutto;
   case xstato of
+  140,
   198:  ModalResult := mrNo;   // -- Non refertare
   120:  ModalResult := mrOk;
   130:  ModalResult := mrOk;  //mrYes;
@@ -540,7 +547,7 @@ end;
 procedure TFDatiWCF.ConfermaUpdate(Sender: TObject);
 begin
   inherited;
-  Conferma.Enabled := not Prestazioni.IsEmpty and (Prestazioni.HasChanged);
+  Conferma.Enabled := not Prestazioni.IsEmpty and FModificato; //(Prestazioni.HasChanged or (EsameSTATOVISITA.NewValue<>EsameSTATOVISITA.OldValue));
 end;
 
 procedure TFDatiWCF.NonRefertareExecute(Sender: TObject);
@@ -609,6 +616,7 @@ var
   qNoDevice: Integer;
   qTutti: Integer;
   qFatti: Integer;
+  qNoDati: Integer;
   qNonRefer: Integer;
 begin
 { -- eliminato: edit non più possibile
@@ -640,6 +648,7 @@ begin
     Prestazioni.First;
     almenouno := false;
     qNoDevice := 0;
+    qNoDati := 0;
     qTutti := 0;
     qFatti := 0;
     result := 120;
@@ -649,17 +658,27 @@ begin
     begin
        if (PrestazioniDEVICE.AsInteger=0) then
        begin
+{ -- non metto automaticamente in eseguito: faccio eseguire !
            Prestazioni.Edit;
            PrestazioniSTATO.AsInteger := 1;
            Prestazioni.Post;
-           Inc(qNoDevice);
+}
+           if PrestazioniSTATO.AsInteger=1 then
+              Inc(qNoDevice);
        end
        else if PrestazioniSTATO.AsInteger=1 then
        begin
-           if (PrestazioniDEVICE.AsInteger=2) then
-              Inc(qNonRefer)
+           case PrestazioniDEVICE.AsInteger of
+           2: Inc(qNonRefer);
+           3: Inc(qNoDati);
            else
               Inc(qFatti);
+           end;
+       end
+       else if PrestazioniSTATO.AsInteger=2 then
+       begin
+           if PrestazioniDEVICE.AsInteger=3 then
+              Inc(qNoDati);
        end;
 
        Inc(qTutti);
@@ -670,7 +689,9 @@ begin
 
     if (qNoDevice = qTutti) then
         result := 198
-    else if (qNoDevice+qNonRefer+qFatti)=qTutti then
+    else if (qNoDati = qTutti) then
+        result := 140
+    else if (qNoDevice+qNonRefer+qFatti+qNoDati)=qTutti then
         result := 130
     else
         Result := 120;
@@ -699,7 +720,7 @@ procedure TFDatiWCF.StampeUpdate(Sender: TObject);
 begin
   inherited;
 //  Stampe.Enabled := not Prestazioni.IsEmpty and (Prestazioni.HasChanged);
-  Stampe.Enabled := not Prestazioni.IsEmpty and Ftutti;
+  Stampe.Enabled := not Prestazioni.IsEmpty; // and Ftutti;
 end;
 
 procedure TFDatiWCF.NonRefertareUpdate(Sender: TObject);
@@ -792,7 +813,19 @@ end;
 
 procedure TFDatiWCF.aInviaWCFExecute(Sender: TObject);
 begin
-  PostMessage(Handle,SY_DBLCLICK,LongInt(GridPrestazioni),LongInt(aChiamaHeS));
+  case PrestazioniDEVICE.AsInteger of
+  1,2: PostMessage(Handle,SY_DBLCLICK,LongInt(GridPrestazioni),LongInt(aChiamaHeS));
+    0: begin
+          Prestazioni.Edit;
+          PrestazioniSTATO.AsInteger := 1;
+          Prestazioni.Post;
+       end;
+    3: begin
+          Prestazioni.Edit;
+          PrestazioniSTATO.AsInteger := 2;
+          Prestazioni.Post;
+       end;
+  end;
 end;
 
 
@@ -812,7 +845,7 @@ end;
 procedure TFDatiWCF.aInviaWCFUpdate(Sender: TObject);
 begin
   inherited;
-  aInviaWCF.Enabled := not Prestazioni.IsEmpty and (PrestazioniSTATO.AsInteger in [0,1]) and (PrestazioniDEVICE.AsInteger in [1,2]);
+  aInviaWCF.Enabled := not Prestazioni.IsEmpty and (((PrestazioniSTATO.AsInteger in [0,1]) and (PrestazioniDEVICE.AsInteger in [1,2])) or ((PrestazioniSTATO.AsInteger=0) and (PrestazioniDEVICE.AsInteger in [0,3])));
 end;
 
 procedure TFDatiWCF.MisureRichiesteBeforeQuery(

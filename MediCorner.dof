@@ -100,7 +100,7 @@ Conditionals=MEDICORNER;madExcept
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=oracle12 PORTA=9000 compress
+RunParams=host=ORACLE12 PORTA=9000 compress DEBUGMODE
 HostApplication=
 Launcher=
 UseLauncher=0
@@ -111,11 +111,11 @@ ProjectLang=
 RootDir=
 [Version Info]
 IncludeVerInfo=1
-AutoIncBuild=0
+AutoIncBuild=1
 MajorVer=0
 MinorVer=1
 Release=0
-Build=0
+Build=8
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Chorafarma s.r.l.
 FileDescription=Medicorner
-FileVersion=0.1.0.0
+FileVersion=0.1.0.8
 InternalName=Medicorner.exe
 LegalCopyright=Chorafarma s.r.l.
 LegalTrademarks=Chorafarma s.r.l.

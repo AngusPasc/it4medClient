@@ -2942,6 +2942,7 @@ begin
        xKey := xItem.DBKey;
        result := QyPrenoREPARTI_FK.AsInteger;
        RegistraEsami.openNoFetch;
+       RegistraSpecxPrest.OpenNoFetch;
        if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3])  then
            RegistraMateriali.openNoFetch;
        codici.CommaText := vRighe;
@@ -2971,7 +2972,7 @@ begin
 
           while not RichSpecxPrest.Eof do
           begin
-            RegistraSpecxPrest.Append;
+            RegistraSpecxPrest.Insert;
             RegistraSpecxPrestSPECIFICAZIONI_FK.AsInteger := RichSpecxPrest.Fieldbyname('SPECIFICAZIONI_FK').AsInteger;
             RegistraSpecxPrestPRESTAZIONI_FK.AsInteger := RegistraEsamiPKPRESTAZIONI.AsInteger;
             RegistraSpecxPrest.Post;
@@ -3158,7 +3159,7 @@ end;
 procedure TPrenoTest.StampaPrenotazioneUpdate(Sender: TObject);
 begin
   inherited;
-  StampaPrenotazione.Enabled := ValidaModificaItem(DBPlanner.Items.DBItem);
+  StampaPrenotazione.Enabled := ValidaModificaItem(DBPlanner.Items.DBItem) and not gblCallCenter;
 end;
 
 procedure TPrenoTest.aRiapriPrenoUpdate(Sender: TObject);
@@ -3540,7 +3541,6 @@ begin
   inherited;
   RegistraMaterialiPRESTAZIONI_FK.AsInteger := RegistraEsamiPKPRESTAZIONI.AsInteger;
   RegistraMaterialiTIPO.AsInteger := 1;
-
 end;
 
 procedure TPrenoTest.aCancellaPrenotazioneUpdate(Sender: TObject);

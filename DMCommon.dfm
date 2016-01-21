@@ -2,8 +2,8 @@ object FDMCommon: TFDMCommon
   OldCreateOrder = False
   OnCreate = FDMCommonCreate
   OnDestroy = DataModuleDestroy
-  Left = 220
-  Top = 28
+  Left = 434
+  Top = 15
   Height = 778
   Width = 1048
   object cxLocalizer1: TcxLocalizer
@@ -583,6 +583,10 @@ object FDMCommon: TFDMCommon
         item
           Description = 'Device / No Referto'
           Value = 2
+        end
+        item
+          Description = 'No Device / Referto'
+          Value = 3
         end>
     end
   end
@@ -6256,7 +6260,8 @@ object FDMCommon: TFDMCommon
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'c.branca,'
-      'b.descrizione as DescBranca'
+      'b.descrizione as DescBranca,'
+      'b.device'
       'from codxrad m'
       'join codicirad c on c.pkcodicirad = m.codicirad_fk'
       'left join branche b on b.pkbranche = c.branca'
@@ -6295,7 +6300,8 @@ object FDMCommon: TFDMCommon
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'BRANCA,1,3'
-      'DESCBRANCA,1,60')
+      'DESCBRANCA,1,60'
+      'DEVICE,3,0')
     FMultiTable = ()
     UpdateMethod = umManual
     object EsamiCODICE: TStringField
@@ -6351,6 +6357,9 @@ object FDMCommon: TFDMCommon
     end
     object EsamiCESPECIFIC: TIntegerField
       FieldName = 'CESPECIFIC'
+    end
+    object EsamiDEVICE: TIntegerField
+      FieldName = 'DEVICE'
     end
   end
   object Timer2: TTimer
@@ -6519,7 +6528,8 @@ object FDMCommon: TFDMCommon
       'p.extra_tariffario,'
       'p.calcolo_85,'
       'c.branca,'
-      'b.descrizione as DescBranca'
+      'b.descrizione as DescBranca,'
+      'b.device'
       '/*'
       ','
       'db.magart_fk,'
@@ -6597,7 +6607,8 @@ object FDMCommon: TFDMCommon
       'EXTRA_TARIFFARIO,3,0'
       'CALCOLO_85,3,0'
       'BRANCA,1,3'
-      'DESCBRANCA,1,60')
+      'DESCBRANCA,1,60'
+      'DEVICE,3,0')
     FMultiTable = ()
     UpdateMethod = umManual
     object PossibiliCODICE: TStringField
@@ -6656,6 +6667,9 @@ object FDMCommon: TFDMCommon
     end
     object PossibiliCESPECIFIC: TIntegerField
       FieldName = 'CESPECIFIC'
+    end
+    object PossibiliDEVICE: TIntegerField
+      FieldName = 'DEVICE'
     end
   end
   object sLkOspedali: TDataSource

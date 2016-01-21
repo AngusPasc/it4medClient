@@ -142,7 +142,7 @@ begin
 
   FInStampa := True;
   try
-
+(*
   if Stampante<>'' then
   begin
      x := Printer.Printers.IndexOf(Stampante);
@@ -153,14 +153,19 @@ begin
         Printer.PrinterIndex := x;
      end;
   end;
-
+*)
   try
 //  for x:=1 to FRefPreview.cxCopie.Value do
   begin
      gtPDFDocument.DocInfo.Title := FTitolo;   //Format(RS_RefertoNr,[qPrintReportPKREFERTI.AsInteger]);
 //     gtPDFViewer.PrintDoc(false);
      if Stampante<>'' then
+     begin
         gtPDFPrinter.SelectPrinterByName(Stampante);
+        gtPDFPrinter.ShowSetupDialog := false;
+     end
+     else
+        gtPDFPrinter.ShowSetupDialog := true;
      gtPDFPrinter.Scaling := psFitPage;
      gtPDFPrinter.Copies := cxCopie.Value;
      gtPDFPrinter.PrintDoc;

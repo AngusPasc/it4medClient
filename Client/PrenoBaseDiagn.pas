@@ -262,6 +262,7 @@ type
     procedure CercaSpazioLiberoUpdate(Sender: TObject);
     procedure ListaPrenoPlannerUpdate(Sender: TObject);
     procedure aCancellaPrenotazioneUpdate(Sender: TObject);
+    procedure StampaPrenotazioneUpdate(Sender: TObject);
   private
     xRightTime: TDateTime;
     dxBarPopupPreno: TdxBarPopupMenu;
@@ -3405,6 +3406,12 @@ procedure TPrenoDiagn.aCancellaPrenotazioneUpdate(Sender: TObject);
 begin
   inherited;
   aCancellaPrenotazione.Enabled := (FDMCommon.LeggiPostoLavoroCHK_ABILITA_ACCETTAZ.AsInteger in [1,6]) and ValidaModificaItem(DBPlanner.Items.DBItem);
+end;
+
+procedure TPrenoDiagn.StampaPrenotazioneUpdate(Sender: TObject);
+begin
+  inherited;
+  StampaPrenotazione.Enabled := not gblCallCenter;
 end;
 
 end.

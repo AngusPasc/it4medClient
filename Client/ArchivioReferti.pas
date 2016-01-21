@@ -935,7 +935,6 @@ type
     TriagexImpegnativeDIAGNOSTICA_FK: TIntegerField;
     TriagexImpegnativeRIS_STUDY_EUID: TStringField;
     CancellaImpegnativa: TAstaClientDataSet;
-    dxComponentPrinterCartella: TdxCustomContainerReportLink;
     aNuovaAnagrafica: TAction;
     dxBarButton53: TdxBarButton;
     SchedaPazienteASSISTIBILI_FK: TIntegerField;
@@ -1005,6 +1004,16 @@ type
     aEsportaExcel: TAction;
     SaveDialog1: TSaveDialog;
     dxBarButton28: TdxBarButton;
+    aImportaReferto: TAction;
+    OpenDialog1: TOpenDialog;
+    qCaricaReferto: TAstaClientDataSet;
+    dxBarPopPrestazioni: TdxBarPopupMenu;
+    dxBarBtnCaricaReferto: TdxBarButton;
+    updCaricaReferto: TAstaUpdateSQL;
+    qCaricaRefertoRIS_STUDY_EUID: TStringField;
+    qCaricaRefertoREFERTO: TBlobField;
+    qCaricaRefertoPKPRESTAZIONI: TFloatField;
+    qCaricaRefertoUSER_ID: TIntegerField;
     procedure RefertoExecute(Sender: TObject);
     procedure RicercaInternaExecute(Sender: TObject);
     procedure RicercaInternaUpdate(Sender: TObject);
@@ -1286,6 +1295,8 @@ type
       AButtonIndex: Integer; var ADone: Boolean);
     procedure aEsportaExcelExecute(Sender: TObject);
     procedure RefEsamiBeforeQuery(Sender: TAstaBaseClientDataSet);
+    procedure aImportaRefertoExecute(Sender: TObject);
+    procedure aImportaRefertoUpdate(Sender: TObject);
   private
     { Private declarations }
     lstato: TStringList;
@@ -2071,17 +2082,17 @@ begin
 
     if FDMCommon.dxPrintDialog1.Execute then
     begin
-{
-       dxComponentPrinterArchivio.ReportTitle.Text := 'Nominativo: '+SchedaPazienteCOGNOME.AsString + ' ' + SchedaPazienteNOME.AsString + #13 +
-                                                      'Codice: '+SchedaPazientePKASSISTIBILI.AsString+#13+
-                                                      'Luogo nascita: '+SchedaPazienteDES_COMNASC.AsString+#13+
+
+       dxComponentPrinterEsamiCartella.ReportTitle.Text := 'Nominativo: '+SchedaPazienteCOGNOME.AsString + ' ' + SchedaPazienteNOME.AsString + #13 + #10 +
+                                                      'Codice: '+SchedaPazientePKASSISTIBILI.AsString+#13+#10 +
+//                                                      'Luogo nascita: '+SchedaPazienteDES_COMNASC.AsString+#13+#10 +
                                                       'Data nascita: '+ DateToStr(SchedaPazienteDATA_NASCITA.AsDateTime);
-}
+
        if FDMCommon.dxPrintDialog1.PreviewBtnClicked then
-          dxComponentPrinter1.Preview(true,dxComponentPrinterCartella)
+          dxComponentPrinter1.Preview(true,dxComponentPrinterEsamiCartella)
        else begin
           AData.DialogData := FDMCommon.dxPrintDialog1.DialogData;
-          dxComponentPrinter1.Print(false,@AData,dxComponentPrinterCartella);
+          dxComponentPrinter1.Print(false,@AData,dxComponentPrinterEsamiCartella);
        end;
     end;
 
@@ -5412,6 +5423,45 @@ begin
   Sender.Parambyname('data_al').AsDateTime := dxDataAccAl.EditValue;
   Sender.Parambyname('reparti_fk').AsInteger := gblpkrep;
 }
+end;
+
+procedure TFArchivioReferti.aImportaRefertoExecute(Sender: TObject);
+var
+  ms: TMemoryStream;
+begin
+  inherited;
+  if OpenDialog1.Execute then
+  begin
+     ms := TMemoryStream.Create;
+     try
+       ms.LoadFromFile(OpenDialog1.FileName);
+       ms.Position := 0;
+{
+       qCaricaReferto.ParamByName('pstudyuid').AsString := SituazioneRIS_STUDY_EUID.AsString;
+       qCaricaReferto.ParamByName('preferto').AsStream := ms;
+       qCaricaReferto.ParamByName('pprestazioni').AsInteger := SitEsamiPKPRESTAZIONI.AsInteger;
+       qCaricaReferto.ParamByName('puserid').AsInteger := gblCodUtente;
+       qCaricaReferto.ExecCommit;
+}
+       qCaricaReferto.Close;
+       qCaricaReferto.OpenNoFetch;
+       qCaricaReferto.Append;
+       qCaricaRefertoRIS_STUDY_EUID.AsString := SituazioneRIS_STUDY_EUID.AsString;
+       TBlobField(qCaricaRefertoREFERTO).LoadFromFile(OpenDialog1.FileName);
+       qCaricaRefertoPKPRESTAZIONI.AsInteger := SitEsamiPKPRESTAZIONI.AsInteger;
+       qCaricaRefertoUSER_ID.AsInteger := gblCodUtente;
+       qCaricaReferto.Post;
+       Situazione.RefreshRecord;
+     finally
+        ms.Free;
+     end;
+  end;
+end;
+
+procedure TFArchivioReferti.aImportaRefertoUpdate(Sender: TObject);
+begin
+  inherited;
+  aImportaReferto.Enabled := (SitEsamiSTATO.AsInteger = 2);
 end;
 
 initialization

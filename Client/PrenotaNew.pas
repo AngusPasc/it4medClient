@@ -503,6 +503,12 @@ dxBarManager1Bar1: TdxBar;
     RichSpecxPrestPREZZO: TFloatField;
     RichSpecxPrestCOSTO: TFloatField;
     RichSpecxPrestPROGRESSIVO_RIGA: TIntegerField;
+    cxGrid1Level2: TcxGridLevel;
+    GridSpecificazioni: TcxGridDBTableView;
+    sRichSpecxPrest: TDataSource;
+    GridSpecificazioniIDSPECIFICAZIONI: TcxGridDBColumn;
+    GridSpecificazioniDESCRIZIONE: TcxGridDBColumn;
+    GridSpecificazioniPREZZO: TcxGridDBColumn;
     procedure aNuovaPrenotazioneExecute(Sender: TObject);
     procedure actRicercaExecute(Sender: TObject);
     procedure QyGiornateBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -652,7 +658,7 @@ dxBarManager1Bar1: TdxBar;
   private
     { Private declarations }
     FPersModified: Boolean;
-    FDiagnSelezionate: Boolean;
+//    FDiagnSelezionate: Boolean;
     FCodiceDiag: string;
     FBollo: Double;
     prgriga: integer;
@@ -671,6 +677,7 @@ dxBarManager1Bar1: TdxBar;
     vbDiagn: TvbDiagnList;
     vSbItem: TList;
     FxAltriPresidi: integer;
+    procedure CancellaSpecxPrest(prg: Integer);
     function LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
     procedure SelezionaDiagnostiche(const lista: string);
     procedure SelezioneSingola;
@@ -1428,6 +1435,7 @@ begin
   if (Richiesti.State in dsEditModes) then
     Richiesti.Cancel;
   Richiesti.Empty;
+  RichSpecxPrest.Empty;
   Materiali.Empty;
   cxCodice.Text := '';
 
@@ -1480,6 +1488,7 @@ begin
   if (Richiesti.State in dsEditModes) then
     Richiesti.Cancel;
   Richiesti.Empty;
+  RichSpecxPrest.Empty;
   Materiali.Empty;
   cxCodice.Text := '';
 
@@ -1515,7 +1524,7 @@ begin
   FDMCommon.CaricaLayout(Name,dxLayoutControl1);
 
   FPersModified := False;
-  FDiagnSelezionate := False;
+//  FDiagnSelezionate := False;
   prgriga := 0;
   sTipoRicetta.DataSet := FDMCommon.LkTipoRicetta;
   sTipoAccesso.DataSet := FDMCommon.LkTipoAccesso;
@@ -1553,6 +1562,7 @@ begin
 
   Materiali.open;
   Richiesti.open;
+  RichSpecxPrest.Open;
   tbSelezione.Open;
   TPreno.open;
   FInRegistrazione := false;
@@ -1761,7 +1771,7 @@ begin
   end;
 *)
 
-  if (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5) or (QyLkServizi.recordcount=1) then
+  if {(FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5) or} (QyLkServizi.recordcount=1) then
       dxSingolaDiagn.Down := True;
 
   for i := 0 to QyLkServizi.recordcount - 1 do
@@ -1775,11 +1785,17 @@ begin
 //          tb.Caption := tb.Caption + ' (' + QyLkServiziDESC_REPARTO.AsString +')';
       tb.Tag := QyLkServiziPKSERVIZI.AsInteger;
       tb.OnClick := dxSelezDiagn;
+
+      if dxSingolaDiagn.Down {or (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5)} then
+      begin
+         tb.GroupIndex := 1;
+         tb.CloseSubMenuOnClick := true;
+      end
+      else
 {JRT 4988}
       tb.CloseSubMenuOnClick := false;
 {}
-      if dxSingolaDiagn.Down or (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5) then
-         tb.GroupIndex := 1;
+
       dxSubDiag.ItemLinks.Add.Item := tb;
       if vbDiagn.Count=0 then
          dxSubDiag.ItemLinks[dxSubDiag.ItemLinks.Count-1].BeginGroup := true;
@@ -1811,11 +1827,15 @@ begin
   //            tb.Caption := tb.Caption + ' (' + QyLkServiziDESC_REPARTO.AsString +')';
           tb.Tag := QyLkServiziPKSERVIZI.AsInteger;
           tb.OnClick := dxSelezDiagn;
+          if dxSingolaDiagn.Down then
+          begin
+             tb.GroupIndex := 1;
+             tb.CloseSubMenuOnClick := true;
+          end
+          else
 {JRT 4988}
           tb.CloseSubMenuOnClick := False;
 {}
-          if dxSingolaDiagn.Down then
-             tb.GroupIndex := 1;
           tsb.ItemLinks.Add.Item := tb;
           vbDiagn.Add( tb );
           QyLkServizi.Next;
@@ -1970,7 +1990,7 @@ procedure TFPrenotaNew.dxSelezDiagn(Sender: TObject);
 //  i,Item: integer;
 begin
 
-  FDiagnSelezionate := True;
+//  FDiagnSelezionate := True;
 (*
   if TdxBarButton(Sender).Down then
   begin
@@ -2633,7 +2653,7 @@ begin
      TPreno.Post;
   SettaTutti;
   EditCodici(true);
-
+  aNuovaPrenotazione.Execute;
 end;
 
 procedure TFPrenotaNew.aCercaAgendeUpdate(Sender: TObject);
@@ -2767,7 +2787,7 @@ end;
 
 procedure TFPrenotaNew.RichiestiAfterDelete(DataSet: TDataSet);
 begin
-    RicalcolaTotale;
+  RicalcolaTotale;
 end;
 
 procedure TFPrenotaNew.RichiestiAfterPost(DataSet: TDataSet);
@@ -2886,6 +2906,7 @@ begin
            FSelezSpec.sPrestazioni.DataSet := Richiesti;
            if FSelezSpec.ShowModal=mrCancel then
            begin
+              CancellaSpecxPrest(RichiestiPROGRESSIVO_RIGA.AsInteger);
               Richiesti.Cancel;
               Exit;
            end;
@@ -2925,6 +2946,15 @@ begin
     Richiesti.Post;
 end;
 
+procedure TFPrenotaNew.CancellaSpecxPrest(prg: Integer);
+begin
+    RichSpecxPrest.Filtered := False;
+    RichSpecxPrest.Filter := format('PROGRESSIVO_RIGA = %d',[prg]);
+    RichSpecxPrest.Filtered := True;
+    while not RichSpecxPrest.eof do
+        RichSpecxPrest.Delete;
+end;
+
 procedure TFPrenotaNew.CaricaCodice(const cod: string);
 begin
   Esami.Filtered := false;
@@ -2938,7 +2968,7 @@ begin
   end;
 
 {$IFDEF MEDICORNER}
-  if Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  if (Esami.Fieldbyname('DEVICE').AsInteger>0) and Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
   begin
       MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
       exit;
@@ -3772,7 +3802,7 @@ end;
 
 procedure TFPrenotaNew.aRistampaUpdate(Sender: TObject);
 begin
-  aRistampa.Enabled := (FListaRich.Count>0);
+  aRistampa.Enabled := (FListaRich.Count>0) and not gblCallCenter;
 end;
 
 procedure TFPrenotaNew.aCancellaPrenoExecute(Sender: TObject);
@@ -4362,7 +4392,7 @@ begin
           Materiali.Delete;
     Materiali.Filtered := false;
   end;
-
+  CancellaSpecxPrest(RichiestiPROGRESSIVO_RIGA.AsInteger);
 end;
 
 procedure TFPrenotaNew.RichiestiBeforePost(DataSet: TDataSet);
@@ -4493,9 +4523,8 @@ end;
 procedure TFPrenotaNew.dxSingolaDiagnClick(Sender: TObject);
 begin
   inherited;
+//  FDiagnSelezionate := True;
   SelezioneSingola;
-  FDiagnSelezionate := True;
-
 end;
 
 procedure TFPrenotaNew.SelezioneSingola;
@@ -4529,7 +4558,7 @@ var
 begin
   inherited;
 
-  if FDiagnSelezionate then
+//  if FDiagnSelezionate then
   begin
 //    AlertRichieste.Active := false;
     xFCodiceDiag := '';
@@ -4537,7 +4566,7 @@ begin
     try
     for I := 0 to vbDiagn.Count-1 do
     begin
-      QyLkServizi.Locate('PKSERVIZI',vbDiagn[I].Tag,[]);
+//      QyLkServizi.Locate('PKSERVIZI',vbDiagn[I].Tag,[]);
 //      QyLkServizi.Edit;
       if Assigned(vbDiagn[I]) and vbDiagn[I].Down then
       begin
@@ -4547,8 +4576,8 @@ begin
          else
             xFCodiceDiag := xFCodiceDiag + ',' + IntToStr(vbDiagn[I].Tag);
 //         QyLkServiziSELEZIONATA.AsInteger := 1;
-      end
-      else
+      end;
+//      else
 //         QyLkServiziSELEZIONATA.AsInteger := 0;
 //      QyLkServizi.Post;
     end;
@@ -4558,7 +4587,7 @@ begin
     if xFCodiceDiag<>'' then
        SelezionaDiagnostiche(xFCodiceDiag);
     finally
-       FDiagnSelezionate := False;
+//       FDiagnSelezionate := False;
 //       AlertRichieste.Active := dxAttivaRefresh.Down;
     end;
   end;
@@ -4750,7 +4779,7 @@ begin
   end;
 
 {$IFDEF MEDICORNER}
-  if Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  if (Esami.Fieldbyname('DEVICE').AsInteger>0) and Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
   begin
       MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
       exit;
@@ -4896,7 +4925,7 @@ end;
 procedure TFPrenotaNew.aStampaTempiUpdate(Sender: TObject);
 begin
   inherited;
-  aStampaTempi.Enabled := not PazientiInAttesa.IsEmpty;
+  aStampaTempi.Enabled := not PazientiInAttesa.IsEmpty and not gblCallCenter;
 end;
 
 procedure TFPrenotaNew.dxAgendeInterniClick(Sender: TObject);

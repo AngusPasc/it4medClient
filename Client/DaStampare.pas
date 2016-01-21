@@ -89,7 +89,7 @@ type
     GridDaRefertare: TcxGridDBTableView;
     GridDaRefertarePKIMPEGNATIVE: TcxGridDBColumn;
     GridDaRefertarePKTRIAGE: TcxGridDBColumn;
-    GridDaRefertareDATA_VISITA: TcxGridDBColumn;
+    GridDaRefertareDATA_REFERTO: TcxGridDBColumn;
     GridDaRefertareNOMINATIVO: TcxGridDBColumn;
     GridDaRefertareREPARTO: TcxGridDBColumn;
     GridDaRefertareSERVIZIO: TcxGridDBColumn;
@@ -606,7 +606,7 @@ begin
   GridDaRefertare.RestoreFromrsStorage(TcxrsStorageReader.CreateNew(name+'.'+GridDaRefertare.Name,rsPropSaver1.Storage), false, false, [{gsoUseFilter,} {gsoUseSummary}]);
   GridConsegnati.RestoreFromrsStorage(TcxrsStorageReader.CreateNew(name+'.'+GridConsegnati.Name,rsPropSaver1.Storage), false, false, [{gsoUseFilter,} {gsoUseSummary}]);
   GridDaRefertare.OptionsView.CellAutoHeight := dxAutoSize.Down;
-  GridDaRefertare.OptionsView.Footer := true;
+//  GridDaRefertare.OptionsView.Footer := true;
 
   FDMCommon.SetVisible(GridDaRefertareNOTE_PRENO,(FDMCommon.LeggiPostoLavoroCHK_NOTE_RICH.AsInteger=1));
   GridDaRefertare.OptionsBehavior.ImmediateEditor := (FDMCommon.LeggiPostoLavoroCHK_NOTE_RICH.AsInteger=1);
@@ -619,7 +619,7 @@ begin
   GridDettDaRefertareNUMERO_PRESTAZIONE.Visible := (FDMCommon.LeggiPostoLavoroCHECK_NO_PRESTMULT.AsInteger=0) and not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
 
   GridConsegnati.OptionsView.CellAutoHeight := dxAutoSize.Down;
-  GridConsegnati.OptionsView.Footer := true;
+//  GridConsegnati.OptionsView.Footer := true;
 
   FDMCommon.SetVisible(GridConsegnatiNOTE_PRENO,(FDMCommon.LeggiPostoLavoroCHK_NOTE_RICH.AsInteger=1));
   GridConsegnati.OptionsBehavior.ImmediateEditor := (FDMCommon.LeggiPostoLavoroCHK_NOTE_RICH.AsInteger=1);

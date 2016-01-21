@@ -1,6 +1,6 @@
 inherited frmMainMenu: TfrmMainMenu
-  Left = 0
-  Top = 145
+  Left = 275
+  Top = 181
   Caption = 'Chorafarma s.r.l.'
   ClientHeight = 569
   ClientWidth = 966

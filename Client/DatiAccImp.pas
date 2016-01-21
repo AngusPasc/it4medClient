@@ -347,6 +347,12 @@ type
     qSpecxPrestDESCRIZIONE: TStringField;
     qSpecxPrestPREZZO: TFloatField;
     qSpecxPrestCOSTO: TFloatField;
+    cxGrid1Level2: TcxGridLevel;
+    GridSpecificazioni: TcxGridDBTableView;
+    sqSpecxPrest: TDataSource;
+    GridSpecificazioniIDSPECIFICAZIONI: TcxGridDBColumn;
+    GridSpecificazioniDESCRIZIONE: TcxGridDBColumn;
+    GridSpecificazioniPREZZO: TcxGridDBColumn;
     procedure AccettazioneBeforePost(DataSet: TDataSet);
     procedure AccettazioneNewRecord(DataSet: TDataSet);
     procedure PrestazioniBeforeQuery(Sender: TAstaBaseClientDataSet);
@@ -441,6 +447,8 @@ type
     procedure cxCodiceKeyPress(Sender: TObject; var Key: Char);
     procedure cxDescrizioneKeyPress(Sender: TObject; var Key: Char);
     procedure qSpecxPrestNewRecord(DataSet: TDataSet);
+    procedure GridPrestazioniNavigatorButtonsButtonClick(Sender: TObject;
+      AButtonIndex: Integer; var ADone: Boolean);
   private
     { Private declarations }
     FBollo: Double;
@@ -452,6 +460,7 @@ type
     FPreFilter: string;
     FDIAGNOSTICA_FK: integer;
     xIndirizzo : string;
+    procedure CancellaSpecxPrest(prg: Integer);
     function LoadPrestazione(ds: TAstaCustomDataset; pgrprest: integer): boolean;
     procedure ControllaAltriEsami;
     procedure ScegliCodiceEsame;
@@ -1230,6 +1239,7 @@ begin
                Result := (FSelezSpec.ShowModal=mrOk);
                if not Result then
                begin
+                  CancellaSpecxPrest(PrestazioniPKPRESTAZIONI.AsInteger);
                   Prestazioni.Cancel;
                   Exit;
                end;
@@ -1311,7 +1321,7 @@ begin
   end;
 
 {$IFDEF MEDICORNER}
-  if Prestazioni.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
+  if (Esami.Fieldbyname('DEVICE').AsInteger>0) and Prestazioni.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
   begin
       MsgDlg(format(RS_TipoEsameGiaCaricato,[Esami.Fieldbyname('BRANCA').AsString]),'', ktWarning, [kbOK]);
       exit;
@@ -1686,6 +1696,8 @@ begin
   cxDataImpegnativa.Properties.MinDate := IncMonth(Date(),-6);
 {}
 
+  GridPrestazioni.ViewData.Collapse(False)
+
 end;
 
 
@@ -1778,7 +1790,7 @@ begin
   FRicercaFatta := (Accettazione.State=dsEdit);
 
   GridPrestazioni.OptionsBehavior.ImmediateEditor := false; //(FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
-  GridPrestazioni.Navigator.Visible := false; //(FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
+//  GridPrestazioni.Navigator.Visible := false; //(FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
 //  GridPrestazioniMAGART_FK.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
 //  GridPrestazioniQR.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
   GridPrestazioniRADIOFARMACO.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger in [1,3]);
@@ -2108,7 +2120,7 @@ procedure TFDatiAccImp.ConfermaStampaUpdate(Sender: TObject);
 begin
   inherited;
   ConfermaStampa.Enabled := (Prestazioni.recordcount>0) {and (Prestazioni.recordcount<9)} and
-                              not AccettazioneASSISTIBILI_FK.IsNull;
+                              not AccettazioneASSISTIBILI_FK.IsNull and not gblCallCenter;
 
 end;
 
@@ -2787,7 +2799,16 @@ begin
           Materiali.Delete;
     Materiali.Filtered := false;
   end;
+  CancellaSpecxPrest(PrestazioniPKPRESTAZIONI.AsInteger);
+end;
 
+procedure TFDatiAccImp.CancellaSpecxPrest(prg: Integer);
+begin
+    qSpecxPrest.Filtered := False;
+    qSpecxPrest.Filter := format('PRESTAZIONI_FK = %d',[prg]);
+    qSpecxPrest.Filtered := True;
+    while not qSpecxPrest.eof do
+        qSpecxPrest.Delete;
 end;
 
 procedure TFDatiAccImp.cxTipoRicettaPropertiesCloseUp(Sender: TObject);
@@ -3066,6 +3087,18 @@ procedure TFDatiAccImp.qSpecxPrestNewRecord(DataSet: TDataSet);
 begin
   inherited;
   qSpecxPrestPRESTAZIONI_FK.AsInteger := PrestazioniPKPRESTAZIONI.AsInteger;
+end;
+
+procedure TFDatiAccImp.GridPrestazioniNavigatorButtonsButtonClick(
+  Sender: TObject; AButtonIndex: Integer; var ADone: Boolean);
+begin
+  inherited;
+  case AButtonIndex of
+  NBDI_DELETE: begin
+                 CancellaEsame.Execute;
+                 ADone := True;                 
+               end;
+  end;
 end;
 
 end.
