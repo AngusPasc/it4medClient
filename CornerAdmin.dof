@@ -100,7 +100,7 @@ Conditionals=MEDICORNER;MADEXCEPT
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=ORACLE12 PORTA=9000 compress DEBUGMODE
+RunParams=host=hs1chora02.hes.it PORTA=9000 compress
 HostApplication=
 Launcher=
 UseLauncher=0

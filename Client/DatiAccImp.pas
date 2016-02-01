@@ -1236,12 +1236,15 @@ begin
             try
                FSelezSpec.sSpecxPrest.Dataset := qSpecxPrest;
                FSelezSpec.sPrestazioni.DataSet := Prestazioni;
-               Result := (FSelezSpec.ShowModal=mrOk);
-               if not Result then
+               if not FSelezSpec.CaricaSpecxEsami then
                begin
-                  CancellaSpecxPrest(PrestazioniPKPRESTAZIONI.AsInteger);
-                  Prestazioni.Cancel;
-                  Exit;
+                 Result := (FSelezSpec.ShowModal=mrOk);
+                 if not Result then
+                 begin
+                    CancellaSpecxPrest(PrestazioniPKPRESTAZIONI.AsInteger);
+                    Prestazioni.Cancel;
+                    Exit;
+                 end;
                end;
             finally
                qSpecxPrest.Filtered := False;
@@ -1836,7 +1839,7 @@ begin
   if dxLayoutScreening.Visible then
      qLivScr.Open;
 
-
+  dxLayoutDescrizione.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
 
 {JRT 880: tolto il blocco su aggiunta esami
   dxLayoutCodice.Enabled := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>2);
@@ -2182,7 +2185,10 @@ begin
   inherited;
   case Key of
   VK_F10: CodicePress;
-  VK_RETURN:  Key := VK_TAB;
+  VK_RETURN:  if dxLayoutDescrizione.Visible then
+                 Key := VK_TAB
+              else
+                 CodicePress;
   end;
 end;
 

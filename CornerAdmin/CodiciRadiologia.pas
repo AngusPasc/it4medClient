@@ -343,6 +343,8 @@ dxBarManager1Bar2: TdxBar;
     cxGridDBTableSpecxEsamiCOSTO: TcxGridDBColumn;
     cxGridDBTableSpecifichePREZZO: TcxGridDBColumn;
     TariffeListiniPKTARIFFE_PRESTAZIONI: TIntegerField;
+    SpecificazioniCOD_ESTERNO: TStringField;
+    cxGridSpecificazioniCOD_ESTERNO: TcxGridDBColumn;
     procedure NuovaMetodicaExecute(Sender: TObject);
     procedure ModificaMetodicaExecute(Sender: TObject);
     procedure CancellaMetodicaExecute(Sender: TObject);
@@ -696,7 +698,7 @@ begin
 
   FDMCommon.ApplicaDataFine(cxMetodicheDB, cxMetodicheDBDATA_FINE);
   FDMCommon.ApplicaDataFine(GridCodici, GridCodiciDATA_FINE);
-  FDMCommon.ApplicaDataFine(cxGridCodici, cxGridCodiciDATA_FINE);
+//  FDMCommon.ApplicaDataFine(cxGridCodici, cxGridCodiciDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridTariffario, cxGridTariffarioDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridListini, cxGridListiniDATA_FINE);
   FDMCommon.ApplicaDataFine(cxGridSpecificazioni,cxGridSpecificazioniDATA_FINE);
@@ -1509,6 +1511,10 @@ begin
               end;
   NBDI_FILTER+1: begin
                 PostMessage(Handle,SY_DBLCLICK,0,LongInt(aEstraiExcel));
+                ADone := true;
+              end;
+  NBDI_REFRESH: begin
+                EsamiRadiologia.syRefresh;
                 ADone := true;
               end;
   end;

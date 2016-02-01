@@ -1,7 +1,7 @@
 inherited FSelezSpec: TFSelezSpec
   Left = 524
   Top = 25
-  Caption = 'Selezione specificazioni'
+  Caption = 'Selezione prestazioni'
   ClientHeight = 846
   ClientWidth = 781
   PixelsPerInch = 96

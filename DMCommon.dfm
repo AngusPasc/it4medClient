@@ -2,8 +2,8 @@ object FDMCommon: TFDMCommon
   OldCreateOrder = False
   OnCreate = FDMCommonCreate
   OnDestroy = DataModuleDestroy
-  Left = 434
-  Top = 15
+  Left = 472
+  Top = 72
   Height = 778
   Width = 1048
   object cxLocalizer1: TcxLocalizer
@@ -581,7 +581,7 @@ object FDMCommon: TFDMCommon
           Value = 1
         end
         item
-          Description = 'Device / No Referto'
+          Description = 'Device / Documento'
           Value = 2
         end
         item
@@ -592,9 +592,9 @@ object FDMCommon: TFDMCommon
   end
   object AstaClientSocket: TAstaClientSocket
     Active = False
-    Address = 'oracle12'
+    Address = 'hs1chora01.hes.it'
     ClientType = ctNonBlocking
-    Host = 'oracle12'
+    Host = 'hs1chora01.hes.it'
     Port = 9000
     OnConnect = AstaClientSocketConnect
     OnDisconnect = AstaClientSocketDisconnect

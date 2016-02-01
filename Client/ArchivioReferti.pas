@@ -5432,6 +5432,7 @@ begin
   inherited;
   if OpenDialog1.Execute then
   begin
+     Screen.Cursor := crHourGlass;
      ms := TMemoryStream.Create;
      try
        ms.LoadFromFile(OpenDialog1.FileName);
@@ -5452,7 +5453,9 @@ begin
        qCaricaRefertoUSER_ID.AsInteger := gblCodUtente;
        qCaricaReferto.Post;
        Situazione.RefreshRecord;
+       ShowMessage(RS_RefertoCaricato);
      finally
+        Screen.Cursor := crDefault;     
         ms.Free;
      end;
   end;
@@ -5461,7 +5464,7 @@ end;
 procedure TFArchivioReferti.aImportaRefertoUpdate(Sender: TObject);
 begin
   inherited;
-  aImportaReferto.Enabled := (SitEsamiSTATO.AsInteger = 2);
+  aImportaReferto.Enabled := (SitEsamiSTATO.AsInteger in [1,2]);
 end;
 
 initialization

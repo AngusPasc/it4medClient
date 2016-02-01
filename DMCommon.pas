@@ -1321,6 +1321,7 @@ var
 
 resourcestring
 
+  RS_RefertoCaricato = 'Referto importato!';
   Tessera_NonTrovatoPreno = 'Nessun appuntamento trovato.'#13'Vuoi fare una prenotazione ?';
   Tessera_NonTrovatoAccet = 'Nessun appuntamento trovato.'#13'Vuoi fare una accettazione diretta ?';
   RS_AV = 'Si è verificato un problema.'#13'L''applicazione verrà riavviata';

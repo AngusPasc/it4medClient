@@ -74,6 +74,7 @@ type
     procedure DoShow; override;
   public
     { Public declarations }
+    function CaricaSpecxEsami: boolean;
   end;
 
 
@@ -109,6 +110,8 @@ end;
 procedure TFSelezSpec.AggiungiSpecificazioni( wView: TcxGridDBTableView; xController: TcxCustomGridTableController );
 var
   i: integer;
+  AIndex: integer;
+  AValue: Variant;
 begin
      sSpecxPrest.DataSet.DisableControls;
      try
@@ -128,6 +131,14 @@ begin
        finally
           sSpecxPrest.DataSet.EnableControls;
        end;
+
+      if (sPrestazioni.DataSet.FieldByName('CESPECIFIC').AsInteger=2) then
+      begin
+          AIndex := cxGridDBTableSpecxPrest.DataController.Summary.FooterSummaryItems.IndexOfItemLink(cxGridDBTableSpecxPrestPREZZO);
+          AValue :=  cxGridDBTableSpecxPrest.DataController.Summary.FooterSummaryValues[AIndex];
+         sPrestazioni.DataSet.FieldByName('IMPORTO').AsVariant := AValue;
+      end;
+
 end;
 
 procedure TFSelezSpec.cxGridDBTableSpecxPrestDragOver(Sender,
@@ -154,7 +165,8 @@ procedure TFSelezSpec.DoShow;
 begin
   inherited;
 
-  qSpecxEsami.syRefresh;
+  if not qSpecxEsami.Active then
+     qSpecxEsami.syRefresh;
   cxGridDBTableSpecxPrest.OptionsView.Footer := (sPrestazioni.DataSet.FieldByName('CESPECIFIC').AsInteger=2);
   cxGridDBTableSpecxEsamiPREZZO.Visible := (sPrestazioni.DataSet.FieldByName('CESPECIFIC').AsInteger=2);
   cxGridDBTableSpecxPrestPREZZO.Visible := (sPrestazioni.DataSet.FieldByName('CESPECIFIC').AsInteger=2);
@@ -200,18 +212,20 @@ begin
   Sender.ParamByName('CODICIRAD_FK').AsInteger := sPrestazioni.DataSet.FieldByName('CODICIRAD_FK').AsInteger;
 end;
 
+function TFSelezSpec.CaricaSpecxEsami: boolean;
+begin
+   qSpecxEsami.syRefresh;
+   result := (qSpecxEsami.RecordCount=1);
+   if result then
+   begin
+      cxGridDBTableSpecxEsami.Controller.SelectAll;
+      AggiungiSpecificazioni(cxGridDBTableSpecxEsami, cxGridDBTableSpecxEsami.Controller);
+   end
+end;
+
 procedure TFSelezSpec.aConfermaExecute(Sender: TObject);
-var
-  AIndex: integer;
-  AValue: Variant;
 begin
   inherited;
-  if (sPrestazioni.DataSet.FieldByName('CESPECIFIC').AsInteger=2) then
-  begin
-      AIndex := cxGridDBTableSpecxPrest.DataController.Summary.FooterSummaryItems.IndexOfItemLink(cxGridDBTableSpecxPrestPREZZO);
-      AValue :=  cxGridDBTableSpecxPrest.DataController.Summary.FooterSummaryValues[AIndex];
-     sPrestazioni.DataSet.FieldByName('IMPORTO').AsVariant := AValue;
-  end;
   Modalresult := mrOK;
 end;
 

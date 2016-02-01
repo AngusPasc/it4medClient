@@ -165,7 +165,7 @@ type
     TPrenoDATA_PRESCRIZIONE: TDateTimeField;
     dxLayoutControl1Group_Root: TdxLayoutGroup;
     dxLayoutControl1: TdxLayoutControl;
-    dxLayoutControl1Item2: TdxLayoutItem;
+    dxLayoutDescTempi: TdxLayoutItem;
     cxProvenienza: TcxDBLookupComboBox;
     dxGroupNumeroImpegnativa: TdxLayoutItem;
     cxNumeroImpegnativa: TcxDBMaskEdit;
@@ -189,7 +189,7 @@ type
     dxLayoutControl1Group9: TdxLayoutGroup;
     dxLayoutControl1Item11: TdxLayoutItem;
     cxCodice: TcxButtonEdit;
-    dxLayoutControl1Item12: TdxLayoutItem;
+    dxLayoutDescrizione: TdxLayoutItem;
     cxDescrizione: TcxButtonEdit;
     dxLayoutControl1Item13: TdxLayoutItem;
     cxGrid1: TcxGrid;
@@ -1466,6 +1466,7 @@ begin
   cxMagg.Checked := dxLayoutControlQuota.Visible;
 
   dxAgendeInterni.Down := false;
+  cxGridPrestazioni.DataController.Summary.FooterSummaryValues[0] := 0;
 
 end;
 
@@ -1646,6 +1647,9 @@ begin
     altriPresidi.Visible := False;
     dxAgendeInterni.Visible := ivNever;
   end;
+
+  dxLayoutDescrizione.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
+  dxLayoutDescTempi.Visible := (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger<>5);
 
   Apertura;
 
@@ -2904,11 +2908,14 @@ begin
         try
            FSelezSpec.sSpecxPrest.Dataset := RichSpecxPrest;
            FSelezSpec.sPrestazioni.DataSet := Richiesti;
-           if FSelezSpec.ShowModal=mrCancel then
+           if not FSelezSpec.CaricaSpecxEsami then
            begin
-              CancellaSpecxPrest(RichiestiPROGRESSIVO_RIGA.AsInteger);
-              Richiesti.Cancel;
-              Exit;
+             if FSelezSpec.ShowModal=mrCancel then
+             begin
+                CancellaSpecxPrest(RichiestiPROGRESSIVO_RIGA.AsInteger);
+                Richiesti.Cancel;
+                Exit;
+             end;
            end;
         finally
            RichSpecxPrest.Filtered := False;
@@ -3424,7 +3431,10 @@ procedure TFPrenotaNew.cxCodiceKeyDown(Sender: TObject; var Key: Word;
 begin
   case Key of
   VK_F10: CodicePress;
-  VK_RETURN:  Key := VK_TAB;
+  VK_RETURN:  if dxLayoutDescrizione.Visible then
+                 Key := VK_TAB
+              else
+                 CodicePress;
   end;
 end;
 
@@ -4741,7 +4751,10 @@ begin
   inherited;
   case Key of
   VK_F10: CodicePressTempi;
-  VK_RETURN:  Key := VK_TAB;
+  VK_RETURN:  if dxLayoutDescTempi.Visible then
+                 Key := VK_TAB
+              else
+                 CodicePressTempi;
   end;
 end;
 

@@ -556,9 +556,9 @@ begin
     Abort;
   end;
 
-    TestNascita := false;
     if (CheckNascita) then
     begin
+        TestNascita := false;
         if Comune_Nasc.Visible and (AssistibiliCOM_CODICE.IsNull or (AssistibiliCOM_CODICE.AsString='')) then
         begin
           AssistibiliDES_COMNASC.FocusControl;
@@ -581,11 +581,13 @@ begin
         end;
 
         TestNascita := true;
-    end;
+    end
+    else
+        TestNascita := True;
 
-    TestResidenza := false;
     if (CheckResidenza) then
     begin
+        TestResidenza := false;
         if Com_Residenza.Visible and (AssistibiliCOM_RES.IsNull or (AssistibiliCOM_RES.AsString='')) then
         begin
           AssistibiliDES_COMRES.FocusControl;
@@ -640,7 +642,9 @@ begin
 
 {$ENDIF}
         TestResidenza := true;
-    end;
+    end
+    else
+        TestResidenza := true;
 
     if (TestNascita and TestResidenza) then
        AssistibiliSAN_IDENT.AsInteger := 2

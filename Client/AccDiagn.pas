@@ -550,6 +550,13 @@ type
     QyPrenoCODICE_FISCALE: TStringField;
     QyEseguitiCODICE_FISCALE: TStringField;
     QyDaAccCODICE_FISCALE: TStringField;
+    qyPrenoDettDEVICE: TIntegerField;
+    GridDaEseguireDettagliDEVICE: TcxGridDBColumn;
+    qDettEseguitiDEVICE: TIntegerField;
+    GridEseguitiDettagliDEVICE: TcxGridDBColumn;
+    RefreshDettagliBRANCA: TStringField;
+    RefreshDettagliDESCBRANCA: TStringField;
+    RefreshDettagliDEVICE: TIntegerField;
     procedure EsecuzioneEsameExecute(Sender: TObject);
     procedure EsecuzioneEsameUpdate(Sender: TObject);
     procedure TutteDiagnosticheExecute(Sender: TObject);

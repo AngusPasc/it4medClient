@@ -7,17 +7,14 @@ interface
 {.$DEFINE UscitaSospensione}
 
 uses
-  BaseRad, Messages, IIConsts, {}cxGraphics, cxLookAndFeels,
-  cxLookAndFeelPainters, Menus, cxControls, cxContainer, cxEdit, cxStyles,
-  cxCustomData, cxFilter, cxData, cxDataStorage, DB, cxDBData, cxMaskEdit,
-  cxSpinEdit, cxTextEdit, cxMemo, dxLayoutcxEditAdapters, dxLayoutControl,
-  AstaUpdateSQL, dxBar, cxClasses, AstaDrv2, AstaClientDataset, Classes,
-  ActnList, cxImageComboBox, cxDBEdit, cxLabel, cxDBLabel, cxDropDownEdit,
-  cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, cxGridLevel,
-  cxGridCustomTableView, cxGridTableView, cxGridDBTableView,
-  cxGridCustomView, cxGrid, CSEZForm, StdCtrls, cxButtons, Controls,
-  ExtCtrls, dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter,
-  dxSkinsdxBarPainter, cxNavigator, dxLayoutContainer, cxGroupBox;
+  BaseRad, Messages, IIConsts, {}cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxContainer, cxEdit, Menus, cxStyles,
+  cxCustomData, cxFilter, cxData, cxDataStorage, cxNavigator, DB, cxDBData,
+  dxLayoutcxEditAdapters, dxLayoutContainer, dxBar, AstaUpdateSQL,
+  cxClasses, AstaDrv2, AstaClientDataset, Classes, ActnList, cxTextEdit,
+  cxMemo, cxDBEdit, cxGridLevel, cxGridCustomTableView, cxGridTableView,
+  cxGridDBTableView, cxGridCustomView, cxGrid, cxLabel, cxDBLabel,
+  dxLayoutControl, CSEZForm, StdCtrls, cxButtons, Controls, cxGroupBox;
   
 type
   TFDatiWCF = class(TFBaseRad)
