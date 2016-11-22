@@ -104,7 +104,6 @@ type
     cxGridListiniDATA_FINE: TcxGridDBColumn;
     TariffeListini: TAstaClientDataSet;
     sTariffeListini: TDataSource;
-    cxGrid4Level2: TcxGridLevel;
     cxGridTariffeListini: TcxGridDBTableView;
     TariffeListiniLEG_CODICE: TStringField;
     TariffeListiniPSP_IDENT: TStringField;
@@ -345,6 +344,7 @@ dxBarManager1Bar2: TdxBar;
     TariffeListiniPKTARIFFE_PRESTAZIONI: TIntegerField;
     SpecificazioniCOD_ESTERNO: TStringField;
     cxGridSpecificazioniCOD_ESTERNO: TcxGridDBColumn;
+    cxGrid4LevelDettagli: TcxGridLevel;
     procedure NuovaMetodicaExecute(Sender: TObject);
     procedure ModificaMetodicaExecute(Sender: TObject);
     procedure CancellaMetodicaExecute(Sender: TObject);
@@ -385,14 +385,6 @@ dxBarManager1Bar2: TdxBar;
     procedure ModificaTariffarioExecute(Sender: TObject);
     procedure PersonalizzaExecute(Sender: TObject);
     procedure PersonalizzaUpdate(Sender: TObject);
-    procedure cxGridTariffeListiniDataControllerDataModeControllerDetailFirst(
-      Sender: TcxDBDataModeController; ADataSet: TDataSet;
-      const AMasterDetailKeyFieldNames: String;
-      const AMasterDetailKeyValues: Variant; var AReopened: Boolean);
-    function cxGridTariffeListiniDataControllerDataModeControllerDetailIsCurrentQuery(
-      Sender: TcxDBDataModeController; ADataSet: TDataSet;
-      const AMasterDetailKeyFieldNames: String;
-      const AMasterDetailKeyValues: Variant): Boolean;
     procedure aCopiaListinoExecute(Sender: TObject);
     procedure cxGridPopupMenu3PopupMenus0Popup(ASenderMenu: TComponent;
       AHitTest: TcxCustomGridHitTest; X, Y: Integer);
@@ -462,6 +454,13 @@ dxBarManager1Bar2: TdxBar;
       ANewItemRecordFocusingChanged: Boolean);
     procedure SpecxEsamiBeforeQuery(Sender: TAstaBaseClientDataSet);
     procedure cxGridDBTableSpecificheDblClick(Sender: TObject);
+    procedure cxGrid4ActiveTabChanged(Sender: TcxCustomGrid;
+      ALevel: TcxGridLevel);
+    procedure TariffeListiniBeforeQuery(Sender: TAstaBaseClientDataSet);
+    procedure cxGridListiniDblClick(Sender: TObject);
+    procedure cxGridTariffeListiniNavigatorButtonsButtonClick(
+      Sender: TObject; AButtonIndex: Integer; var ADone: Boolean);
+    procedure TariffeListiniNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
     oldfiltered: Boolean;
@@ -979,22 +978,6 @@ begin
 
 end;
 
-procedure TFCodiciRadiologia.cxGridTariffeListiniDataControllerDataModeControllerDetailFirst(
-  Sender: TcxDBDataModeController; ADataSet: TDataSet;
-  const AMasterDetailKeyFieldNames: String;
-  const AMasterDetailKeyValues: Variant; var AReopened: Boolean);
-begin
-  FDMCommon.DetailFirst(ADataSet,AMasterDetailKeyFieldNames,AMasterDetailKeyValues,AReopened);
-end;
-
-function TFCodiciRadiologia.cxGridTariffeListiniDataControllerDataModeControllerDetailIsCurrentQuery(
-  Sender: TcxDBDataModeController; ADataSet: TDataSet;
-  const AMasterDetailKeyFieldNames: String;
-  const AMasterDetailKeyValues: Variant): Boolean;
-begin
-  result := FDMCommon.DetailIsCurrentQuery(ADataSet,AMasterDetailKeyFieldNames,AMasterDetailKeyValues);
-end;
-
 procedure TFCodiciRadiologia.aCopiaListinoExecute(Sender: TObject);
 var
   lprec: string;
@@ -1134,8 +1117,8 @@ end;
 
 procedure TFCodiciRadiologia.AggiungiCodici( wView: TcxGridDBTableView; xController: TcxCustomGridTableController );
 var
-  z,i: integer;
-  TempUM: TAstaUpdateMethod;
+  i: integer;
+//  TempUM: TAstaUpdateMethod;
   puntamento: integer;
   lAssociati: TStringList;
 begin
@@ -1357,6 +1340,11 @@ begin
               end;
   NBDI_DELETE: begin
                 PostMessage(Handle,SY_DBLCLICK,0,LongInt(CancellaTariffario));
+                ADone := true;
+              end;
+  NBDI_FILTER+1:
+               begin
+                PostMessage(Handle,SY_DBLCLICK,0,LongInt(aEstraiExcel));
                 ADone := true;
               end;
   end;
@@ -1688,14 +1676,21 @@ begin
 end;
 
 procedure TFCodiciRadiologia.aEstraiExcelExecute(Sender: TObject);
+var
+  rg: TcxGrid;
 begin
   inherited;
   SaveDialog.FileName := cxGrid2.ActiveLevel.Caption;
   if SaveDialog.Execute then
   begin
-      cxGrid2.BeginUpdate();
-      ExportGridToXLSX(SaveDialog.FileName, cxGrid2); //, AExpand: Boolean = True; ASaveAll: Boolean = True; AUseNativeFormat: Boolean = True; const AFileExt: string = 'xlsx');
-      cxGrid2.EndUpdate();
+     if cxPageControl.ActivePage=dxTabTariffario then
+        rg := cxGrid1
+     else
+        rg := cxGrid2;
+
+      rg.BeginUpdate();
+      ExportGridToXLSX(SaveDialog.FileName, rg); //, AExpand: Boolean = True; ASaveAll: Boolean = True; AUseNativeFormat: Boolean = True; const AFileExt: string = 'xlsx');
+      rg.EndUpdate();
   end;
 end;
 
@@ -1834,6 +1829,53 @@ begin
 
   AggiungiSpecificazioni(cxGridDBTableSpecifiche, cxGridDBTableSpecifiche.Controller);
 
+end;
+
+procedure TFCodiciRadiologia.cxGrid4ActiveTabChanged(Sender: TcxCustomGrid;
+  ALevel: TcxGridLevel);
+begin
+  inherited;
+  if ALevel=cxGrid4LevelDettagli then
+  begin
+     if TariffeListini.ParamByName('leg_codice').AsString<>ListiniCODICE.AsString then
+        TariffeListini.syRefresh;
+  end;
+end;
+
+procedure TFCodiciRadiologia.TariffeListiniBeforeQuery(
+  Sender: TAstaBaseClientDataSet);
+begin
+  inherited;
+  Sender.ParamByName('leg_codice').AsString := ListiniCODICE.AsString;
+end;
+
+procedure TFCodiciRadiologia.cxGridListiniDblClick(Sender: TObject);
+begin
+  inherited;
+  if not Listini.IsEmpty then
+     cxGrid4.ActiveLevel := cxGrid4LevelDettagli;
+end;
+
+procedure TFCodiciRadiologia.cxGridTariffeListiniNavigatorButtonsButtonClick(
+  Sender: TObject; AButtonIndex: Integer; var ADone: Boolean);
+begin
+  inherited;
+  case AButtonIndex of
+  NBDI_FILTER+1:
+             begin
+                if cxGridTariffeListini.Controller.IsFindPanelVisible then
+                   cxGridTariffeListini.Controller.HideFindPanel
+                else
+                   cxGridTariffeListini.Controller.ShowFindPanel;
+                ADone := True;
+             end;
+  end;
+end;
+
+procedure TFCodiciRadiologia.TariffeListiniNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  TariffeListiniLEG_CODICE.AsString := ListiniCODICE.AsString;
 end;
 
 initialization

@@ -1018,7 +1018,7 @@ inherited FCalDiagn: TFCalDiagn
     IndexName = 'QyAgendaIDX_PKAGENDE'
     Aggregates = <>
     AutoCalcFields = False
-    Active = True
+    Active = False
     Constraints = <>
     BeforePost = QyAgendaBeforePost
     AfterPost = QyAgendaAfterPost
@@ -1336,7 +1336,7 @@ inherited FCalDiagn: TFCalDiagn
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Calendario'
-      ReportDocument.CreationDate = 42338.364011377310000000
+      ReportDocument.CreationDate = 42559.481874895840000000
       ReportTitle.Text = 'Stampa calendario'
       PrintRange.TimePrintFrom = 0.333333333333333300
       PrintRange.TimePrintTo = 0.750000000000000000

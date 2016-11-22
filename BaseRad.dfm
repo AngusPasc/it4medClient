@@ -1,10 +1,10 @@
 object FBaseRad: TFBaseRad
-  Left = 251
-  Top = 176
+  Left = 252
+  Top = 178
   AutoScroll = False
   BorderIcons = [biSystemMenu]
-  ClientHeight = 418
-  ClientWidth = 638
+  ClientHeight = 417
+  ClientWidth = 640
   Color = clBtnFace
   DefaultMonitor = dmPrimary
   Font.Charset = ANSI_CHARSET
@@ -21,7 +21,7 @@ object FBaseRad: TFBaseRad
   TextHeight = 24
   object cxGroupBox1: TcxGroupBox
     Left = 0
-    Top = 368
+    Top = 367
     Align = alBottom
     Ctl3D = False
     ParentCtl3D = False
@@ -36,7 +36,7 @@ object FBaseRad: TFBaseRad
     StyleHot.LookAndFeel.SkinName = 'UserSkin'
     TabOrder = 0
     Height = 50
-    Width = 638
+    Width = 640
     object btSalva: TcxButton
       Left = 12
       Top = 5
@@ -106,7 +106,7 @@ object FBaseRad: TFBaseRad
         00000000000000000000000000002130687B151E414D00000000}
     end
     object cxPersonalizza: TcxButton
-      Left = 603
+      Left = 605
       Top = 9
       Width = 34
       Height = 40

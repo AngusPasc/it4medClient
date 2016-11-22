@@ -447,12 +447,10 @@ begin
   inherited;
   if MsgDlgPos( RS_Gene_Msg_ConfCanc, '', ktConfirmation, [kbYes,kbNo], dfFirst)=mrYes then
   begin
-      Prestazioni.Delete;
-{
+//      Prestazioni.Delete;
       Prestazioni.Edit;
       PrestazioniSTATO.AsInteger := 4;
       Prestazioni.Post;
-}
   end;
 
 end;

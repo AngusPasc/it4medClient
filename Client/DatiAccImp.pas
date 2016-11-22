@@ -1323,6 +1323,7 @@ begin
       exit;
   end;
 
+
 {$IFDEF MEDICORNER}
   if (Esami.Fieldbyname('DEVICE').AsInteger>0) and Prestazioni.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
   begin

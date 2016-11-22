@@ -1,9 +1,9 @@
 inherited FConfermaPswdRep: TFConfermaPswdRep
   Left = 742
-  Top = 226
+  Top = 228
   Caption = 'it4med'
   ClientHeight = 268
-  ClientWidth = 466
+  ClientWidth = 468
   Constraints.MinHeight = 300
   KeyPreview = True
   OnCloseQuery = FormCloseQuery
@@ -14,13 +14,13 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
   inherited cxGroupBox1: TcxGroupBox
     Top = 218
     TabOrder = 1
-    Width = 466
+    Width = 468
     inherited btSalva: TcxButton
       Hint = 'Conferma identificativo'
       Action = Conferma
     end
     inherited cxPersonalizza: TcxButton
-      Left = 431
+      Left = 433
     end
     object cxBtnTestAV: TcxButton
       Left = 320
@@ -35,7 +35,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
   object dxLayoutControl1: TdxLayoutControl [1]
     Left = 0
     Top = 0
-    Width = 466
+    Width = 468
     Height = 218
     Align = alClient
     TabOrder = 0
@@ -209,7 +209,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
     StreamOptions = [ssIndexes, ssAggregates]
     Indexes = <>
     Aggregates = <>
-    Active = True
+    Active = False
     Constraints = <>
     BeforeQuery = qryUserBeforeQuery
     SequenceField.ApplyMoment = amOnNewRecord

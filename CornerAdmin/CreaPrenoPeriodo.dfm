@@ -1,6 +1,6 @@
 inherited FCreaPrenoPeriodo: TFCreaPrenoPeriodo
-  Left = 241
-  Top = 50
+  Left = 242
+  Top = 51
   ActiveControl = Scheduler
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Template agende - '
@@ -1483,6 +1483,7 @@ inherited FCreaPrenoPeriodo: TFCreaPrenoPeriodo
     object dxPrintTemplate: TdxGridReportLink
       Active = True
       Component = cxGrid1
+      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -1515,12 +1516,13 @@ inherited FCreaPrenoPeriodo: TFCreaPrenoPeriodo
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42332.392137800930000000
+      ReportDocument.CreationDate = 42559.481919386580000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
+      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -1562,7 +1564,7 @@ inherited FCreaPrenoPeriodo: TFCreaPrenoPeriodo
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'Calendario'
-      ReportDocument.CreationDate = 42332.392138333340000000
+      ReportDocument.CreationDate = 42559.481919560190000000
       ReportTitle.Text = 'Stampa calendario'
       PrintRange.TimePrintFrom = 0.333333333333333300
       PrintRange.TimePrintTo = 0.750000000000000000

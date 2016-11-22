@@ -2974,6 +2974,7 @@ begin
       exit;
   end;
 
+
 {$IFDEF MEDICORNER}
   if (Esami.Fieldbyname('DEVICE').AsInteger>0) and Richiesti.Locate('BRANCA',Esami.Fieldbyname('BRANCA').AsString,[]) then
   begin
@@ -2981,6 +2982,7 @@ begin
       exit;
   end;
 {$ENDIF}
+
 
   if Esami.Fieldbyname('COMPOSTO').AsInteger=0 then
   begin

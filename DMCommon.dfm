@@ -2,8 +2,8 @@ object FDMCommon: TFDMCommon
   OldCreateOrder = False
   OnCreate = FDMCommonCreate
   OnDestroy = DataModuleDestroy
-  Left = 472
-  Top = 72
+  Left = 348
+  Top = 20
   Height = 778
   Width = 1048
   object cxLocalizer1: TcxLocalizer

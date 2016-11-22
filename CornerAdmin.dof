@@ -100,7 +100,7 @@ Conditionals=MEDICORNER;MADEXCEPT
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=host=hs1chora02.hes.it PORTA=9000 compress
+RunParams=host=ORACLE12 PORTA=9000 compress
 HostApplication=
 Launcher=
 UseLauncher=0
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=0
 MinorVer=1
 Release=0
-Build=5
+Build=7
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Chorafarma s.r.l.
 FileDescription=Setup Medicorner
-FileVersion=0.1.0.5
+FileVersion=0.1.0.7
 InternalName=CornerAdmin.exe
 LegalCopyright=Chorafarma s.r.l.
 LegalTrademarks=Chorafarma s.r.l.
@@ -146,17 +146,13 @@ c:\RAD4MED\3pd7\Bpl\DataSetManager70.bpl=Devart DataSet Manager
 C:\RAD4MED\3pD7\Bpl\dclusr70.bpl=Borland User Components
 [HistoryLists\hlConditionals]
 Count=1
-Item0=MEDICORNER;madExcept
+Item0=madExcept;ORACLEMONITOR;AssumeMultiThreaded;TRADUZIONI;FARMACIA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
-Count=1
-Item0=$(DELPHI)\Lib\Debug;C:\RAD4MED\3pD7\EurekaLog\Lib\Win32\Debug\Delphi7\
 [HistoryLists\hlUnitOutputDirectory]
-Count=2
+Count=1
 Item0=..\dcuout
-Item1=..\dcuoutTest
 [HistoryLists\hlOutputDirectorry]
 Count=1
 Item0=..\bin

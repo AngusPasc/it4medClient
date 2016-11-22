@@ -351,6 +351,8 @@ type
     procedure cxIndDomPropertiesButtonClick(Sender: TObject;
       AButtonIndex: Integer);
     procedure aAnnullaExecute(Sender: TObject);
+    procedure cxMailContatto1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     FoldCOGNOME: string;
@@ -1781,6 +1783,21 @@ begin
   if (Assistibili.State in dsEditModes) then
      Assistibili.Cancel;
   ModalResult := mrCancel;
+end;
+
+procedure TFAnagrafica.cxMailContatto1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  ff: Word;
+begin
+  inherited;
+  if (Key=192) and (ssCtrl in Shift) then
+  begin
+      ff := StrToWord('@');
+      PostKeyEx( TcxCustomInnerTextEdit(sender).Handle, ff, [], False );
+      Key := 0;
+  end;
+
 end;
 
 end.

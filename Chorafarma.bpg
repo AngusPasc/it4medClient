@@ -9,7 +9,8 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = MediCornerTest.exe CornerAdmin.exe RisPackage.bpl MediCorner.exe
+PROJECTS = MediCornerTest.exe CornerAdmin.exe RisPackage.bpl MediCorner.exe \
+  Project1.exe Asta3DoaServer.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -24,6 +25,12 @@ RisPackage.bpl: ..\3pD7\ks7\RisPackage.dpk
   $(DCC)
 
 MediCorner.exe: MediCorner.dpr
+  $(DCC)
+
+Project1.exe: ..\..\Temp\dxSample_S137800\Project1.dpr
+  $(DCC)
+
+Asta3DoaServer.exe: ..\AstaServer\Asta3DoaServer.dpr
   $(DCC)
 
 
