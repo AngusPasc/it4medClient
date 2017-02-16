@@ -1,6 +1,6 @@
 object FBaseRad: TFBaseRad
-  Left = 252
-  Top = 178
+  Left = 253
+  Top = 179
   AutoScroll = False
   BorderIcons = [biSystemMenu]
   ClientHeight = 417

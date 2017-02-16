@@ -237,8 +237,8 @@ type
     dxLayoutControl1Group14: TdxLayoutGroup;
     AssistibiliNR_CIVICO_RES: TStringField;
     AssistibiliNR_CIVICO_DOM: TStringField;
-    cxDBMaskEdit7: TcxDBMaskEdit;
-    dxLayoutControl1Item1: TdxLayoutItem;
+    cxNumeroCivico: TcxDBMaskEdit;
+    dxlNumeroCivico: TdxLayoutItem;
     dxLayoutRicercaResidenza: TdxLayoutGroup;
     cxDBMaskEdit10: TcxDBMaskEdit;
     dxLayoutCivicoDom: TdxLayoutItem;
@@ -546,9 +546,10 @@ begin
      begin
         AssistibiliCODICE_FISCALE.AsString := CalcolaCodice;
      end
-     else if (AssistibiliCIT_CODICE.AsString<>FDMCommon.Param_TicketNAZ_LOCALE.AsString) and AssistibiliCODICE_FISCALE.IsNull then
+     else if (AssistibiliCIT_CODICE.AsString<>FDMCommon.Param_TicketNAZ_LOCALE.AsString) and
+             (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
      begin
-   //     AssistibiliCODICE_FISCALE.AsString := '9999999999999999';
+        AssistibiliCODICE_FISCALE.AsString := '9999999999999999';
      end;
   end;
 
@@ -611,6 +612,11 @@ begin
           Abort;
         end;
 
+        TestResidenza := true;
+    end
+    else
+        TestResidenza := true;
+
 {$IFDEF MEDICORNER}
         if AssistibiliTELEFONO.IsNull and AssistibiliEMAIL.IsNull then
         begin
@@ -641,12 +647,7 @@ begin
           MsgDlg(Format(RAD_TelefonoEmail,[RAD_Contatto]), '', ktError, [kbOk]);
           Abort;
         end;
-
 {$ENDIF}
-        TestResidenza := true;
-    end
-    else
-        TestResidenza := true;
 
     if (TestNascita and TestResidenza) then
        AssistibiliSAN_IDENT.AsInteger := 2
@@ -829,19 +830,21 @@ begin
     ripunta := not dxlIndirizzo.Enabled;
 
     dxlIndirizzo.Enabled := checkIndRes;
+    dxlNumeroCivico.Enabled := checkIndRes;
     dxlCAP.Enabled := checkIndRes;
     dxlASLAppartenenza.Enabled := checkIndRes;
-    dxlTelefono.Enabled := checkIndRes;
-    dxlAltroTelefono.Enabled := checkIndRes;
+//    dxlTelefono.Enabled := checkIndRes;
+//    dxlAltroTelefono.Enabled := checkIndRes;
     dxlMedicoBase.Enabled := checkIndRes;
 
     if not checkIndRes then
     begin
       cxIndirizzo.Clear;
+      cxNumeroCivico.Clear;
       cxCapRes.Clear;
       cxASLAppartiene.Clear;
-      cxTelefono.Clear;
-      cxAltroTelefono.Clear;
+//      cxTelefono.Clear;
+//      cxAltroTelefono.Clear;
       cxMedicoBase.Clear;
     end
     else if ripunta then

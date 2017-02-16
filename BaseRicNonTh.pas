@@ -58,6 +58,7 @@ type
     { Private declarations }
     FApriTutti: boolean;
     listactrl: TList;
+    FNuovaRegistrazione: Boolean;
     procedure FineQBE(Sender: TObject);
     procedure DisattivaTutto(controllo: TWinControl);
     procedure RiattivaTutto;
@@ -70,7 +71,7 @@ type
     procedure xKeyDown;
     procedure PrimoCampo; virtual; abstract;
     procedure CaricaLista(dxL: TdxLayoutControl); virtual;
-    procedure RegistraNuovoPaziente; virtual; abstract;
+    procedure RegistraNuovo; virtual; abstract;
   public
     { Public declarations }
     RicercaEffettuata: boolean;
@@ -78,6 +79,7 @@ type
     procedure KeyPress(var Key: Char); override;
     procedure SendPortDataToForm(const s: string; lungh: integer); override;
     property ApriTutti: boolean read FApriTutti write FApriTutti;
+    property NuovaRegistrazione: Boolean read FNuovaRegistrazione write FNuovaRegistrazione default False;
   end;
 
 var
@@ -98,6 +100,8 @@ begin
     InternalWindowsMode := syModal;
 
     inherited;
+
+    FNuovaRegistrazione := False;
 
 end;
 
@@ -131,11 +135,15 @@ begin
      else
          if QRicerca.IsEmpty then
          begin
-//            MsgDlg(RS_Gene_Msg_NoDt, '', ktWarning, [kbOk], dfFirst);
-              if MsgDlg(RS_Gene_Msg_NoDtReg, '', ktWarning, [kbYes,kbNo], dfFirst)=mrYes then
+              if FNuovaRegistrazione then
               begin
-                 RegistraNuovoPaziente;
-              end;
+                if MsgDlg(format(RS_Gene_Msg_NoDtReg,['']), '', ktWarning, [kbYes,kbNo], dfFirst)=mrYes then
+                begin
+                   RegistraNuovo;
+                end;
+              end
+              else
+                MsgDlg(RS_Gene_Msg_NoDt, '', ktWarning, [kbOk], dfFirst);
          end;
 
      if QRicerca.IsEmpty then

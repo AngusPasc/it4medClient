@@ -13,7 +13,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
     Height = 500
     Align = alClient
     TabOrder = 4
-    Properties.ActivePage = dxTabElenco
+    Properties.ActivePage = dxTabMetodiche
     Properties.CustomButtons.Buttons = <>
     LookAndFeel.Kind = lfUltraFlat
     OnPageChanging = cxPageControlPageChanging
@@ -26,8 +26,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object cxMetodiche: TcxGrid
         Left = 0
         Top = 0
-        Width = 1073
-        Height = 607
+        Width = 991
+        Height = 453
         Align = alClient
         TabOrder = 0
         object cxMetodicheDB: TcxGridDBTableView
@@ -139,8 +139,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object cxGrid2: TcxGrid
         Left = 343
         Top = 30
-        Width = 91
-        Height = 196
+        Width = 648
+        Height = 423
         Align = alClient
         BevelInner = bvNone
         BevelOuter = bvNone
@@ -355,7 +355,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object dxBarDockControl2: TdxBarDockControl
         Left = 0
         Top = 0
-        Width = 434
+        Width = 991
         Height = 30
         Align = dalTop
         BarManager = dxBarManager1
@@ -364,7 +364,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         Left = 339
         Top = 30
         Width = 4
-        Height = 196
+        Height = 423
         Cursor = crHSplit
         HotZoneClassName = 'TcxXPTaskBarStyle'
         MinSize = 100
@@ -376,7 +376,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         Left = 0
         Top = 30
         Width = 339
-        Height = 196
+        Height = 423
         Align = alLeft
         BevelInner = bvNone
         BevelOuter = bvNone
@@ -477,8 +477,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object cxGrid1: TcxGrid
         Left = 0
         Top = 0
-        Width = 434
-        Height = 226
+        Width = 991
+        Height = 453
         Align = alClient
         BevelInner = bvNone
         BevelOuter = bvNone
@@ -773,8 +773,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object cxGridSpec: TcxGrid
         Left = 0
         Top = 0
-        Width = 434
-        Height = 226
+        Width = 991
+        Height = 453
         Align = alClient
         TabOrder = 0
         LookAndFeel.Kind = lfUltraFlat
@@ -882,8 +882,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       object cxGridCodEsEsterni: TcxGrid
         Left = 0
         Top = 0
-        Width = 434
-        Height = 226
+        Width = 991
+        Height = 453
         Align = alClient
         TabOrder = 0
         object cxGridCodEsEsterniDBTableView1: TcxGridDBTableView
@@ -1012,7 +1012,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         Left = 0
         Top = 0
         Width = 521
-        Height = 226
+        Height = 453
         Align = alLeft
         TabOrder = 0
         RootLevelOptions.DetailTabsPosition = dtpTop
@@ -1100,21 +1100,21 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         Left = 521
         Top = 0
         Width = 4
-        Height = 226
+        Height = 453
         Control = cxGrid5
       end
       object Panel1: TPanel
         Left = 525
         Top = 0
-        Width = 548
-        Height = 226
+        Width = 466
+        Height = 453
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 2
         object cxGrid6: TcxGrid
           Left = 0
           Top = 0
-          Width = 548
+          Width = 466
           Height = 293
           Align = alTop
           TabOrder = 0
@@ -1206,7 +1206,7 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         object cxSplitter2: TcxSplitter
           Left = 0
           Top = 293
-          Width = 548
+          Width = 466
           Height = 4
           AlignSplitter = salTop
           Control = cxGrid6
@@ -1214,8 +1214,8 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
         object cxGrid7: TcxGrid
           Left = 0
           Top = 297
-          Width = 548
-          Height = 310
+          Width = 466
+          Height = 156
           Align = alClient
           TabOrder = 2
           RootLevelOptions.DetailTabsPosition = dtpTop
@@ -2015,7 +2015,6 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
     object dxComponentPrinterTariffario: TdxGridReportLink
       Active = True
       Component = cxGrid1
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2049,14 +2048,13 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42559.481927337960000000
+      ReportDocument.CreationDate = 42759.623242754630000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2082,7 +2080,6 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
     object dxComponentPrinterRadCodici: TdxGridReportLink
       Active = True
       Component = cxGrid2
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 9
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2116,14 +2113,13 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
       ReportDocument.Caption = 'New Report'
-      ReportDocument.CreationDate = 42559.481927337960000000
+      ReportDocument.CreationDate = 42759.623242754630000000
       ReportTitle.Font.Charset = DEFAULT_CHARSET
       ReportTitle.Font.Color = clWindowText
       ReportTitle.Font.Height = -19
       ReportTitle.Font.Name = 'Times New Roman'
       ReportTitle.Font.Style = [fsBold]
       ShrinkToPageWidth = True
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -2148,7 +2144,6 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
     end
     object dxComponentPrinterGruppiSpec: TdxGridReportLink
       Component = cxGridSpec
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 1
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2162,14 +2157,12 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       PrinterPage.PageSize.Y = 279400
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       OptionsSelection.ProcessExactSelection = True
       OptionsSelection.ProcessSelection = True
       BuiltInReportLink = True
     end
     object dxComponentPrinterGruppi: TdxGridReportLink
       Component = cxMetodiche
-      PageNumberFormat = pnfNumeral
       PrinterPage.DMPaper = 1
       PrinterPage.Footer = 6350
       PrinterPage.GrayShading = True
@@ -2183,7 +2176,6 @@ inherited FCodiciRadiologia: TFCodiciRadiologia
       PrinterPage.PageSize.Y = 279400
       PrinterPage._dxMeasurementUnits_ = 0
       PrinterPage._dxLastMU_ = 2
-      AssignedFormatValues = [fvDate, fvTime, fvPageNumber]
       OptionsSelection.ProcessExactSelection = True
       OptionsSelection.ProcessSelection = True
       BuiltInReportLink = True

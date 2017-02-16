@@ -1,6 +1,6 @@
 object frmBaseMainMenu: TfrmBaseMainMenu
-  Left = 100
-  Top = 45
+  Left = 500
+  Top = 106
   AutoScroll = False
   ClientHeight = 549
   ClientWidth = 963
@@ -119,6 +119,10 @@ object frmBaseMainMenu: TfrmBaseMainMenu
     object tcaLogPanelOff: TdxTileControlActionBarItem
       Caption = 'Log Panel Off'
       OnClick = tcaLogPanelOffClick
+    end
+    object tcaTestException: TdxTileControlActionBarItem
+      Caption = 'Test Exception'
+      OnClick = tcaTestExceptionClick
     end
     object dxTiledxTileControlGroup1: TdxTileControlGroup
       Index = 0

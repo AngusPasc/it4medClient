@@ -4597,6 +4597,7 @@ begin
   FRicAssistito := TFRicAssistito.Create(nil);
   try
 
+   FRicAssistito.NuovaRegistrazione := False;
    FRicAssistito.QRicerca.Active := false;
    FRicAssistito.QRicerca.QBEMode := true;
    FRicAssistito.QRicerca.Active := true;

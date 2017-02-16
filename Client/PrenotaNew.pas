@@ -2429,6 +2429,7 @@ begin
       FRicAssistito := TFRicAssistito.Create(nil);
       try
 
+       FRicAssistito.NuovaRegistrazione := True;
        FRicAssistito.QRicerca.Active := false;
        FRicAssistito.QRicerca.QBEMode := true;
        FRicAssistito.QRicerca.Active := true;
@@ -2599,7 +2600,7 @@ begin
 
        FRicAssPreno.statolancio := 0;
 
-       if ricerca then
+       if ricerca and (FRicAssPreno.qRicerca.Recordcount>1) then
        begin
 
           if not TPrenoPKASSISTIBILI.IsNull and FRicercaFatta then
@@ -2607,8 +2608,10 @@ begin
 
           trovato := FRicAssPreno.ShowModal;
        end
+       else if (FRicAssPreno.qRicerca.Recordcount=1) then
+          trovato := mrOk
        else
-          trovato := mrOk;
+          trovato := mrCancel;
 
        case trovato of
        mrCancel: begin
@@ -2616,31 +2619,31 @@ begin
                        cxRicCognome.SetFocus;
                  end;
        mrOk:
-       begin
-          if not (TPreno.State in dsEditModes) then
-          begin
-           TPreno.Empty;
-           TPreno.Append;
-          end;
-          TPrenoPKASSISTIBILI.AsInteger := FRicAssPreno.QRicercaPKASSISTIBILI.AsInteger;
-          TPrenoCOGNOME.AsString := FRicAssPreno.QRicercaCOGNOME.AsString;
-          TPrenoNOME.AsString := FRicAssPreno.QRicercaNOME.AsString;
-          TPrenoLIBRETTO_SAN.AsString := FRicAssPreno.QRicercaLIBRETTO_SAN.AsString;
-          TPrenoDATA_NASCITA.AsDateTime := FRicAssPreno.QRicercaDATA_NASCITA.AsDateTime;
-          TPrenoIND_COMPLETO.AsString := FRicAssPreno.QRicercaDES_COM_RES.AsString;
+         begin
+            if not (TPreno.State in dsEditModes) then
+            begin
+             TPreno.Empty;
+             TPreno.Append;
+            end;
+            TPrenoPKASSISTIBILI.AsInteger := FRicAssPreno.QRicercaPKASSISTIBILI.AsInteger;
+            TPrenoCOGNOME.AsString := FRicAssPreno.QRicercaCOGNOME.AsString;
+            TPrenoNOME.AsString := FRicAssPreno.QRicercaNOME.AsString;
+            TPrenoLIBRETTO_SAN.AsString := FRicAssPreno.QRicercaLIBRETTO_SAN.AsString;
+            TPrenoDATA_NASCITA.AsDateTime := FRicAssPreno.QRicercaDATA_NASCITA.AsDateTime;
+            TPrenoIND_COMPLETO.AsString := FRicAssPreno.QRicercaDES_COM_RES.AsString;
 
-          btnRicPreno.Glyph.ReleaseHandle;
-          FDMCommon.imIcone.GetBitmap(40,btnRicPreno.Glyph);
-          QyRicPreno.syRefresh;
-          QyStorEsami.Parambyname('triage_fk').AsInteger := -1;
-          QyStorEsami.syRefresh;
+            btnRicPreno.Glyph.ReleaseHandle;
+            FDMCommon.imIcone.GetBitmap(40,btnRicPreno.Glyph);
+            QyRicPreno.syRefresh;
+            QyStorEsami.Parambyname('triage_fk').AsInteger := -1;
+            QyStorEsami.syRefresh;
 
-          cxGridRicPrenoPrenotazioni.Controller.GoToLast(false);
-          if cxGridRicPreno.CanFocus then
-             cxGridRicPreno.SetFocus;
-          FRicercaFatta := true;
+            cxGridRicPrenoPrenotazioni.Controller.GoToLast(false);
+            if cxGridRicPreno.CanFocus then
+               cxGridRicPreno.SetFocus;
+            FRicercaFatta := true;
 
-       end;
+         end;
        end;
 
        finally

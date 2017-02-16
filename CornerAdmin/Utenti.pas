@@ -285,6 +285,7 @@ dxBarManager1Bar2: TdxBar;
     procedure aModificaUtenteUpdate(Sender: TObject);
     procedure cxDBNavigator1ButtonsButtonClick(Sender: TObject;
       AButtonIndex: Integer; var ADone: Boolean);
+    procedure cxDBMaskEdit5Enter(Sender: TObject);
   private
     { Private declarations }
     FUserToken: THandle;
@@ -1013,6 +1014,17 @@ begin
                   aStampaLabel.Execute;
                   ADone := True;
                   end;
+  end;
+end;
+
+procedure TFUtenti.cxDBMaskEdit5Enter(Sender: TObject);
+begin
+  inherited;
+  if UtentiPASSWORD.AsString='' then
+  begin
+     if not (Utenti.State in dsEditModes) then
+        Utenti.Edit;
+     UtentiPASSWORD.AsString := LowerCase(Copy(UtentiNOME.AsString,1,1)+UtentiCOGNOME.AsString);
   end;
 end;
 

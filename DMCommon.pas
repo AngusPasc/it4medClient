@@ -1552,7 +1552,7 @@ resourcestring
   RS_Gene_Msg_SCam = 'Specificare almeno un campo per la ricerca';
   RS_Gene_Cap_NRic = 'Nuova ricerca';
   RS_Gene_Msg_NoDt = 'Dati non trovati';
-  RS_Gene_Msg_NoDtReg = 'Dati anagrafici non trovati.'#13#10'Vuoi creare una nuova anagrafica ?';
+  RS_Gene_Msg_NoDtReg = 'Dati %s non trovati.'#13#10'Vuoi crearne di nuovi ?';
   RS_Gene_Msg_NoDtAcc = 'Dati appuntamento non trovati.'#13#10'Vuoi registrare una nuova accettazione ?';
   RS_Gene_Msg_Inte = 'Interruzione in corso...';
   RS_Gene_Msg_Conf = 'Confermi abbandono ricerca ?';
@@ -2769,6 +2769,7 @@ begin
 
   AstaClientSocket.SetSmartWaitTickLimit(120000);
   AstaMultiSite.SetSmartWaitTickLimit(120000);
+  AstaClientSocket.ReconnectDelayTime := 5000;
 
   if not gblDebugMode and OneInstance1.PrecAttivato then exit;
 
@@ -5066,8 +5067,8 @@ begin
                  AstaClientSocket.ServerHasResponded(True);
                  AstaClientSocket.CloseTheSocket;
                  PostMessage(Application.MainForm.Handle,SY_USERDISCONNECTED,0,0);
-                 if AstaClientSocket.ReconnectMaxAttempt>0 then
-                    exit;
+//                 if AstaClientSocket.ReconnectMaxAttempt>0 then
+//                    exit;
                end;
      end;
 

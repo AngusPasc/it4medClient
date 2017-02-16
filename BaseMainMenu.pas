@@ -36,12 +36,14 @@ type
     cxButton1: TcxButton;
     tcaLogPanelOn: TdxTileControlActionBarItem;
     tcaLogPanelOff: TdxTileControlActionBarItem;
+    tcaTestException: TdxTileControlActionBarItem;
     procedure cxButton1Click(Sender: TObject);
     procedure tlaExitClick(Sender: TdxTileControlActionBarItem);
     procedure tcaBlackThemeClick(Sender: TdxTileControlActionBarItem);
     procedure tcaWhiteThemeClick(Sender: TdxTileControlActionBarItem);
     procedure tcaLogPanelOnClick(Sender: TdxTileControlActionBarItem);
     procedure tcaLogPanelOffClick(Sender: TdxTileControlActionBarItem);
+    procedure tcaTestExceptionClick(Sender: TdxTileControlActionBarItem);
   private
     FImgList: TcxImageList;
     function GetTileItem(const aFrameName: string): TdxTileControlItem;
@@ -139,6 +141,7 @@ begin
    FDMCommon.pnlUpgrade := pnlUpgrade;
    FDMCommon.reUpgrade := reUpgrade;
    FDMCommon.cxProgressUpdate := cxProgressUpdate;
+   tcaTestException.Visible := gblDebugMode;
 
 end;
 
@@ -344,6 +347,12 @@ begin
   TdxTileControlItemDetailOptions(Message.LParam).DetailControl.Free;
   TdxTileControlItemDetailOptions(Message.LParam).DetailControl := nil;
 
+end;
+
+procedure TfrmBaseMainMenu.tcaTestExceptionClick(
+  Sender: TdxTileControlActionBarItem);
+begin
+  raise Exception.Create('Prova di gestione errori da applicazione');
 end;
 
 end.

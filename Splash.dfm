@@ -1295,7 +1295,7 @@ object frmSplash: TfrmSplash
       Left = 11
       Top = 242
       AutoSize = False
-      Caption = 'Copyright '#169' 2016 Chorafarma s.r.l.'
+      Caption = 'Copyright '#169' 2017 Chorafarma s.r.l.'
       Style.HotTrack = False
       Style.TransparentBorder = False
       Properties.Alignment.Horz = taCenter

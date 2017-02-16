@@ -1,6 +1,6 @@
 inherited frmMainMenu: TfrmMainMenu
-  Left = 275
-  Top = 181
+  Left = 344
+  Top = 188
   Caption = 'Chorafarma s.r.l.'
   ClientHeight = 569
   ClientWidth = 966
@@ -14,7 +14,7 @@ inherited frmMainMenu: TfrmMainMenu
     OptionsView.GroupMaxRowCount = 1
     Title.Font.Height = -48
     Title.Text = 'Medicorner'
-    inherited dxTiledxTileControlGroup2: TdxTileControlGroup [5]
+    inherited dxTiledxTileControlGroup2: TdxTileControlGroup [6]
       Caption.Font.Charset = ANSI_CHARSET
       Caption.Font.Height = -35
       Caption.Font.Name = 'Source Sans Pro Semibold'
@@ -22,7 +22,7 @@ inherited frmMainMenu: TfrmMainMenu
       Caption.Text = 'Operazioni'
       Index = 0
     end
-    inherited dxTiledxTileControlGroup1: TdxTileControlGroup [6]
+    inherited dxTiledxTileControlGroup1: TdxTileControlGroup [7]
       Caption.Font.Charset = ANSI_CHARSET
       Caption.Font.Height = -35
       Caption.Font.Name = 'Source Sans Pro Semibold'

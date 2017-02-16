@@ -102,8 +102,8 @@ type
     QRicercaDES_COM_RES: TStringField;
     QRicercaDES_COM_DOM: TStringField;
     QRicercaEMAIL: TStringField;
-    dxLayoutControl1Group8: TdxLayoutAutoCreatedGroup;
     dxLayoutControl1Group10: TdxLayoutAutoCreatedGroup;
+    dxLayoutControl1Group3: TdxLayoutAutoCreatedGroup;
     procedure NuovoPazienteExecute(Sender: TObject);
     procedure ModificaExecute(Sender: TObject);
     procedure ModificaUpdate(Sender: TObject);
@@ -141,7 +141,7 @@ type
     procedure StartPersonalizza; override;
     procedure StopPersonalizza; override;
     procedure ResetPersonalizza; override;
-    procedure RegistraNuovoPaziente; override;
+    procedure RegistraNuovo; override;
   public
     { Public declarations }
      xRec: TTessera;
@@ -187,7 +187,7 @@ begin
 
 end;
 
-procedure TFRicAssistito.RegistraNuovoPaziente;
+procedure TFRicAssistito.RegistraNuovo;
 var
   cNascita,cResidenza: boolean;
 begin
@@ -229,7 +229,7 @@ procedure TFRicAssistito.NuovoPazienteExecute(Sender: TObject);
 begin
   inherited;
 
-  RegistraNuovoPaziente;
+  RegistraNuovo;
 
 end;
 

@@ -144,3 +144,15 @@ c:\RAD4MED\3pd7\Bpl\dclunidac70.bpl=Devart Universal Data Access Components
 c:\RAD4MED\3pd7\Bpl\unidacvcl70.bpl=Devart Universal Data Access GUI related Components
 c:\RAD4MED\3pd7\Bpl\DataSetManager70.bpl=Devart DataSet Manager
 C:\RAD4MED\3pD7\Bpl\dclusr70.bpl=Borland User Components
+[HistoryLists\hlConditionals]
+Count=1
+Item0=madExcept;ORACLEMONITOR;AssumeMultiThreaded;TRADUZIONI;FARMACIA
+[HistoryLists\hlUnitAliases]
+Count=1
+Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlUnitOutputDirectory]
+Count=1
+Item0=..\dcuout
+[HistoryLists\hlOutputDirectorry]
+Count=1
+Item0=..\bin
