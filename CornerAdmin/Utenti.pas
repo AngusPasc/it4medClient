@@ -100,7 +100,7 @@ type
     dxLayoutControl1Item6: TdxLayoutItem;
     cxDBDateEdit2: TcxDBDateEdit;
     dxLayoutControl1Item7: TdxLayoutItem;
-    cxDBMaskEdit5: TcxDBMaskEdit;
+    cxDBPassword: TcxDBMaskEdit;
     dxLayoutControl1Item8: TdxLayoutItem;
     cxDBDateEdit3: TcxDBTextEdit;
     dxLayoutControl1Item9: TdxLayoutItem;
@@ -285,7 +285,7 @@ dxBarManager1Bar2: TdxBar;
     procedure aModificaUtenteUpdate(Sender: TObject);
     procedure cxDBNavigator1ButtonsButtonClick(Sender: TObject;
       AButtonIndex: Integer; var ADone: Boolean);
-    procedure cxDBMaskEdit5Enter(Sender: TObject);
+    procedure cxDBPasswordEnter(Sender: TObject);
   private
     { Private declarations }
     FUserToken: THandle;
@@ -339,7 +339,7 @@ begin
   if not UtentiPASSWORD.IsNull and not UtentiLOGIN_NT.IsNull then
   begin
     ControlloPswd.Parambyname('LOGIN_NT').AsString := UtentiLOGIN_NT.AsString;
-    ControlloPswd.Parambyname('PASSWORD').AsString := Encrypt(UtentiPASSWORD.AsString);
+//    ControlloPswd.Parambyname('PASSWORD').AsString := UtentiPASSWORD.AsString;
     ControlloPswd.Parambyname('PKPERSONALE').AsInteger := UtentiPKPERSONALE.AsInteger;
     ControlloPswd.syRefresh;
 
@@ -1017,14 +1017,14 @@ begin
   end;
 end;
 
-procedure TFUtenti.cxDBMaskEdit5Enter(Sender: TObject);
+procedure TFUtenti.cxDBPasswordEnter(Sender: TObject);
 begin
   inherited;
   if UtentiPASSWORD.AsString='' then
   begin
      if not (Utenti.State in dsEditModes) then
         Utenti.Edit;
-     UtentiPASSWORD.AsString := LowerCase(Copy(UtentiNOME.AsString,1,1)+UtentiCOGNOME.AsString);
+     UtentiPASSWORD.AsString := Encrypt(LowerCase(Copy(UtentiNOME.AsString,1,1)+UtentiCOGNOME.AsString));
   end;
 end;
 

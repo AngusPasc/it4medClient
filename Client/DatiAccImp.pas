@@ -523,7 +523,8 @@ var
 implementation
 
 uses DMCommon,BaseForm,Windows,msgdlgs,dateutils,sysutils,Variants, //Accettazione,
-     RicAssistito, VisitePrecRAD, RicMedici, Anagrafica, osFastStrings, SelezSpec,
+     VisitePrecRAD, RicMedici, Anagrafica, osFastStrings, SelezSpec,
+     RicAssistito,
 {$IFNDEF MEDICORNER}
      RicMedInt,
      Radiofarmaco,
@@ -532,6 +533,7 @@ uses DMCommon,BaseForm,Windows,msgdlgs,dateutils,sysutils,Variants, //Accettazio
      RicercaTessera, Note, dxCore;
 
 {$R *.dfm}
+
 
 function TFDatiAccImp.GetDiagSelez: integer;
 begin
@@ -989,7 +991,11 @@ begin
   FRicAssistito := TFRicAssistito.Create(nil);
   try
 
+{$IFDEF MEDICORNER}
+   FRicAssistito.NuovaRegistrazione := True;
+{$ELSE}
    FRicAssistito.NuovaRegistrazione := False;
+{$ENDIF}
    FRicAssistito.QRicerca.Active := false;
    FRicAssistito.QRicerca.QBEMode := true;
    FRicAssistito.QRicerca.Active := true;

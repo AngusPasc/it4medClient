@@ -111,11 +111,11 @@ ProjectLang=
 RootDir=
 [Version Info]
 IncludeVerInfo=1
-AutoIncBuild=1
+AutoIncBuild=0
 MajorVer=0
 MinorVer=1
 Release=2
-Build=0
+Build=2
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Chorafarma s.r.l.
 FileDescription=Medicorner
-FileVersion=0.1.2.0
+FileVersion=0.1.2.2
 InternalName=Medicorner.exe
 LegalCopyright=Chorafarma s.r.l.
 LegalTrademarks=Chorafarma s.r.l.
@@ -145,8 +145,9 @@ c:\RAD4MED\3pd7\Bpl\unidacvcl70.bpl=Devart Universal Data Access GUI related Com
 c:\RAD4MED\3pd7\Bpl\DataSetManager70.bpl=Devart DataSet Manager
 C:\RAD4MED\3pD7\Bpl\dclusr70.bpl=Borland User Components
 [HistoryLists\hlConditionals]
-Count=1
-Item0=madExcept;ORACLEMONITOR;AssumeMultiThreaded;TRADUZIONI;FARMACIA
+Count=2
+Item0=MEDICORNER;madExcept
+Item1=madExcept;ORACLEMONITOR;AssumeMultiThreaded;TRADUZIONI;FARMACIA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

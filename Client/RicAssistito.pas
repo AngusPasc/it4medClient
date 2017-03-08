@@ -158,6 +158,7 @@ type
 var
   FRicAssistito: TFRicAssistito;
 
+  
 implementation
 
 uses DMCommon, Windows, Msgdlgs, Variants, Anagrafica, Forms, graphics, sysutils, strutils,dxPrnDlg,

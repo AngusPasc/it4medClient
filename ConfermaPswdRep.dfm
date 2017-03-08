@@ -21,6 +21,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
     end
     inherited cxPersonalizza: TcxButton
       Left = 433
+      TabOrder = 3
     end
     object cxBtnTestAV: TcxButton
       Left = 320
@@ -28,7 +29,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       Width = 75
       Height = 25
       Caption = 'Test AV'
-      TabOrder = 3
+      TabOrder = 2
       OnClick = cxBtnTestAVClick
     end
   end
@@ -52,7 +53,7 @@ inherited FConfermaPswdRep: TFConfermaPswdRep
       Properties.ListColumns = <
         item
           SortOrder = soAscending
-          Width = 400
+          Width = 550
           FieldName = 'REPARTO'
         end
         item

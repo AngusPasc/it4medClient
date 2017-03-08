@@ -194,7 +194,7 @@ type
     cxDBLookupComboBox2: TcxDBLookupComboBox;
     dxLayoutControlOscuramento: TdxLayoutItem;
     cxBtnTessera: TcxButton;
-    dxLayoutControl1Item3: TdxLayoutItem;
+    dxLayoutControlRicCodFisc: TdxLayoutItem;
     aTesseraSanitaria: TAction;
     CercoComuneNasc: TAstaClientDataSet;
     CercoComuneNascCODICE: TStringField;
@@ -353,17 +353,23 @@ type
     procedure aAnnullaExecute(Sender: TObject);
     procedure cxMailContatto1KeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure BaseFormCreate(Sender: TObject);
+    procedure AssistibiliNAZRES_CODICEChange(Sender: TField);
+    procedure AssistibiliNAZ_CITChange(Sender: TField);
+    procedure CittadinanzaExit(Sender: TObject);
   private
     { Private declarations }
     FoldCOGNOME: string;
     FoldNOME: string;
     FoldCOM_CODICE: string;
     FoldDATA_NASCITA: TDateTime;
+    FcheckIndRes: Boolean;
     function CalcolaCodice: string;
     function TogliNumeri(const ind: string): string;
     procedure AssegnaMask;
     procedure AssegnaValoreRes;
     procedure AssegnaValoreDom;
+    procedure SetCheckIndRes(Value: Boolean);
   protected
     procedure DoCreate; override;
     procedure DoShow; override;
@@ -381,6 +387,8 @@ type
     procedure DecodificaCodiceFiscale(xrec: TTessera); overload;
     function CercaInStradario(const xcod_com: string; const xIndirizzo: string): Integer; overload;
     function CercaInStradario(const xcod_com: string; const xIndirizzo: string; var xIndTrovato,xCapTrovato: string): Integer; overload;
+
+    property checkIndRes: Boolean read FcheckIndRes write SetcheckIndRes;
   end;
 
 function ConfermaAnagrafica(pka: integer; statolancio: integer): boolean;
@@ -465,7 +473,7 @@ begin
      result := false;
   end;
 
-  if cxCodiceFiscale.Visible and (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
+  if cxCodiceFiscale.Enabled and (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
   begin
      result := false;
   end;
@@ -485,7 +493,7 @@ end;
 function TFAnagrafica.ValidaResidenza: boolean;
 begin
   result := true;
-  if Com_Residenza.Visible and (AssistibiliCOM_RES.IsNull or (AssistibiliCOM_RES.AsString='')) then
+  if Com_Residenza.Enabled and (AssistibiliCOM_RES.IsNull or (AssistibiliCOM_RES.AsString='')) then
   begin
      result := false;
   end;
@@ -495,7 +503,7 @@ begin
      result := false;
   end;
 
-  if cxIndirizzo.Visible and (AssistibiliIND_RES.IsNull or (AssistibiliIND_RES.AsString='')) then
+  if cxIndirizzo.Enabled and (AssistibiliIND_RES.IsNull or (AssistibiliIND_RES.AsString='')) then
   begin
      result := false;
   end;
@@ -539,7 +547,7 @@ begin
     Abort;
   end;
 
-  if cxCodiceFiscale.Visible then
+  if cxCodiceFiscale.Enabled then
   begin
      if not AssistibiliCIT_CODICE.IsNull and (AssistibiliCIT_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString) and
      AssistibiliCODICE_FISCALE.IsNull and (FDMCommon.Param_TicketCALCOLO_CF.AsInteger=1) then
@@ -549,7 +557,7 @@ begin
      else if (AssistibiliCIT_CODICE.AsString<>FDMCommon.Param_TicketNAZ_LOCALE.AsString) and
              (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
      begin
-        AssistibiliCODICE_FISCALE.AsString := '9999999999999999';
+//        AssistibiliCODICE_FISCALE.AsString := '9999999999999999';
      end;
   end;
 
@@ -576,7 +584,7 @@ begin
           Abort;
         end;
 
-        if cxCodiceFiscale.Visible and (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
+        if cxCodiceFiscale.Enabled and (AssistibiliCODICE_FISCALE.IsNull or (AssistibiliCODICE_FISCALE.AsString='')) then
         begin
           AssistibiliCODICE_FISCALE.FocusControl;
           MsgDlg(format(SFieldRequired, [AssistibiliCODICE_FISCALE.DisplayName]), '', ktError, [kbOk]);
@@ -591,7 +599,7 @@ begin
     if (CheckResidenza) then
     begin
         TestResidenza := false;
-        if Com_Residenza.Visible and (AssistibiliCOM_RES.IsNull or (AssistibiliCOM_RES.AsString='')) then
+        if Com_Residenza.Enabled and (AssistibiliCOM_RES.IsNull or (AssistibiliCOM_RES.AsString='')) then
         begin
           AssistibiliDES_COMRES.FocusControl;
           MsgDlg(format(SFieldRequired, [AssistibiliCOM_RES.DisplayName]), '', ktError, [kbOk]);
@@ -605,7 +613,7 @@ begin
           Abort;
         end;
 
-        if cxIndirizzo.Visible and ((AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString) and (AssistibiliIND_RES.IsNull or (AssistibiliIND_RES.AsString=''))) then
+        if cxIndirizzo.Enabled and ((AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString) and (AssistibiliIND_RES.IsNull or (AssistibiliIND_RES.AsString=''))) then
         begin
           cxIndirizzo.SetFocus;
           MsgDlg(format(SFieldRequired, [AssistibiliIND_RES.DisplayName]), '', ktError, [kbOk]);
@@ -701,8 +709,6 @@ begin
 end;
 
 procedure TFAnagrafica.DoShow;
-var
-  checkIndRes: boolean;
 begin
   inherited;
   LkSesso.Open;
@@ -724,13 +730,7 @@ begin
     end
     else begin
       dxLayoutTesseraEuropea.Enabled := (AssistibiliTNZ_IDENT.AsInteger=1);
-      checkIndRes := (AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
-      dxlIndirizzo.Enabled := checkIndRes;
-      dxlCAP.Enabled := checkIndRes;
-      dxlASLAppartenenza.Enabled := checkIndRes;
-      dxlTelefono.Enabled := checkIndRes;
-      dxlAltroTelefono.Enabled := checkIndRes and not (FDMCommon.LeggiPostoLavoroFLAG_MN.AsInteger=5);
-      dxlMedicoBase.Enabled := checkIndRes;
+//      checkIndRes := (AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
       AssegnaMask;
     end;
   end;
@@ -805,7 +805,6 @@ end;
 procedure TFAnagrafica.Com_ResidenzaCloseDialog(Sender: TObject;
   const Scelto: Boolean);
 var
-  checkIndRes: boolean;
   ripunta: boolean;
 begin
     if not (Assistibili.State in dsEditModes) then
@@ -826,28 +825,8 @@ begin
         cxASLAppartiene.Clear;
     end;
 
-    checkIndRes := (AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
-    ripunta := not dxlIndirizzo.Enabled;
-
-    dxlIndirizzo.Enabled := checkIndRes;
-    dxlNumeroCivico.Enabled := checkIndRes;
-    dxlCAP.Enabled := checkIndRes;
-    dxlASLAppartenenza.Enabled := checkIndRes;
-//    dxlTelefono.Enabled := checkIndRes;
-//    dxlAltroTelefono.Enabled := checkIndRes;
-    dxlMedicoBase.Enabled := checkIndRes;
-
-    if not checkIndRes then
-    begin
-      cxIndirizzo.Clear;
-      cxNumeroCivico.Clear;
-      cxCapRes.Clear;
-      cxASLAppartiene.Clear;
-//      cxTelefono.Clear;
-//      cxAltroTelefono.Clear;
-      cxMedicoBase.Clear;
-    end
-    else if ripunta then
+//    checkIndRes := (AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
+//    if not dxlIndirizzo.Enabled
         SelectNext(Com_Residenza, True, True);
 
 end;
@@ -1027,7 +1006,34 @@ begin
      AssegnaMask;
      if (FDMCommon.Param_TicketCALCOLO_CF.AsInteger=1) then
         AssistibiliCODICE_FISCALE.Clear;
+
    end;
+
+end;
+
+procedure TFAnagrafica.SetCheckIndRes(Value: Boolean);
+begin
+    FcheckIndRes := Value;
+
+//    dxLayoutComuneResidenza.Enabled := checkIndRes;
+    dxlIndirizzo.Enabled := checkIndRes;
+    dxlNumeroCivico.Enabled := checkIndRes;
+    dxlCAP.Enabled := checkIndRes;
+    dxlASLAppartenenza.Enabled := checkIndRes;
+//    dxlTelefono.Enabled := checkIndRes;
+//    dxlAltroTelefono.Enabled := checkIndRes;
+    dxlMedicoBase.Enabled := checkIndRes;
+
+    if not checkIndRes then
+    begin
+      cxIndirizzo.Clear;
+      cxNumeroCivico.Clear;
+      cxCapRes.Clear;
+      cxASLAppartiene.Clear;
+//      cxTelefono.Clear;
+//      cxAltroTelefono.Clear;
+      cxMedicoBase.Clear;
+    end;
 
 end;
 
@@ -1801,6 +1807,31 @@ begin
       Key := 0;
   end;
 
+end;
+
+procedure TFAnagrafica.BaseFormCreate(Sender: TObject);
+begin
+  inherited;
+  FcheckIndRes := False;
+end;
+
+procedure TFAnagrafica.AssistibiliNAZRES_CODICEChange(Sender: TField);
+begin
+  inherited;
+  checkIndRes := (AssistibiliNAZRES_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
+end;
+
+procedure TFAnagrafica.AssistibiliNAZ_CITChange(Sender: TField);
+begin
+  inherited;
+  cxCodiceFiscale.Enabled := (AssistibiliCIT_CODICE.AsString=FDMCommon.Param_TicketNAZ_LOCALE.AsString);
+  cxBtnTessera.Enabled := cxCodiceFiscale.Enabled;
+end;
+
+procedure TFAnagrafica.CittadinanzaExit(Sender: TObject);
+begin
+  inherited;
+  SelectNext(Cittadinanza, True, True);
 end;
 
 end.
